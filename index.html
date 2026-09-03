@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guhan Murugaiyan — AI Developer & Agent Architect</title>
+
+  <!-- Google Fonts: Editorial Display (Cinzel / Syne), Inter, Italianno cursive, and JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Italianno&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="loading-state">
+
+  <!-- ========================================================================
+       1. PRELOADER (Exact Match from Video 00:00 - 00:14)
+       ======================================================================== -->
+  <div id="preloader" class="preloader">
+    <div class="preloader-content">
+      <!-- Rotating Gold Ring & Percentage Counter -->
+      <div class="loader-circle-wrapper" id="loaderCircleWrap">
+        <svg class="loader-svg" viewBox="0 0 160 160">
+          <circle class="loader-bg-ring" cx="80" cy="80" r="68" />
+          <circle class="loader-gold-ring" id="loaderRing" cx="80" cy="80" r="68" />
+        </svg>
+        <div class="loader-percentage" id="loaderPct">0%</div>
+      </div>
+
+      <!-- Golden Script "hello" that draws/appears at 100% -->
+      <div class="preloader-hello" id="preloaderHello">
+        <span class="hello-text">hello</span>
+      </div>
+    </div>
+
+    <!-- Dramatic Curtain Panels for the Split Reveal -->
+    <div class="curtain curtain-top"></div>
+    <div class="curtain curtain-bottom"></div>
+  </div>
+
+  <!-- ========================================================================
+       2. CUSTOM CURSOR & FOLLOWER
+       ======================================================================== -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- ========================================================================
+       3. FULL-SCREEN NAVIGATION OVERLAY (From Video 00:24)
+       ======================================================================== -->
+  <div class="overlay-nav" id="overlayNav">
+    <div class="overlay-header">
+      <div class="nav-logo">
+        <span class="signature-text">guhan</span>
+        <span class="logo-sub">©2026</span>
+      </div>
+      <button class="nav-close-btn" id="navCloseBtn" aria-label="Close menu">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="overlay-links-wrapper">
+      <ul class="overlay-links">
+        <li><a href="#hero" class="menu-link" data-text="HOME">HOME</a></li>
+        <li><a href="#about" class="menu-link" data-text="ABOUT">ABOUT</a></li>
+        <li><a href="#expertise" class="menu-link" data-text="EXPERTISE">EXPERTISE</a></li>
+        <li><a href="#work" class="menu-link" data-text="WORK">WORK</a></li>
+        <li><a href="#certifications" class="menu-link" data-text="CREDENTIALS">CREDENTIALS</a></li>
+        <li><a href="#contact" class="menu-link" data-text="CONTACT">CONTACT</a></li>
+      </ul>
+      <div class="overlay-footer">
+        <div>
+          <span class="muted-label">GET IN TOUCH</span>
+          <a href="mailto:mguhan6383@gmail.com" class="footer-email-link">mguhan6383@gmail.com</a>
+        </div>
+        <div>
+          <span class="muted-label">LOCATION</span>
+          <p>Vanur, Tamil Nadu, India</p>
+        </div>
+        <div>
+          <span class="muted-label">SOCIAL</span>
+          <div class="social-row">
+            <a href="https://www.linkedin.com/in/guhan-murugaiyan" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       4. TOP FIXED NAVBAR (Cream Theme in Hero, Dark Theme on Scroll)
+       ======================================================================== -->
+  <header class="main-header" id="mainHeader">
+    <div class="header-inner">
+      <a href="#hero" class="nav-brand">
+        <span class="signature-logo">guhan</span>
+        <span class="brand-copy">©2026 <span class="brand-name">Guhan Murugaiyan</span></span>
+      </a>
+
+      <nav class="desktop-nav">
+        <a href="#work" class="nav-item">WORK</a>
+        <a href="#about" class="nav-item">ABOUT</a>
+        <a href="#expertise" class="nav-item">EXPERTISE</a>
+        <a href="#certifications" class="nav-item">CREDENTIALS</a>
+        <a href="#contact" class="nav-item">CONTACT</a>
+      </nav>
+
+      <div class="header-right">
+        <!-- Rotating Circular Badge "LET'S WORK TOGETHER ↗" (Exact from Video 00:15) -->
+        <a href="#contact" class="circular-badge-btn" aria-label="Let's work together">
+          <svg class="rotating-text-svg" viewBox="0 0 100 100">
+            <path id="circlePath" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="transparent" />
+            <text>
+              <textPath xlink:href="#circlePath">
+                LET'S WORK TOGETHER • LET'S TALK •
+              </textPath>
+            </text>
+          </svg>
+          <div class="badge-arrow">↗</div>
+        </a>
+
+        <div class="location-stamp">
+          <span class="loc-dot"></span>
+          <span>BASED IN INDIA</span>
+        </div>
+
+        <button class="hamburger-btn" id="navOpenBtn" aria-label="Open menu">
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       5. HERO SECTION (Exact Match from Video 00:15 - 00:39: Cream Editorial)
+       ======================================================================== -->
+  <section class="hero-section" id="hero">
+    <div class="hero-wrapper">
+      
+      <!-- Massive Hero Headline -->
+      <div class="hero-headline-container">
+        <h1 class="hero-title-massive">
+          <span class="char-distort" data-text="CREATIVE">CREATIVE</span>
+        </h1>
+        <h2 class="hero-subtitle-massive">
+          <span>AI DEVELOPER</span>
+        </h2>
+      </div>
+
+      <!-- Subtitle Pills / Capabilities -->
+      <div class="hero-meta-row">
+        <div class="meta-pill">AGENTIC AI</div>
+        <span class="pill-divider">•</span>
+        <div class="meta-pill">JAVA ARCHITECTURE</div>
+        <span class="pill-divider">•</span>
+        <div class="meta-pill">DATA ANALYTICS</div>
+      </div>
+
+      <!-- Scroll to explore indicator -->
+      <div class="scroll-explore">
+        <span>SCROLL TO EXPLORE</span>
+        <div class="scroll-mouse-icon">
+          <div class="scroll-wheel"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       6. ABOUT ME SECTION (Transition to Dark Aesthetic 00:40 - 00:58)
+       ======================================================================== -->
+  <section class="about-section" id="about">
+    <div class="section-container">
+      
+      <!-- Section Tag Header -->
+      <div class="section-label-row">
+        <span class="tag-number">// 01</span>
+        <span class="tag-dash">—</span>
+        <span class="tag-title">THE PERSON BEHIND THE CODE</span>
+      </div>
+      <h2 class="section-headline-gold">ABOUT ME</h2>
+
+      <div class="about-grid">
+        <!-- Left: Guhan's High-Resolution Portrait -->
+        <div class="about-portrait-card">
+          <div class="portrait-wrapper">
+            <img src="profile.jpg" alt="Guhan Murugaiyan" class="portrait-img" id="portraitImg" />
+            <div class="portrait-overlay"></div>
+            <div class="portrait-badge">
+              <span class="badge-role">AI AGENT ARCHITECT</span>
+              <span class="badge-sub">SVCET CSE</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Bio & Quick Facts Table -->
+        <div class="about-content-card">
+          <div class="about-sub-label">WHO AM I ?</div>
+          <h3 class="about-main-quote">
+            I BUILD <span class="highlight-text">INTELLIGENT AGENTS</span> WHERE DATA MEETS <span class="highlight-text">AUTONOMY</span>.
+          </h3>
+
+          <p class="about-bio-text">
+            I am an <strong>AI Java Developer</strong> and Computer Science student at Sri Venkateshwaraa College of Engineering and Technology (SVCET), deeply passionate about building autonomous solutions, multi-agent frameworks, and high-performance backend pipelines.
+          </p>
+          <p class="about-bio-text">
+            I care about the architectural details that elevate software: autonomous agent collaboration, fault-tolerant execution, and turning raw data into meaningful business intelligence. Beyond code, I proudly represent the <strong>National Service Scheme (NSS)</strong>, championing disciplined teamwork and community leadership.
+          </p>
+
+          <!-- Quick Metadata Grid -->
+          <div class="quick-facts-grid">
+            <div class="fact-box">
+              <span class="fact-label">BASED</span>
+              <span class="fact-val">India (Tamil Nadu)</span>
+            </div>
+            <div class="fact-box">
+              <span class="fact-label">FOCUS</span>
+              <span class="fact-val">Agentic AI & Java</span>
+            </div>
+            <div class="fact-box">
+              <span class="fact-label">CURRENT ROLE</span>
+              <span class="fact-val">Data Analyst · NoviTech R&D</span>
+            </div>
+            <div class="fact-box">
+              <span class="fact-label">MINDSET</span>
+              <span class="fact-val">Always Learning & Building</span>
+            </div>
+            <div class="fact-box">
+              <span class="fact-label">EDUCATION</span>
+              <span class="fact-val">B.Tech CSE (2024–2028)</span>
+            </div>
+            <div class="fact-box">
+              <span class="fact-label">LEADERSHIP</span>
+              <span class="fact-val">NSS Representative</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       7. MY EXPERTISE (Floating Physics Tech Badges + Accordion 00:59 - 01:14)
+       ======================================================================== -->
+  <section class="expertise-section" id="expertise">
+    <div class="section-container">
+      
+      <div class="section-label-row">
+        <span class="tag-number">// 02</span>
+        <span class="tag-dash">—</span>
+        <span class="tag-title">SPECIALIZATION & TECH STACK</span>
+      </div>
+      <h2 class="section-headline-gold">MY EXPERTISE</h2>
+
+      <div class="expertise-grid">
+        
+        <!-- Left: Statement & Interactive Physics / Floating Tech Sandbox -->
+        <div class="expertise-left-col">
+          <h3 class="expertise-hero-quote">
+            I design and architect intelligent systems where autonomy, code, and motion work as one.
+          </h3>
+          <p class="expertise-hero-sub">
+            From autonomous multi-agent swarms to high-throughput Java workflows and data pipelines, I build robust, intelligent architectures designed to scale.
+          </p>
+
+          <!-- Interactive Bouncing Floating Badges Container (From Video 01:00) -->
+          <div class="physics-sandbox-box" id="physicsSandbox">
+            <div class="sandbox-header">
+              <span><i class="fa-solid fa-atom"></i> INTERACTIVE TECH MATRIX</span>
+              <span class="sandbox-hint">DRAG & TOSS BADGES</span>
+            </div>
+            <div class="sandbox-body" id="sandboxCanvasArea">
+              <!-- Draggable Floating Tech Badges -->
+              <div class="tech-bubble bubble-java" data-vx="1.2" data-vy="-0.8">
+                <i class="fa-brands fa-java"></i> Java 21
+              </div>
+              <div class="tech-bubble bubble-ai" data-vx="-1.4" data-vy="1.1">
+                <i class="fa-solid fa-robot"></i> Agentic AI
+              </div>
+              <div class="tech-bubble bubble-python" data-vx="1.5" data-vy="0.7">
+                <i class="fa-brands fa-python"></i> Python
+              </div>
+              <div class="tech-bubble bubble-data" data-vx="-0.9" data-vy="-1.2">
+                <i class="fa-solid fa-chart-pie"></i> Analytics
+              </div>
+              <div class="tech-bubble bubble-llm" data-vx="1.1" data-vy="1.3">
+                <i class="fa-solid fa-brain"></i> LLM Agents
+              </div>
+              <div class="tech-bubble bubble-spring" data-vx="-1.3" data-vy="0.9">
+                <i class="fa-solid fa-server"></i> Spring Boot
+              </div>
+              <div class="tech-bubble bubble-sec" data-vx="0.8" data-vy="-1.4">
+                <i class="fa-solid fa-shield-halved"></i> Data Security
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Interactive Accordion / Hover Preview Cards -->
+        <div class="expertise-right-col">
+          
+          <div class="expertise-card" data-card="ai">
+            <div class="card-num">01</div>
+            <div class="card-info">
+              <h4 class="card-title">Agentic AI & Multi-Agent Swarms</h4>
+              <p class="card-desc">Architecting autonomous agent networks, LLM tool calling, memory management, and task decomposition pipelines.</p>
+              <div class="card-tags">
+                <span>Multi-Agent</span>
+                <span>LLM Orchestration</span>
+                <span>Bioinformatics AI</span>
+              </div>
+            </div>
+            <div class="card-arrow">↗</div>
+          </div>
+
+          <div class="expertise-card" data-card="java">
+            <div class="card-num">02</div>
+            <div class="card-info">
+              <h4 class="card-title">Java Enterprise & Systems Development</h4>
+              <p class="card-desc">Building resilient object-oriented backends, concurrent task execution engines, and structured software design patterns.</p>
+              <div class="card-tags">
+                <span>Core Java</span>
+                <span>Multithreading</span>
+                <span>OOP & Clean Arch</span>
+              </div>
+            </div>
+            <div class="card-arrow">↗</div>
+          </div>
+
+          <div class="expertise-card" data-card="data">
+            <div class="card-num">03</div>
+            <div class="card-info">
+              <h4 class="card-title">Data Analytics & Insights Engineering</h4>
+              <p class="card-desc">Practical analytics workflows applied at NoviTech R&D, converting messy raw data into actionable dashboards and statistical models.</p>
+              <div class="card-tags">
+                <span>Data Workflows</span>
+                <span>Statistical Insights</span>
+                <span>ETL Automation</span>
+              </div>
+            </div>
+            <div class="card-arrow">↗</div>
+          </div>
+
+          <div class="expertise-card" data-card="nss">
+            <div class="card-num">04</div>
+            <div class="card-info">
+              <h4 class="card-title">Leadership & Analytical Rigor</h4>
+              <p class="card-desc">NSS community leadership paired with analytical accounting experience at Jana Fibre Glass, ensuring meticulous precision.</p>
+              <div class="card-tags">
+                <span>Team Leadership</span>
+                <span>Financial Analysis</span>
+                <span>Communication</span>
+              </div>
+            </div>
+            <div class="card-arrow">↗</div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       8. MARQUEE TRANSITION BANNER (From Video 01:15 - 01:25)
+       ======================================================================== -->
+  <div class="work-marquee-section">
+    
+    <div class="marquee-top-indicator">
+      <span>SCROLL TO EXPLORE MY</span>
+    </div>
+
+    <div class="giant-work-text">
+      <span>WORK</span>
+    </div>
+
+    <!-- Infinite Scrolling Text Banner -->
+    <div class="ticker-wrap">
+      <div class="ticker-move">
+        <span class="ticker-item">AI AGENT ARCHITECTURE ✦</span>
+        <span class="ticker-item">MULTI-AGENT SYSTEMS ✦</span>
+        <span class="ticker-item">JAVA ENTERPRISE ✦</span>
+        <span class="ticker-item">BIOINFORMATICS AGENTS ✦</span>
+        <span class="ticker-item">DATA ANALYTICS ✦</span>
+        <span class="ticker-item">SVCET CSE ✦</span>
+        <span class="ticker-item">AUTONOMOUS RESUME PARSER ✦</span>
+        <span class="ticker-item">NSS LEADERSHIP ✦</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========================================================================
+       9. SELECTED PROJECTS: STACKED STICKY CARDS (From Video 01:26 - 01:51)
+       ======================================================================== -->
+  <section class="work-section" id="work">
+    <div class="section-container">
+      
+      <div class="section-label-row">
+        <span class="tag-number">// 03</span>
+        <span class="tag-dash">—</span>
+        <span class="tag-title">FEATURED CASE STUDIES</span>
+      </div>
+      <h2 class="section-headline-gold">MY WORK</h2>
+
+      <!-- Stacked Layered Cards Container -->
+      <div class="stacked-cards-container">
+        
+        <!-- CARD 1 -->
+        <div class="stack-card card-1">
+          <div class="card-split">
+            <div class="card-meta">
+              <span class="case-study-tag">CASE STUDY · 01</span>
+              <h3 class="card-project-title">Multi-Agent AI for Bioinformatics</h3>
+              <p class="card-project-desc">
+                An autonomous cooperative multi-agent system engineered to coordinate biological sequence retrieval, genomic clustering, and scientific literature summarization using specialized LLM agents.
+              </p>
+              <div class="card-tech-badges">
+                <span>Multi-Agent Swarm</span>
+                <span>LLM Tooling</span>
+                <span>Python</span>
+                <span>Bioinformatics</span>
+              </div>
+              <div class="card-actions">
+                <a href="#contact" class="btn-case-action">
+                  <span>Explore Architecture</span>
+                  <div class="btn-action-icon">↗</div>
+                </a>
+              </div>
+            </div>
+            <div class="card-visual">
+              <div class="code-preview-mockup">
+                <div class="mockup-header">
+                  <span class="mock-dot red"></span>
+                  <span class="mock-dot yellow"></span>
+                  <span class="mock-dot green"></span>
+                  <span class="mock-filename">AgentBioPipeline.java</span>
+                </div>
+                <pre class="mockup-code"><code><span class="k">public class</span> <span class="c">BioAgentSwarm</span> {
+  <span class="k">private final</span> AgentOrchestrator coordinator;
+  
+  <span class="k">public void</span> <span class="m">executeSequenceAnalysis</span>(DNASeq seq) {
+    Agent researcher = coordinator.get(<span class="s">"PubMed-Agent"</span>);
+    Agent aligner   = coordinator.get(<span class="s">"BLAST-Node"</span>);
+    
+    <span class="k">var</span> findings = researcher.queryRelated(seq);
+    <span class="k">var</span> aligned  = aligner.process(seq);
+    
+    coordinator.synthesize(findings, aligned);
+  }
+}</code></pre>
+                <div class="mockup-stamp">
+                  <span>BIO·AI</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 2 -->
+        <div class="stack-card card-2">
+          <div class="card-split">
+            <div class="card-meta">
+              <span class="case-study-tag">CASE STUDY · 02</span>
+              <h3 class="card-project-title">Automated AI Resume Parser</h3>
+              <p class="card-project-desc">
+                An intelligent applicant evaluation pipeline built with NLP and agentic heuristics. Extracts skills, categorizes experience, and calculates semantic candidate-job matching scores with high accuracy.
+              </p>
+              <div class="card-tech-badges">
+                <span>Agentic AI</span>
+                <span>Java Backend</span>
+                <span>NLP Heuristics</span>
+                <span>Document Parsing</span>
+              </div>
+              <div class="card-actions">
+                <a href="#contact" class="btn-case-action">
+                  <span>View Case Study</span>
+                  <div class="btn-action-icon">↗</div>
+                </a>
+              </div>
+            </div>
+            <div class="card-visual">
+              <div class="code-preview-mockup">
+                <div class="mockup-header">
+                  <span class="mock-dot red"></span>
+                  <span class="mock-dot yellow"></span>
+                  <span class="mock-dot green"></span>
+                  <span class="mock-filename">ResumeParserEngine.java</span>
+                </div>
+                <pre class="mockup-code"><code><span class="k">public class</span> <span class="c">NeuroParser</span> {
+  <span class="k">public</span> CandidateProfile <span class="m">extractEntities</span>(PDFDoc doc) {
+    String text = doc.extractStructuredText();
+    List&lt;Skill&gt; skills = SkillMatcher.eval(text);
+    MatchScore score = JobCriteria.calculate(skills);
+    
+    <span class="k">return new</span> CandidateProfile(skills, score);
+  }
+}</code></pre>
+                <div class="mockup-stamp">
+                  <span>AI·PARSER</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 3 -->
+        <div class="stack-card card-3">
+          <div class="card-split">
+            <div class="card-meta">
+              <span class="case-study-tag">CASE STUDY · 03</span>
+              <h3 class="card-project-title">NoviTech Practical Analytics Workflow</h3>
+              <p class="card-project-desc">
+                Enterprise analytics pipeline and insight generator constructed during my role at NoviTech R&D Pvt Ltd. Automates raw tabular data normalization, anomaly detection, and operational trend discovery.
+              </p>
+              <div class="card-tech-badges">
+                <span>Data Analytics</span>
+                <span>Python / Pandas</span>
+                <span>Statistical Modeling</span>
+                <span>ETL Pipelines</span>
+              </div>
+              <div class="card-actions">
+                <a href="#contact" class="btn-case-action">
+                  <span>View Analytics Flow</span>
+                  <div class="btn-action-icon">↗</div>
+                </a>
+              </div>
+            </div>
+            <div class="card-visual">
+              <div class="code-preview-mockup">
+                <div class="mockup-header">
+                  <span class="mock-dot red"></span>
+                  <span class="mock-dot yellow"></span>
+                  <span class="mock-dot green"></span>
+                  <span class="mock-filename">pipeline_analytics.py</span>
+                </div>
+                <pre class="mockup-code"><code><span class="k">import</span> pandas <span class="k">as</span> pd
+<span class="k">from</span> novitech.analytics <span class="k">import</span> StreamProcessor
+
+<span class="k">def</span> <span class="m">transform_raw_stream</span>(data_source):
+    df = pd.read_parquet(data_source)
+    cleaned_df = df.pipe(normalize_timestamps)
+                   .pipe(detect_anomalies)
+    
+    insights = generate_business_metrics(cleaned_df)
+    <span class="k">return</span> insights</code></pre>
+                <div class="mockup-stamp">
+                  <span>DATA·OPS</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 4 -->
+        <div class="stack-card card-4">
+          <div class="card-split">
+            <div class="card-meta">
+              <span class="case-study-tag">CASE STUDY · 04</span>
+              <h3 class="card-project-title">Autonomous Java Agent Framework</h3>
+              <p class="card-project-desc">
+                High-performance Java core framework featuring concurrent agent execution, inter-agent messaging channels, memory caching, and tool invocation with graceful degradation.
+              </p>
+              <div class="card-tech-badges">
+                <span>Java 21</span>
+                <span>Concurrency</span>
+                <span>Tool Orchestration</span>
+                <span>Clean Architecture</span>
+              </div>
+              <div class="card-actions">
+                <a href="#contact" class="btn-case-action">
+                  <span>Check Architecture</span>
+                  <div class="btn-action-icon">↗</div>
+                </a>
+              </div>
+            </div>
+            <div class="card-visual">
+              <div class="code-preview-mockup">
+                <div class="mockup-header">
+                  <span class="mock-dot red"></span>
+                  <span class="mock-dot yellow"></span>
+                  <span class="mock-dot green"></span>
+                  <span class="mock-filename">ConcurrentAgentDispatcher.java</span>
+                </div>
+                <pre class="mockup-code"><code><span class="k">public record</span> <span class="c">AgentTask</span>(String id, Runnable action) {}
+
+<span class="k">public class</span> <span class="c">Dispatcher</span> {
+  <span class="k">private final</span> ExecutorService pool = 
+      Executors.newVirtualThreadPerTaskExecutor();
+      
+  <span class="k">public</span> Future&lt;Result&gt; <span class="m">dispatch</span>(AgentTask task) {
+    <span class="k">return</span> pool.submit(() -&gt; executeAgentLogic(task));
+  }
+}</code></pre>
+                <div class="mockup-stamp">
+                  <span>JAVA·CORE</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       10. CERTIFICATIONS & TIMELINE SECTION
+       ======================================================================== -->
+  <section class="certifications-section" id="certifications">
+    <div class="section-container">
+      
+      <div class="section-label-row">
+        <span class="tag-number">// 04</span>
+        <span class="tag-dash">—</span>
+        <span class="tag-title">ACCREDITATION & CAREER</span>
+      </div>
+      <h2 class="section-headline-gold">CREDENTIALS</h2>
+
+      <!-- Certifications Badge Grid -->
+      <div class="cert-badges-grid">
+        <div class="cert-item">
+          <div class="cert-icon-wrap"><i class="fa-solid fa-brain"></i></div>
+          <div class="cert-meta">
+            <h4>Learner to Builder: Become an AI Architect</h4>
+            <span>AI Architecture & LLM Design</span>
+          </div>
+        </div>
+
+        <div class="cert-item">
+          <div class="cert-icon-wrap"><i class="fa-solid fa-shield-halved"></i></div>
+          <div class="cert-meta">
+            <h4>Basic Data Security</h4>
+            <span>Information Protection & Compliance</span>
+          </div>
+        </div>
+
+        <div class="cert-item">
+          <div class="cert-icon-wrap"><i class="fa-solid fa-chart-line"></i></div>
+          <div class="cert-meta">
+            <h4>Data Analytics</h4>
+            <span>Quantitative Modeling & Business Insights</span>
+          </div>
+        </div>
+
+        <div class="cert-item">
+          <div class="cert-icon-wrap"><i class="fa-solid fa-bolt"></i></div>
+          <div class="cert-meta">
+            <h4>Digital Productivity Certificate</h4>
+            <span>High-Efficiency Automated Workflows</span>
+          </div>
+        </div>
+
+        <div class="cert-item">
+          <div class="cert-icon-wrap"><i class="fa-solid fa-comments"></i></div>
+          <div class="cert-meta">
+            <h4>Communication Skill</h4>
+            <span>Team Collaboration & Executive Presentation</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Experience & Education Mini Timeline -->
+      <div class="timeline-row">
+        <div class="timeline-col">
+          <h3 class="col-title"><i class="fa-solid fa-briefcase"></i> Experience</h3>
+          
+          <div class="timeline-block">
+            <div class="block-period">July 2026 – Present (3 mos)</div>
+            <div class="block-role">Data Analyst</div>
+            <div class="block-org">NoviTech R&D Pvt Ltd · Chennai</div>
+            <p class="block-desc">Immersed in practical analytics workflows, turning raw data into meaningful insights for strategic decision making.</p>
+          </div>
+
+          <div class="timeline-block">
+            <div class="block-period">May 2024 – Present (2 yrs 5 mos)</div>
+            <div class="block-role">Accountant</div>
+            <div class="block-org">Jana Fibre Glass</div>
+            <p class="block-desc">Led operational accounting, financial reporting, and data integrity verification across manufacturing operations.</p>
+          </div>
+        </div>
+
+        <div class="timeline-col">
+          <h3 class="col-title"><i class="fa-solid fa-graduation-cap"></i> Education</h3>
+          
+          <div class="timeline-block">
+            <div class="block-period">Nov 2024 – Nov 2028</div>
+            <div class="block-role">B.Tech in Computer Science & Engineering</div>
+            <div class="block-org">Sri Venkateshwaraa College of Engg & Tech (SVCET)</div>
+            <p class="block-desc">Focusing on Artificial Intelligence, Agentic AI, Java Software Architecture, and Distributed Systems.</p>
+          </div>
+
+          <div class="timeline-block">
+            <div class="block-period">June 2022 – May 2024</div>
+            <div class="block-role">Higher Secondary Education (BioMaths)</div>
+            <div class="block-org">Kuyilappalayam Higher Secondary School</div>
+            <p class="block-desc">Advanced foundations in mathematics and biological sciences, shaping my work in bioinformatics AI.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       11. CONTACT SECTION (Exact Match from Video 01:52 - 01:57)
+       ======================================================================== -->
+  <section class="contact-section" id="contact">
+    <div class="section-container">
+      
+      <div class="contact-badge-header">
+        <span class="pulse-emerald-dot"></span>
+        <span class="contact-badge-text">CONTACT</span>
+      </div>
+
+      <div class="contact-grid">
+        
+        <!-- Left Side: Massive Title & Contact Quick Buttons -->
+        <div class="contact-left">
+          <h2 class="contact-headline">
+            Let's create <br />
+            <span class="headline-serif">something meaningful.</span>
+          </h2>
+
+          <p class="contact-subtext">
+            Have a project in mind, an internship opening in AI or Data Science, or simply want to talk about autonomous agents? I'd love to hear from you.
+          </p>
+
+          <div class="contact-pills-list">
+            
+            <!-- Copy Email Pill -->
+            <div class="contact-card-btn" id="copyEmailBtn">
+              <div class="btn-icon-circle"><i class="fa-regular fa-envelope"></i></div>
+              <div class="btn-text-block">
+                <span class="pill-label">Email me</span>
+                <span class="pill-val">mguhan6383@gmail.com</span>
+              </div>
+              <div class="btn-action-corner">
+                <i class="fa-regular fa-copy" id="copyIcon"></i>
+              </div>
+            </div>
+
+            <!-- LinkedIn Pill -->
+            <a href="https://www.linkedin.com/in/guhan-murugaiyan" target="_blank" rel="noopener" class="contact-card-btn">
+              <div class="btn-icon-circle"><i class="fa-brands fa-linkedin-in"></i></div>
+              <div class="btn-text-block">
+                <span class="pill-label">Connect</span>
+                <span class="pill-val">LinkedIn / guhan-murugaiyan</span>
+              </div>
+              <div class="btn-action-corner">↗</div>
+            </a>
+
+            <!-- Location Pill -->
+            <div class="contact-card-btn non-clickable">
+              <div class="btn-icon-circle"><i class="fa-solid fa-location-dot"></i></div>
+              <div class="btn-text-block">
+                <span class="pill-label">Based in</span>
+                <span class="pill-val">Vanur, Tamil Nadu, India</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Right Side: Clean Dark Form -->
+        <div class="contact-right">
+          <form class="contact-form" id="contactForm">
+            <div class="form-group">
+              <label for="formName">Name</label>
+              <input type="text" id="formName" name="name" placeholder="Your Name" required />
+            </div>
+
+            <div class="form-group">
+              <label for="formEmail">Email</label>
+              <input type="email" id="formEmail" name="email" placeholder="your@email.com" required />
+            </div>
+
+            <div class="form-group">
+              <label for="formMsg">Message</label>
+              <textarea id="formMsg" name="message" rows="5" placeholder="Tell me about your project or opportunity..." required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+              <span>Send Message</span>
+              <div class="btn-send-arrow">↗</div>
+            </button>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- Footer Bottom Row -->
+      <footer class="site-footer">
+        <div class="footer-left">
+          <span class="signature-footer">guhan</span>
+          <p>© 2026 Guhan Murugaiyan. All rights reserved.</p>
+        </div>
+        <div class="footer-right">
+          <a href="#hero" class="back-to-top">
+            <span>BACK TO TOP</span>
+            <i class="fa-solid fa-arrow-up"></i>
+          </a>
+        </div>
+      </footer>
+
+    </div>
+  </section>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">Email copied to clipboard!</div>
+
+  <!-- Main JavaScript File -->
+  <script src="script.js"></script>
+</body>
+</html>
