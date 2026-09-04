@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import {
   ArrowUpRight,
@@ -33,12 +33,15 @@ export default function Projects() {
   const gallerySectionRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const workDispRef = useRef<SVGFEDisplacementMapElement>(null);
-  const scrollTriggerInstanceRef = useRef<ScrollTrigger | null>(null);
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
 
-  // Marquee Tracks updated for 5 projects (Part 3)
+  // Mouse drag-to-scroll refs
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollStart = useRef(0);
+
+  // Marquee Tracks updated for 5 projects
   const techMarquee = [
     "JAVA 21",
     "SPRING BOOT",
@@ -62,15 +65,6 @@ export default function Projects() {
     "FULL-STACK WEB",
     "CONCURRENT SYSTEMS",
   ];
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   // 1. ScrollTrigger-driven liquid melt reveal on "WORK" title
   useGSAP(
@@ -98,103 +92,98 @@ export default function Projects() {
     { scope: transitionRef }
   );
 
-  // 2. Horizontal Scroll Gallery: Desktop Pinned Scrub (Part 2)
-  useGSAP(
-    () => {
-      const prefersReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
+  // 2. Programmatic scroll to card index
+  const scrollToIndex = useCallback((index: number) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const targetIdx = Math.max(0, Math.min(REAL_PROJECTS.length - 1, index));
+    setActiveIndex(targetIdx);
 
-      if (isMobile || prefersReducedMotion) {
-        if (scrollTriggerInstanceRef.current) {
-          scrollTriggerInstanceRef.current.kill();
-          scrollTriggerInstanceRef.current = null;
-        }
-        return;
-      }
-
-      const track = trackRef.current;
-      const gallery = gallerySectionRef.current;
-      if (!track || !gallery) return;
-
-      const getScrollDistance = () => track.scrollWidth - window.innerWidth + 80;
-
-      const st = ScrollTrigger.create({
-        trigger: gallery,
-        pin: true,
-        start: "top top",
-        end: () => `+=${getScrollDistance()}`,
-        scrub: 1,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          const idx = Math.min(
-            REAL_PROJECTS.length - 1,
-            Math.max(0, Math.round(self.progress * (REAL_PROJECTS.length - 1)))
-          );
-          setActiveIndex(idx);
-        },
+    const cards = track.querySelectorAll<HTMLElement>(".project-card");
+    if (cards[targetIdx]) {
+      cards[targetIdx].scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center",
       });
+    }
+  }, []);
 
-      scrollTriggerInstanceRef.current = st;
+  // 3. Track scroll listener to update active index in real time
+  const handleScroll = () => {
+    const track = trackRef.current;
+    if (!track) return;
+    const cards = track.querySelectorAll<HTMLElement>(".project-card");
+    if (!cards.length) return;
 
-      gsap.to(track, {
-        x: () => -getScrollDistance(),
-        ease: "none",
-        scrollTrigger: st,
-      });
+    const trackCenter = track.scrollLeft + track.clientWidth / 2;
+    let closestIdx = 0;
+    let minDistance = Infinity;
 
-      return () => {
-        st.kill();
-      };
-    },
-    { scope: gallerySectionRef, dependencies: [isMobile] }
-  );
-
-  // Programmatic navigation to card index
-  const goToIndex = useCallback(
-    (index: number) => {
-      const targetIdx = Math.max(0, Math.min(REAL_PROJECTS.length - 1, index));
-      setActiveIndex(targetIdx);
-
-      if (isMobile) {
-        const track = trackRef.current;
-        if (track) {
-          const cardWidth = track.clientWidth * 0.88;
-          track.scrollTo({ left: targetIdx * cardWidth, behavior: "smooth" });
-        }
-        return;
+    cards.forEach((card, i) => {
+      const cardCenter = card.offsetLeft + card.clientWidth / 2;
+      const dist = Math.abs(trackCenter - cardCenter);
+      if (dist < minDistance) {
+        minDistance = dist;
+        closestIdx = i;
       }
+    });
 
-      const st = scrollTriggerInstanceRef.current;
-      if (st) {
-        const targetProgress = targetIdx / (REAL_PROJECTS.length - 1);
-        const targetScroll = st.start + targetProgress * (st.end - st.start);
-        window.scrollTo({ top: targetScroll, behavior: "smooth" });
-      }
-    },
-    [isMobile]
-  );
+    setActiveIndex(closestIdx);
+  };
 
-  // Keyboard navigation (Part 2)
+  // 4. Mouse wheel handler: smooth horizontal scroll with edge chaining
+  const handleWheel = (e: React.WheelEvent) => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    // If scrolling mostly horizontally (touchpad), let it scroll naturally
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+
+    // Check if at boundaries
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    const isAtStart = track.scrollLeft <= 15 && e.deltaY < 0;
+    const isAtEnd = track.scrollLeft >= maxScroll - 15 && e.deltaY > 0;
+
+    // If at boundary, allow page to continue scrolling vertically
+    if (isAtStart || isAtEnd) return;
+
+    // Otherwise, translate wheel delta to horizontal movement
+    track.scrollLeft += e.deltaY * 0.9;
+  };
+
+  // 5. Desktop Drag-to-Scroll (Mouse down + drag)
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (e.button !== 0) return;
+    if ((e.target as HTMLElement).closest("a, button, input, pre, code")) return;
+
+    isDragging.current = true;
+    startX.current = e.pageX;
+    scrollStart.current = trackRef.current ? trackRef.current.scrollLeft : 0;
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging.current || !trackRef.current) return;
+    e.preventDefault();
+    const walk = (e.pageX - startX.current) * 1.4;
+    trackRef.current.scrollLeft = scrollStart.current - walk;
+  };
+
+  const handleMouseUpOrLeave = () => {
+    isDragging.current = false;
+  };
+
+  // 6. Keyboard navigation (Left / Right arrows)
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowRight") {
-      goToIndex(activeIndex + 1);
+      scrollToIndex(activeIndex + 1);
     } else if (e.key === "ArrowLeft") {
-      goToIndex(activeIndex - 1);
+      scrollToIndex(activeIndex - 1);
     }
   };
 
-  // Mobile native scroll listener to update activeIndex
-  const handleMobileScroll = () => {
-    if (!isMobile || !trackRef.current) return;
-    const track = trackRef.current;
-    const cardWidth = track.clientWidth * 0.88;
-    const currentIdx = Math.round(track.scrollLeft / cardWidth);
-    setActiveIndex(Math.max(0, Math.min(REAL_PROJECTS.length - 1, currentIdx)));
-  };
-
   return (
-    <div className="relative bg-[#0A0A0A] text-[#F0F0F0] overflow-hidden select-none">
+    <div className="relative bg-[#0A0A0A] text-[#F0F0F0] select-none">
       {/* SVG Liquid Distortion Filter for "WORK" Title Reveal */}
       <svg
         className="absolute w-0 h-0 overflow-hidden pointer-events-none"
@@ -266,28 +255,28 @@ export default function Projects() {
         onKeyDown={handleKeyDown}
         tabIndex={0}
         aria-label="Selected Case Studies Horizontal Gallery"
-        className="relative min-h-screen py-16 px-4 sm:px-8 lg:px-12 flex flex-col justify-center overflow-hidden outline-none"
+        className="relative py-12 sm:py-16 px-4 sm:px-8 lg:px-12 flex flex-col justify-center outline-none"
       >
         {/* Gallery Top Controls Bar: Header, Progress Dots & Arrow Controls */}
         <div className="max-w-7xl mx-auto w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-8 mb-4 border-b border-white/10">
           <div>
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-[#C9AF7C]/30 bg-[#C9AF7C]/10 text-[#C9AF7C] text-[11px] font-mono tracking-widest uppercase mb-2 font-semibold">
               <Sparkles className="w-3.5 h-3.5 text-[#C9AF7C]" />
-              {"// 03 — FEATURED PROJECTS (01 / 05)"}
+              {`// 03 — FEATURED PROJECTS (0${activeIndex + 1} / 05)`}
             </div>
             <h3 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold uppercase tracking-tight text-white">
               SELECTED CASE STUDIES
             </h3>
           </div>
 
-          {/* Controls: Prev/Next Buttons + 5-Dot Progress Indicator (Part 2) */}
+          {/* Controls: Prev/Next Buttons + 5-Dot Progress Indicator */}
           <div className="flex items-center gap-4 sm:gap-6 self-end sm:self-center">
             {/* 5-Dot Indicator */}
             <div className="flex items-center gap-2">
               {REAL_PROJECTS.map((p, i) => (
                 <button
                   key={`dot-${p.id}`}
-                  onClick={() => goToIndex(i)}
+                  onClick={() => scrollToIndex(i)}
                   aria-label={`Go to project ${i + 1}`}
                   className={`h-2 rounded-full transition-all duration-300 ${
                     activeIndex === i
@@ -301,7 +290,7 @@ export default function Projects() {
             {/* Prev / Next Arrows */}
             <div className="flex items-center gap-2">
               <button
-                onClick={() => goToIndex(activeIndex - 1)}
+                onClick={() => scrollToIndex(activeIndex - 1)}
                 disabled={activeIndex === 0}
                 aria-label="Previous project"
                 className="circle-hover-parent w-10 h-10 rounded-full border border-white/15 text-white disabled:opacity-30 disabled:pointer-events-none hover:border-[#C9AF7C] hover:text-black [--circle-bg:#C9AF7C] transition-all flex items-center justify-center cursor-pointer"
@@ -309,7 +298,7 @@ export default function Projects() {
                 <ChevronLeft className="w-4 h-4 z-10" />
               </button>
               <button
-                onClick={() => goToIndex(activeIndex + 1)}
+                onClick={() => scrollToIndex(activeIndex + 1)}
                 disabled={activeIndex === REAL_PROJECTS.length - 1}
                 aria-label="Next project"
                 className="circle-hover-parent w-10 h-10 rounded-full border border-white/15 text-white disabled:opacity-30 disabled:pointer-events-none hover:border-[#C9AF7C] hover:text-black [--circle-bg:#C9AF7C] transition-all flex items-center justify-center cursor-pointer"
@@ -323,21 +312,19 @@ export default function Projects() {
         {/* Horizontal Track Container */}
         <div
           ref={trackRef}
-          onScroll={handleMobileScroll}
-          className={`flex flex-row items-stretch w-full ${
-            isMobile
-              ? "overflow-x-auto scroll-smooth snap-x snap-mandatory py-4 gap-4 no-scrollbar"
-              : "flex-nowrap"
-          }`}
+          data-lenis-prevent="true"
+          onWheel={handleWheel}
+          onScroll={handleScroll}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUpOrLeave}
+          onMouseLeave={handleMouseUpOrLeave}
+          className="flex flex-row items-stretch w-full overflow-x-auto scroll-smooth snap-x snap-mandatory py-4 px-2 no-scrollbar cursor-grab active:cursor-grabbing gap-6 sm:gap-8 lg:gap-10"
         >
           {REAL_PROJECTS.map((project, idx) => (
             <div
               key={project.id}
-              className={`rounded-3xl bg-[#111111] border border-white/10 hover:border-[#C9AF7C]/50 transition-all duration-500 shadow-2xl p-6 sm:p-8 lg:p-10 flex flex-col justify-between group select-text ${
-                isMobile
-                  ? "w-[88vw] flex-shrink-0 snap-start"
-                  : "w-[82vw] max-w-5xl flex-shrink-0 mr-8 lg:mr-12"
-              }`}
+              className="project-card rounded-3xl bg-[#111111] border border-white/10 hover:border-[#C9AF7C]/50 transition-all duration-500 shadow-2xl p-6 sm:p-8 lg:p-10 flex flex-col justify-between group select-text w-[86vw] max-w-4xl lg:max-w-5xl flex-shrink-0 snap-center"
             >
               {/* Card Top: Case Number, Running Total & Rotating Status Badge */}
               <div className="flex items-center justify-between pb-5 border-b border-white/10">
