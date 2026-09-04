@@ -37,6 +37,8 @@ export default function Projects() {
   const workDispRef = useRef<SVGFEDisplacementMapElement>(null);
 
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [centerPadding, setCenterPadding] = useState(0);
 
   const isDragging = useRef(false);
   const startX = useRef(0);
@@ -53,6 +55,17 @@ export default function Projects() {
     "FULL-STACK WEB", "CONCURRENT SYSTEMS",
   ];
 
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Liquid distortion text reveal on "WORK"
   useGSAP(
     () => {
       const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -75,83 +88,154 @@ export default function Projects() {
     { scope: transitionRef }
   );
 
+  // Desktop Pinned Horizontal Scroll Architecture
   useEffect(() => {
+    if (isMobile) return;
+
     const wrapper = pinnedWrapperRef.current;
     const track = trackRef.current;
     if (!wrapper || !track) return;
 
-    track.scrollLeft = 0;
-    setActiveIndex(0);
+    const totalProjects = REAL_PROJECTS.length;
+    if (totalProjects <= 1) return;
 
     let st: ScrollTrigger | null = null;
+    let tween: gsap.core.Tween | null = null;
 
-    const rafId = requestAnimationFrame(() => {
-      const maxTrackScroll = track.scrollWidth - track.clientWidth;
-      if (maxTrackScroll <= 0) return;
+    const setupGallery = () => {
+      if (st) st.kill();
+      if (tween) tween.kill();
 
-      wrapper.style.height = `calc(100vh + ${maxTrackScroll}px)`;
+      const cards = track.querySelectorAll<HTMLElement>(".project-card");
+      if (cards.length < 2) return;
 
-      st = ScrollTrigger.create({
-        trigger: wrapper,
-        start: "top top",
-        end: () => `+=${maxTrackScroll}`,
-        scrub: 1,
-        onUpdate: (self) => {
-          const newScrollLeft = self.progress * maxTrackScroll;
-          track.scrollLeft = newScrollLeft;
+      const firstCard = cards[0];
+      const lastCard = cards[cards.length - 1];
 
-          const cards = track.querySelectorAll<HTMLElement>(".project-card");
-          if (!cards.length) return;
-          const trackCenter = track.clientWidth / 2 + newScrollLeft;
-          let closestIdx = 0;
-          let minDist = Infinity;
-          cards.forEach((card, i) => {
-            const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-            const dist = Math.abs(trackCenter - cardCenter);
-            if (dist < minDist) { minDist = dist; closestIdx = i; }
-          });
-          setActiveIndex(closestIdx);
-        },
+      // Calculate center padding so Card 1 starts centered in the viewport
+      const viewportWidth = window.innerWidth;
+      const cardWidth = firstCard.offsetWidth;
+      const calculatedPadding = Math.max(24, Math.round((viewportWidth - cardWidth) / 2));
+      setCenterPadding(calculatedPadding);
+
+      // Force recalculation of card positions with updated padding
+      requestAnimationFrame(() => {
+        const currentCards = track.querySelectorAll<HTMLElement>(".project-card");
+        if (!currentCards.length) return;
+        const c0 = currentCards[0];
+        const cLast = currentCards[currentCards.length - 1];
+
+        // Exact horizontal distance to travel from Card 0 center to Card N-1 center
+        const totalDistance = cLast.offsetLeft - c0.offsetLeft;
+        if (totalDistance <= 0) return;
+
+        // Dynamic vertical scroll distance proportional strictly to project count (N - 1 steps)
+        // Each project step consumes ~75% of viewport height (deliberate & responsive)
+        const vh = window.innerHeight;
+        const stepScroll = Math.min(800, Math.max(500, Math.round(vh * 0.75)));
+        const scrollDistance = (totalProjects - 1) * stepScroll;
+
+        // Set wrapper height so sticky container releases immediately when Project N finishes
+        wrapper.style.height = `${vh + scrollDistance}px`;
+
+        gsap.set(track, { x: 0 });
+
+        tween = gsap.to(track, {
+          x: -totalDistance,
+          ease: "none",
+          scrollTrigger: {
+            trigger: wrapper,
+            start: "top top",
+            end: `+=${scrollDistance}`,
+            scrub: 0.5,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              const rawProgress = self.progress * (totalProjects - 1);
+              const active = Math.min(totalProjects - 1, Math.max(0, Math.round(rawProgress)));
+              setActiveIndex(active);
+            },
+          },
+        });
+
+        st = tween.scrollTrigger ?? null;
       });
-    });
+    };
+
+    const timer = setTimeout(setupGallery, 100);
+
+    const handleResize = () => {
+      setupGallery();
+      ScrollTrigger.refresh();
+    };
+
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      cancelAnimationFrame(rafId);
+      clearTimeout(timer);
+      window.removeEventListener("resize", handleResize);
       if (st) st.kill();
+      if (tween) tween.kill();
       if (wrapper) wrapper.style.height = "";
+      if (track) gsap.set(track, { clearProps: "x" });
     };
-  }, []);
+  }, [isMobile]);
 
-  const scrollToIndex = useCallback((index: number) => {
-    const track = trackRef.current;
-    const wrapper = pinnedWrapperRef.current;
-    if (!track || !wrapper) return;
+  // Mobile IntersectionObserver to update activeIndex on vertical scroll
+  useEffect(() => {
+    if (!isMobile) return;
+    const cards = trackRef.current?.querySelectorAll<HTMLElement>(".project-card");
+    if (!cards || !cards.length) return;
 
-    const targetIdx = Math.max(0, Math.min(REAL_PROJECTS.length - 1, index));
-    setActiveIndex(targetIdx);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const idx = Array.from(cards).indexOf(entry.target as HTMLElement);
+            if (idx !== -1) setActiveIndex(idx);
+          }
+        });
+      },
+      { threshold: 0.45 }
+    );
 
-    const cards = track.querySelectorAll<HTMLElement>(".project-card");
-    const targetCard = cards[targetIdx];
-    if (!targetCard) return;
+    cards.forEach((c) => observer.observe(c));
+    return () => observer.disconnect();
+  }, [isMobile]);
 
-    const cardLeft = targetCard.offsetLeft;
-    const cardWidth = targetCard.offsetWidth;
-    const trackWidth = track.clientWidth;
-    const targetScrollLeft = Math.max(0, cardLeft - (trackWidth - cardWidth) / 2);
+  // Programmatic scroll to specific card index
+  const scrollToIndex = useCallback(
+    (index: number) => {
+      const targetIdx = Math.max(0, Math.min(REAL_PROJECTS.length - 1, index));
+      setActiveIndex(targetIdx);
 
-    const maxTrackScroll = track.scrollWidth - track.clientWidth;
-    if (maxTrackScroll > 0) {
-      const progress = targetScrollLeft / maxTrackScroll;
+      if (isMobile) {
+        const cards = trackRef.current?.querySelectorAll<HTMLElement>(".project-card");
+        if (cards && cards[targetIdx]) {
+          cards[targetIdx].scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+        return;
+      }
+
+      const wrapper = pinnedWrapperRef.current;
+      if (!wrapper) return;
+
+      const totalProjects = REAL_PROJECTS.length;
+      const vh = window.innerHeight;
+      const stepScroll = Math.min(800, Math.max(500, Math.round(vh * 0.75)));
+      const scrollDistance = (totalProjects - 1) * stepScroll;
+
       const wrapperTop = wrapper.getBoundingClientRect().top + window.scrollY;
-      const targetPageY = wrapperTop + progress * maxTrackScroll;
+      const targetPageY = wrapperTop + (targetIdx / (totalProjects - 1)) * scrollDistance;
+
       const lenis = (window as unknown as { __lenis?: { scrollTo: (y: number, opts?: Record<string, unknown>) => void } }).__lenis;
       if (lenis) {
         lenis.scrollTo(targetPageY, { duration: 0.8 });
       } else {
         window.scrollTo({ top: targetPageY, behavior: "smooth" });
       }
-    }
-  }, []);
+    },
+    [isMobile]
+  );
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowRight") scrollToIndex(activeIndex + 1);
@@ -159,27 +243,23 @@ export default function Projects() {
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (e.button !== 0) return;
+    if (isMobile || e.button !== 0) return;
     if ((e.target as HTMLElement).closest("a, button, input, pre, code")) return;
     isDragging.current = true;
     startX.current = e.pageX;
-    scrollStart.current = trackRef.current ? trackRef.current.scrollLeft : 0;
+    scrollStart.current = window.scrollY;
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging.current || !trackRef.current || !pinnedWrapperRef.current) return;
+    if (!isDragging.current || isMobile || !pinnedWrapperRef.current) return;
     e.preventDefault();
-    const walk = (e.pageX - startX.current) * 1.35;
-    const newScrollLeft = Math.max(0, scrollStart.current - walk);
-    const maxTrackScroll = trackRef.current.scrollWidth - trackRef.current.clientWidth;
-    if (maxTrackScroll > 0) {
-      const progress = Math.min(1, newScrollLeft / maxTrackScroll);
-      const wrapperTop = pinnedWrapperRef.current.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: wrapperTop + progress * maxTrackScroll });
-    }
+    const walk = (e.pageX - startX.current) * 1.5;
+    window.scrollTo({ top: scrollStart.current - walk });
   };
 
-  const handleMouseUpOrLeave = () => { isDragging.current = false; };
+  const handleMouseUpOrLeave = () => {
+    isDragging.current = false;
+  };
 
   return (
     <div className="relative bg-[#0A0A0A] text-[#F0F0F0] select-none">
@@ -192,6 +272,7 @@ export default function Projects() {
         </defs>
       </svg>
 
+      {/* Marquee & Title Section */}
       <section
         id="work"
         ref={transitionRef}
@@ -223,23 +304,29 @@ export default function Projects() {
         </div>
       </section>
 
+      {/* Pinned Gallery Container */}
       <div
         ref={pinnedWrapperRef}
-        className="relative w-full"
-        style={{ height: "100vh" }}
+        className={`relative w-full ${isMobile ? "h-auto" : ""}`}
+        style={isMobile ? { height: "auto" } : undefined}
       >
         <div
           ref={stickyInnerRef}
-          className="sticky top-0 w-full h-screen overflow-hidden bg-[#0A0A0A]"
+          className={
+            isMobile
+              ? "relative w-full py-12 px-4 bg-[#0A0A0A]"
+              : "sticky top-0 w-full h-screen overflow-hidden bg-[#0A0A0A]"
+          }
         >
           <section
             ref={gallerySectionRef}
             onKeyDown={handleKeyDown}
             tabIndex={0}
-            aria-label="Selected Case Studies Horizontal Gallery"
-            className="relative h-full py-8 sm:py-10 px-4 sm:px-8 lg:px-12 flex flex-col justify-center outline-none"
+            aria-label="Selected Case Studies Gallery"
+            className="relative h-full py-6 sm:py-8 px-4 sm:px-8 lg:px-12 flex flex-col justify-center outline-none"
           >
-            <div className="max-w-7xl mx-auto w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 mb-4 border-b border-white/10">
+            {/* Header & Controls */}
+            <div className="max-w-7xl mx-auto w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-5 mb-3 border-b border-white/10">
               <div>
                 <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-[#C9AF7C]/30 bg-[#C9AF7C]/10 text-[#C9AF7C] text-[11px] font-mono tracking-widest uppercase mb-2 font-semibold">
                   <Sparkles className="w-3.5 h-3.5 text-[#C9AF7C]" />
@@ -281,22 +368,39 @@ export default function Projects() {
               </div>
             </div>
 
+            {/* Cards Track */}
             <div
               ref={trackRef}
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUpOrLeave}
               onMouseLeave={handleMouseUpOrLeave}
-              className="relative flex flex-row items-stretch w-full overflow-x-hidden py-3 px-4 sm:px-8 md:px-12 lg:px-16 no-scrollbar cursor-grab active:cursor-grabbing gap-5 sm:gap-6 lg:gap-8 flex-1"
-              style={{ scrollBehavior: "auto" }}
+              className={
+                isMobile
+                  ? "flex flex-col items-center w-full gap-8 py-4"
+                  : "relative flex flex-row items-stretch flex-nowrap py-2 cursor-grab active:cursor-grabbing gap-6 sm:gap-8 flex-1"
+              }
+              style={
+                isMobile
+                  ? {}
+                  : {
+                      willChange: "transform",
+                      paddingLeft: `${centerPadding}px`,
+                      paddingRight: `${centerPadding}px`,
+                    }
+              }
             >
               {REAL_PROJECTS.map((project, idx) => (
                 <div
                   key={project.id}
-                  className="project-card relative rounded-3xl bg-[#111111] border border-white/10 hover:border-[#C9AF7C]/50 transition-all duration-500 shadow-2xl p-5 sm:p-6 lg:p-8 flex flex-col justify-between group select-text flex-shrink-0"
-                  style={{ width: "clamp(300px, 68vw, 800px)" }}
+                  className="project-card relative rounded-3xl bg-[#111111] border border-white/10 hover:border-[#C9AF7C]/50 transition-all duration-500 shadow-2xl p-5 sm:p-6 lg:p-7 flex flex-col justify-between group select-text flex-shrink-0"
+                  style={
+                    isMobile
+                      ? { width: "100%", maxWidth: "560px" }
+                      : { width: "clamp(320px, 66vw, 780px)" }
+                  }
                 >
-                  <div className="flex items-center justify-between pb-4 border-b border-white/10">
+                  <div className="flex items-center justify-between pb-3.5 border-b border-white/10">
                     <div className="flex items-center gap-3">
                       <span className="text-sm font-mono font-bold text-[#C9AF7C]">CASE {project.num}</span>
                       <span className="text-xs font-mono tracking-widest text-[#7A7A7A] uppercase font-semibold">/ {project.category}</span>
@@ -316,7 +420,7 @@ export default function Projects() {
                   </div>
 
                   <div
-                    className="relative w-full my-4 rounded-2xl overflow-hidden border border-white/10 bg-[#161616] group/frame cursor-pointer"
+                    className="relative w-full my-3.5 rounded-2xl overflow-hidden border border-white/10 bg-[#161616] group/frame cursor-pointer"
                     style={{ aspectRatio: "21/8" }}
                     data-cursor="view"
                   >
@@ -354,7 +458,7 @@ export default function Projects() {
                           <span>{project.filename}</span>
                         </div>
                       </div>
-                      <pre className="p-3 text-[11px] leading-relaxed text-[#CBD5E1] overflow-x-auto max-h-32 selection:bg-[#C9AF7C] selection:text-black">
+                      <pre className="p-3 text-[11px] leading-relaxed text-[#CBD5E1] overflow-x-auto max-h-28 selection:bg-[#C9AF7C] selection:text-black">
                         <code>{project.codeSnippet}</code>
                       </pre>
                     </div>
@@ -377,8 +481,8 @@ export default function Projects() {
               ))}
             </div>
 
-            <div className="mt-3 flex items-center justify-center gap-3 text-[11px] font-mono text-white/25 tracking-widest uppercase select-none">
-              <span>← scroll to explore projects →</span>
+            <div className="mt-2 flex items-center justify-center gap-3 text-[11px] font-mono text-white/25 tracking-widest uppercase select-none">
+              <span>{isMobile ? "↓ scroll down to explore projects ↓" : "← scroll to explore projects →"}</span>
             </div>
           </section>
         </div>
@@ -386,3 +490,4 @@ export default function Projects() {
     </div>
   );
 }
+
