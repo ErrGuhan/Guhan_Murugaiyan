@@ -26,11 +26,11 @@ export default function Home() {
       {/* 5. Expertise with Interactive Floating Physics Tech Matrix (Video 00:59 - 01:14) */}
       <Expertise />
 
-      {/* 6. Credentials & Experience / Education Timeline */}
-      <Credentials />
-
-      {/* 7. Giant WORK Marquee Banner & Case Studies Showcase (Video 01:15 - 01:51) */}
+      {/* 6. Giant WORK Marquee Banner & Case Studies Showcase (Video 01:15 - 01:51) */}
       <Projects />
+
+      {/* 7. Credentials & Experience / Education Timeline */}
+      <Credentials />
 
       {/* 8. Contact Section with Direct Cards & Form (Video 01:52 - 01:57) */}
       <Contact />

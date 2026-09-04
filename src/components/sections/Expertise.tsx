@@ -5,6 +5,9 @@ import Image from "next/image";
 import { ArrowUpRight, Cpu, Layers, BarChart3, ShieldCheck } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface ExpertiseArea {
   num: string;
@@ -105,17 +108,32 @@ export default function Expertise() {
         });
       });
 
-      // 2. Staggered reveal for expertise rows
-      gsap.from(".expertise-row", {
-        y: 40,
-        opacity: 0,
-        stagger: 0.12,
-        duration: 0.9,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 75%",
-        },
+      // 2. Responsive Animation via gsap.matchMedia()
+      const mm = gsap.matchMedia();
+
+      // Desktop: Staggered reveal for expertise rows
+      mm.add("(min-width: 768px)", () => {
+        gsap.from(".expertise-row", {
+          y: 35,
+          opacity: 0,
+          stagger: 0.12,
+          duration: 0.85,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 75%",
+          },
+        });
+      });
+
+      // Mobile: Always visible and readable in normal document flow.
+      // Explicitly clear any opacity or transform hiding the items on touch devices.
+      mm.add("(max-width: 767px)", () => {
+        gsap.set(".expertise-row", {
+          opacity: 1,
+          y: 0,
+          clearProps: "opacity,transform",
+        });
       });
     },
     { scope: containerRef }
@@ -265,6 +283,12 @@ export default function Expertise() {
                         {tag}
                       </span>
                     ))}
+                  </div>
+
+                  {/* Mobile Tap Cue */}
+                  <div className="mt-3 flex items-center justify-between text-[11px] font-mono text-[#A8986E] md:hidden">
+                    <span>{isMobileActive ? "Tap to close preview snapshot" : "Tap to view preview snapshot"}</span>
+                    <span className="text-[#C9AF7C]">{isMobileActive ? "▲" : "▼"}</span>
                   </div>
 
                   {/* Mobile Tap-Expanded Preview (Part 6) */}

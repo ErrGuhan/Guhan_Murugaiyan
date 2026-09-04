@@ -7,12 +7,14 @@ import { ArrowUpRight, Download, X } from "lucide-react";
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDarkSection, setIsDarkSection] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Hero section height is ~100vh. Scrolled past 85vh = dark theme
+      const scrollY = window.scrollY;
+      setIsScrolled(scrollY > 20);
       const threshold = window.innerHeight * 0.85;
-      setIsDarkSection(window.scrollY > threshold);
+      setIsDarkSection(scrollY > threshold);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -31,10 +33,12 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 w-full z-50 px-6 md:px-12 py-5 flex items-center justify-between transition-all duration-500 ${
+        className={`fixed top-0 left-0 w-full z-50 px-6 md:px-12 flex items-center justify-between transition-all duration-300 ${
           isDarkSection
             ? "bg-[#0A0A0A]/95 backdrop-blur-md border-b border-[#C9AF7C]/15 text-[#F0F0F0] shadow-2xl py-3.5"
-            : "bg-transparent text-[#0C0C0C]"
+            : isScrolled
+            ? "bg-[#F1E8E0]/95 backdrop-blur-md border-b border-[#0C0C0C]/10 text-[#0C0C0C] shadow-sm py-3.5"
+            : "bg-transparent text-[#0C0C0C] py-5"
         }`}
       >
         {/* Left: Cursive Monogram Logo & Copyright (Part 3) */}

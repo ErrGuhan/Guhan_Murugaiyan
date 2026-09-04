@@ -3,7 +3,10 @@
 import { useRef, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Download } from "lucide-react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -48,6 +51,18 @@ export default function Hero() {
         },
         "-=0.5"
       );
+
+      // 3. Smooth fade out of hero bottom prompt on scroll so it cleanly disappears before reaching nav
+      gsap.to(".hero-bottom-row", {
+        opacity: 0,
+        y: -15,
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "8% top",
+          end: "35% top",
+          scrub: true,
+        },
+      });
     },
     { scope: containerRef }
   );
@@ -207,7 +222,7 @@ export default function Hero() {
       </div>
 
       {/* Bottom Row: Copyright, Animated Scroll Prompt & Location (Part 4) */}
-      <div className="w-full flex items-end justify-between border-t border-[#0C0C0C]/12 pt-6 text-xs font-mono tracking-wider text-[#7A7A7A]">
+      <div className="hero-bottom-row w-full flex items-end justify-between border-t border-[#0C0C0C]/12 pt-6 text-xs font-mono tracking-wider text-[#7A7A7A]">
         {/* Left */}
         <div className="hero-stagger">
           <span className="font-semibold text-[#0C0C0C]">©2026 GUHAN</span>
