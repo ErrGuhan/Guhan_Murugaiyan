@@ -7,17 +7,20 @@ interface PreloaderProps {
   onComplete?: () => void;
 }
 
+const WELCOME_CHARS = "Welcome".split("");
+const PORTFOLIO_CHARS = "Guhan's Portfolio".split("");
+
 export default function Preloader({ onComplete }: PreloaderProps) {
   const [isDone, setIsDone] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const welcomeScreenRef = useRef<HTMLDivElement>(null);
   const portfolioScreenRef = useRef<HTMLDivElement>(null);
-  const welcomeClipRectRef = useRef<SVGRectElement>(null);
-  const portfolioClipRectRef = useRef<SVGRectElement>(null);
-  const welcomePenRef = useRef<SVGCircleElement>(null);
-  const portfolioPenRef = useRef<SVGCircleElement>(null);
-  const welcomeUnderlineRef = useRef<SVGPathElement>(null);
-  const portfolioUnderlineRef = useRef<SVGPathElement>(null);
+  const welcomeCharRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const portfolioCharRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const welcomeCaretRef = useRef<HTMLSpanElement>(null);
+  const portfolioCaretRef = useRef<HTMLSpanElement>(null);
+  const welcomeFlourishRef = useRef<SVGPathElement>(null);
+  const portfolioFlourishRef = useRef<SVGPathElement>(null);
   const isRunning = useRef(false);
 
   useEffect(() => {
@@ -46,18 +49,21 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       return () => clearTimeout(timer);
     }
 
-    // 2. Pre-calculate path lengths for underline flourishes on mount
-    if (welcomeUnderlineRef.current) {
-      const len = welcomeUnderlineRef.current.getTotalLength();
-      welcomeUnderlineRef.current.style.strokeDasharray = `${len}`;
-      welcomeUnderlineRef.current.style.strokeDashoffset = `${len}`;
+    // 2. Pre-calculate path lengths for underline flourishes
+    if (welcomeFlourishRef.current) {
+      const len = welcomeFlourishRef.current.getTotalLength();
+      welcomeFlourishRef.current.style.strokeDasharray = `${len}`;
+      welcomeFlourishRef.current.style.strokeDashoffset = `${len}`;
     }
 
-    if (portfolioUnderlineRef.current) {
-      const len = portfolioUnderlineRef.current.getTotalLength();
-      portfolioUnderlineRef.current.style.strokeDasharray = `${len}`;
-      portfolioUnderlineRef.current.style.strokeDashoffset = `${len}`;
+    if (portfolioFlourishRef.current) {
+      const len = portfolioFlourishRef.current.getTotalLength();
+      portfolioFlourishRef.current.style.strokeDasharray = `${len}`;
+      portfolioFlourishRef.current.style.strokeDashoffset = `${len}`;
     }
+
+    const wChars = welcomeCharRefs.current.filter(Boolean);
+    const pChars = portfolioCharRefs.current.filter(Boolean);
 
     const tl = gsap.timeline({
       onComplete: () => {
@@ -70,93 +76,69 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       },
     });
 
-    // --- PHASE 1: CRYSTAL-CLEAR BOLD "WELCOME" INTRO (1.8s) ---
-    tl.fromTo(
-      welcomeClipRectRef.current,
-      { attr: { width: 0 } },
-      {
-        attr: { width: 720 },
-        duration: 1.8,
-        ease: "power2.inOut",
-      }
-    )
-      // Calligraphy pen spark tracking the ink flow
-      .fromTo(
-        welcomePenRef.current,
-        { attr: { cx: 40 }, opacity: 0 },
-        {
-          attr: { cx: 680 },
-          opacity: 1,
-          duration: 1.8,
-          ease: "power2.inOut",
-        },
-        "<"
-      )
-      .to(welcomePenRef.current, { opacity: 0, duration: 0.15 }, "-=0.15")
-      // Underline flourish draw
+    // --- PHASE 1: "WELCOME" CALLIGRAPHY TYPING/WRITING ANIMATION (2.2s) ---
+    tl.set(welcomeCaretRef.current, { opacity: 1 })
+      .to(wChars, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        filter: "blur(0px)",
+        duration: 0.5,
+        stagger: 0.18,
+        ease: "power2.out",
+      })
+      .to(welcomeCaretRef.current, { opacity: 0, duration: 0.2 }, "-=0.15")
       .to(
-        welcomeUnderlineRef.current,
+        welcomeFlourishRef.current,
         {
           strokeDashoffset: 0,
-          duration: 0.45,
-          ease: "power2.out",
+          duration: 0.6,
+          ease: "power2.inOut",
         },
         "-=0.2"
       )
-      // Hold briefly
-      .to({}, { duration: 0.35 })
+      // Hold to enjoy the glowing finished word
+      .to({}, { duration: 0.6 })
       // Fade & scale out Welcome screen
       .to(welcomeScreenRef.current, {
         opacity: 0,
-        scale: 0.95,
-        duration: 0.35,
+        scale: 0.96,
+        duration: 0.4,
         ease: "power2.in",
       })
 
-      // --- PHASE 2: BOLD ITALIC "GUHAN'S PORTFOLIO" TYPING MOTION (1.9s) ---
+      // --- PHASE 2: "GUHAN'S PORTFOLIO" CALLIGRAPHY TYPING/WRITING ANIMATION (2.4s) ---
       .set(portfolioScreenRef.current, {
         opacity: 1,
         scale: 0.98,
       })
-      .fromTo(
-        portfolioClipRectRef.current,
-        { attr: { width: 0 } },
-        {
-          attr: { width: 840 },
-          duration: 1.9,
-          ease: "power2.inOut",
-        }
-      )
-      // Calligraphy pen spark tracking the portfolio ink flow
-      .fromTo(
-        portfolioPenRef.current,
-        { attr: { cx: 40 }, opacity: 0 },
-        {
-          attr: { cx: 800 },
-          opacity: 1,
-          duration: 1.9,
-          ease: "power2.inOut",
-        },
-        "<"
-      )
-      .to(portfolioPenRef.current, { opacity: 0, duration: 0.15 }, "-=0.15")
-      // Portfolio underline flourish draw
+      .set(portfolioCaretRef.current, { opacity: 1 })
+      .to(pChars, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        filter: "blur(0px)",
+        duration: 0.4,
+        stagger: 0.11,
+        ease: "power2.out",
+      })
+      .to(portfolioCaretRef.current, { opacity: 0, duration: 0.2 }, "-=0.15")
       .to(
-        portfolioUnderlineRef.current,
+        portfolioFlourishRef.current,
         {
           strokeDashoffset: 0,
-          duration: 0.45,
-          ease: "power2.out",
+          duration: 0.65,
+          ease: "power2.inOut",
         },
         "-=0.2"
       )
-      // Hold to savor the completed signature
-      .to({}, { duration: 0.5 })
-      // Smooth fade & scale out into hero
+      // Savor the completed gold signature
+      .to({}, { duration: 0.7 })
+      // Smooth fade & gentle scale out into hero
       .to(portfolioScreenRef.current, {
         opacity: 0,
         scale: 1.04,
-        duration: 0.35,
+        duration: 0.4,
         ease: "power2.in",
       });
 
@@ -171,182 +153,91 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     <div
       ref={containerRef}
       id="preloader-overlay"
-      className="fixed inset-0 z-[99999] flex items-center justify-center overflow-hidden bg-[#0A0A0A] pointer-events-auto"
+      className="fixed inset-0 z-[99999] flex items-center justify-center overflow-hidden bg-[#0A0A0A] pointer-events-auto select-none"
     >
       {/* Curtain Panels for Split Reveal */}
       <div className="curtain curtain-top bg-[#0A0A0A]" />
       <div className="curtain curtain-bottom bg-[#0A0A0A]" />
 
       {/* Preloader Centered Content Container */}
-      <div className="relative z-[100000] flex flex-col items-center justify-center select-none w-full max-w-xl sm:max-w-2xl md:max-w-3xl lg:max-w-4xl px-4 sm:px-6">
+      <div className="relative z-[100000] flex flex-col items-center justify-center w-full max-w-2xl sm:max-w-3xl md:max-w-4xl px-4 sm:px-6">
         {/* =======================================================================
-            PHASE 1: CRYSTAL-CLEAR BOLD "WELCOME" INTRO
+            PHASE 1: CLEAN BOLD "WELCOME" (Pure Typography, Zero Stroke, Warm Glow)
            ======================================================================= */}
         <div
           ref={welcomeScreenRef}
           className="flex flex-col items-center justify-center w-full"
         >
-          <svg
-            viewBox="0 0 720 190"
-            className="w-full drop-shadow-[0_0_35px_rgba(201,175,124,0.5)] overflow-visible"
-          >
-            <defs>
-              <clipPath id="welcomeClip">
-                <rect
-                  ref={welcomeClipRectRef}
-                  x="0"
-                  y="0"
-                  width="0"
-                  height="190"
-                />
-              </clipPath>
-              <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="5" result="blur" />
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
-
-            {/* Glowing Calligraphy Underlay */}
-            <text
-              x="50%"
-              y="118"
-              textAnchor="middle"
-              clipPath="url(#welcomeClip)"
-              className="font-script"
-              fontSize="145"
-              fontWeight="bold"
-              fontStyle="italic"
-              fill="#C9AF7C"
-              stroke="#C9AF7C"
-              strokeWidth="4"
-              opacity="0.5"
-              filter="url(#goldGlow)"
-            >
-              Welcome
-            </text>
-
-            {/* Crisp, Perfectly Legible Foreground Calligraphy */}
-            <text
-              x="50%"
-              y="118"
-              textAnchor="middle"
-              clipPath="url(#welcomeClip)"
-              className="font-script"
-              fontSize="145"
-              fontWeight="bold"
-              fontStyle="italic"
-              fill="#C9AF7C"
-              stroke="#C9AF7C"
-              strokeWidth="2.5"
-              letterSpacing="0.04em"
-            >
-              Welcome
-            </text>
-
-            {/* Glowing Golden Fountain Pen Nib Spark */}
-            <circle
-              ref={welcomePenRef}
-              cx="40"
-              cy="95"
-              r="4.5"
-              fill="#FFF8E7"
-              opacity="0"
-              filter="url(#goldGlow)"
+          <div className="font-script text-7xl sm:text-8xl md:text-9xl text-[#C9AF7C] italic tracking-wide flex items-baseline justify-center whitespace-nowrap drop-shadow-[0_0_25px_rgba(201,175,124,0.65)] [text-shadow:0_0_30px_rgba(201,175,124,0.6),0_0_60px_rgba(201,175,124,0.3)]">
+            {WELCOME_CHARS.map((char, i) => (
+              <span
+                key={i}
+                ref={(el) => {
+                  welcomeCharRefs.current[i] = el;
+                }}
+                className="inline-block opacity-0 translate-y-2 scale-90 blur-sm will-change-transform"
+              >
+                {char}
+              </span>
+            ))}
+            <span
+              ref={welcomeCaretRef}
+              className="inline-block w-1 sm:w-1.5 h-[0.75em] bg-[#FFF8E7] rounded-full ml-1.5 opacity-0 shadow-[0_0_15px_#C9AF7C,0_0_30px_#C9AF7C]"
             />
+          </div>
 
-            {/* Calligraphy Underline Flourish */}
+          {/* Underline Flourish */}
+          <svg
+            className="w-full max-w-md sm:max-w-lg h-8 sm:h-10 mt-1 sm:mt-2 drop-shadow-[0_0_15px_rgba(201,175,124,0.6)]"
+            viewBox="0 0 600 40"
+          >
             <path
-              ref={welcomeUnderlineRef}
-              d="M 160,148 C 290,166 430,162 560,144"
+              ref={welcomeFlourishRef}
+              d="M 120,20 C 240,34 380,30 480,18"
               fill="none"
               stroke="#C9AF7C"
-              strokeWidth="4.5"
+              strokeWidth="3.5"
               strokeLinecap="round"
             />
           </svg>
         </div>
 
         {/* =======================================================================
-            PHASE 2: CRYSTAL-CLEAR BOLD ITALIC "GUHAN'S PORTFOLIO" TYPING MOTION
+            PHASE 2: CLEAN BOLD "GUHAN'S PORTFOLIO" (Zero Stroke, Warm Glow)
            ======================================================================= */}
         <div
           ref={portfolioScreenRef}
           className="absolute inset-0 flex flex-col items-center justify-center w-full opacity-0 pointer-events-none"
         >
-          <svg
-            viewBox="0 0 840 190"
-            className="w-full drop-shadow-[0_0_35px_rgba(201,175,124,0.5)] overflow-visible"
-          >
-            <defs>
-              <clipPath id="portfolioClip">
-                <rect
-                  ref={portfolioClipRectRef}
-                  x="0"
-                  y="0"
-                  width="0"
-                  height="190"
-                />
-              </clipPath>
-            </defs>
-
-            {/* Glowing Underlay */}
-            <text
-              x="50%"
-              y="120"
-              textAnchor="middle"
-              clipPath="url(#portfolioClip)"
-              className="font-script"
-              fontSize="115"
-              fontWeight="bold"
-              fontStyle="italic"
-              fill="#C9AF7C"
-              stroke="#C9AF7C"
-              strokeWidth="3.5"
-              opacity="0.5"
-              filter="url(#goldGlow)"
-            >
-              Guhan&apos;s Portfolio
-            </text>
-
-            {/* Crisp, Perfectly Legible Bold Italic Calligraphy */}
-            <text
-              x="50%"
-              y="120"
-              textAnchor="middle"
-              clipPath="url(#portfolioClip)"
-              className="font-script"
-              fontSize="115"
-              fontWeight="bold"
-              fontStyle="italic"
-              fill="#C9AF7C"
-              stroke="#C9AF7C"
-              strokeWidth="2.2"
-              letterSpacing="0.04em"
-            >
-              Guhan&apos;s Portfolio
-            </text>
-
-            {/* Glowing Golden Fountain Pen Nib Spark */}
-            <circle
-              ref={portfolioPenRef}
-              cx="40"
-              cy="95"
-              r="4.5"
-              fill="#FFF8E7"
-              opacity="0"
-              filter="url(#goldGlow)"
+          <div className="font-script text-5xl sm:text-7xl md:text-8xl text-[#C9AF7C] italic tracking-wide flex items-baseline justify-center whitespace-nowrap drop-shadow-[0_0_25px_rgba(201,175,124,0.65)] [text-shadow:0_0_30px_rgba(201,175,124,0.6),0_0_60px_rgba(201,175,124,0.3)]">
+            {PORTFOLIO_CHARS.map((char, i) => (
+              <span
+                key={i}
+                ref={(el) => {
+                  portfolioCharRefs.current[i] = el;
+                }}
+                className="inline-block opacity-0 translate-y-2 scale-90 blur-sm will-change-transform"
+              >
+                {char === " " ? "\u00A0" : char}
+              </span>
+            ))}
+            <span
+              ref={portfolioCaretRef}
+              className="inline-block w-1 sm:w-1.5 h-[0.75em] bg-[#FFF8E7] rounded-full ml-1.5 opacity-0 shadow-[0_0_15px_#C9AF7C,0_0_30px_#C9AF7C]"
             />
+          </div>
 
-            {/* Calligraphy Underline Flourish */}
+          {/* Underline Flourish */}
+          <svg
+            className="w-full max-w-lg sm:max-w-2xl h-8 sm:h-10 mt-1 sm:mt-2 drop-shadow-[0_0_15px_rgba(201,175,124,0.6)]"
+            viewBox="0 0 700 40"
+          >
             <path
-              ref={portfolioUnderlineRef}
-              d="M 120,150 C 330,172 530,168 720,146"
+              ref={portfolioFlourishRef}
+              d="M 80,20 C 260,34 460,32 620,18"
               fill="none"
               stroke="#C9AF7C"
-              strokeWidth="4.5"
+              strokeWidth="3.5"
               strokeLinecap="round"
             />
           </svg>
