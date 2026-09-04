@@ -66,14 +66,16 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       tl.to(
         welcomeLetters,
         {
-          clipPath: "polygon(-25% -30%, 125% -30%, 110% 130%, -35% 130%)",
+          clipPath: "polygon(-40% -60%, 200% -60%, 180% 160%, -60% 160%)",
           opacity: 1,
-          duration: 0.16,
+          duration: 0.18,
           stagger: 0.09,
           ease: "power1.inOut",
         },
         "+=0.1"
       );
+      // Immediately remove clipPath once revealed to prevent any glyph clipping or damaged loops
+      tl.set(welcomeLetters, { clipPath: "none" });
     }
 
     // Brief hold to appreciate the completed word
@@ -100,14 +102,16 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       tl.to(
         portfolioLetters,
         {
-          clipPath: "polygon(-25% -30%, 125% -30%, 110% 130%, -35% 130%)",
+          clipPath: "polygon(-40% -60%, 200% -60%, 180% 160%, -60% 160%)",
           opacity: 1,
-          duration: 0.14,
+          duration: 0.15,
           stagger: 0.065,
           ease: "power1.inOut",
         },
         "+=0.08"
       );
+      // Immediately remove clipPath once revealed
+      tl.set(portfolioLetters, { clipPath: "none" });
     }
 
     // Brief hold to admire
@@ -227,7 +231,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
                 key={`welcome-${index}`}
                 className="welcome-letter inline-block will-change-[clip-path,opacity]"
                 style={{
-                  clipPath: "polygon(-25% -30%, -25% -30%, -35% 130%, -35% 130%)",
+                  clipPath: "polygon(-40% -60%, -40% -60%, -60% 160%, -60% 160%)",
                   opacity: 0,
                 }}
               >
@@ -253,7 +257,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
                   key={`portfolio-${index}`}
                   className="portfolio-letter inline-block will-change-[clip-path,opacity]"
                   style={{
-                    clipPath: "polygon(-25% -30%, -25% -30%, -35% 130%, -35% 130%)",
+                    clipPath: "polygon(-40% -60%, -40% -60%, -60% 160%, -60% 160%)",
                     opacity: 0,
                   }}
                 >

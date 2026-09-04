@@ -85,8 +85,21 @@ export default function Expertise() {
     const setY = gsap.quickTo(panel, "y", { duration: 0.25, ease: "power3.out" });
 
     const handleMouseMove = (e: MouseEvent) => {
-      setX(e.clientX + 24);
-      setY(e.clientY - 90);
+      const panelWidth = 288; // w-72 = 18rem = 288px
+      const panelHeight = 162; // aspect-video = 288 * 9 / 16 ≈ 162px
+
+      // Flip preview to left of cursor if approaching right screen edge
+      let targetX = e.clientX + 24;
+      if (e.clientX + panelWidth + 36 > window.innerWidth) {
+        targetX = e.clientX - panelWidth - 24;
+      }
+
+      // Clamp vertical position so preview stays inside viewport
+      let targetY = e.clientY - 90;
+      targetY = Math.max(75, Math.min(window.innerHeight - panelHeight - 20, targetY));
+
+      setX(targetX);
+      setY(targetY);
     };
 
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
@@ -111,23 +124,31 @@ export default function Expertise() {
       // 2. Responsive Animation via gsap.matchMedia()
       const mm = gsap.matchMedia();
 
-      // Desktop: Staggered reveal for expertise rows
+      // Desktop: Reliable entrance reveal with clearProps so rows are never stuck at opacity 0
       mm.add("(min-width: 768px)", () => {
-        gsap.from(".expertise-row", {
-          y: 35,
-          opacity: 0,
-          stagger: 0.12,
-          duration: 0.85,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 75%",
+        gsap.fromTo(
+          ".expertise-row",
+          {
+            y: 30,
+            opacity: 0,
           },
-        });
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.1,
+            duration: 0.75,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: ".expertise-row",
+              start: "top 85%",
+              once: true,
+            },
+            clearProps: "opacity,transform",
+          }
+        );
       });
 
       // Mobile: Always visible and readable in normal document flow.
-      // Explicitly clear any opacity or transform hiding the items on touch devices.
       mm.add("(max-width: 767px)", () => {
         gsap.set(".expertise-row", {
           opacity: 1,
@@ -135,6 +156,17 @@ export default function Expertise() {
           clearProps: "opacity,transform",
         });
       });
+
+      // Universal Failsafe: Guarantee expertise rows are 100% visible if user jumps directly
+      const timer = setTimeout(() => {
+        gsap.set(".expertise-row", {
+          opacity: 1,
+          y: 0,
+          clearProps: "opacity,transform",
+        });
+      }, 1500);
+
+      return () => clearTimeout(timer);
     },
     { scope: containerRef }
   );

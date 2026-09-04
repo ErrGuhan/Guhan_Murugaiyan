@@ -175,25 +175,25 @@ export default function Hero() {
       </div>
 
       {/* Main Massive Editorial Typography with Liquid Wave Hover (Part 4) */}
-      <div className="flex-1 flex flex-col items-center justify-center text-center my-6 md:my-10 w-full max-w-5xl mx-auto px-4 sm:px-6">
+      <div className="flex-1 flex flex-col items-center justify-center text-center my-4 sm:my-8 md:my-10 w-full max-w-6xl mx-auto px-4 sm:px-6">
         <h1
           ref={headlineRef}
           className="font-display font-black uppercase flex flex-col items-center text-[#0C0C0C] w-full cursor-default [filter:url(#hero-liquid-wave)]"
           data-cursor="pointer"
         >
           {/* Word 1: CREATIVE */}
-          <span className="squeeze-word text-[clamp(2.8rem,9.5vw,8.5rem)] leading-[0.88] tracking-tight">
+          <span className="squeeze-word text-[clamp(4.2rem,16vw,12.5rem)] leading-[0.88] tracking-tight">
             CREATIVE
           </span>
 
           {/* Word 2: DEVELOPER */}
-          <span className="squeeze-word text-[clamp(2.4rem,8.2vw,7.2rem)] leading-[0.92] tracking-tight mt-1 sm:mt-2 text-[#0C0C0C]">
+          <span className="squeeze-word text-[clamp(3.6rem,14vw,11rem)] leading-[0.88] tracking-tight mt-1 sm:mt-2 text-[#0C0C0C]">
             DEVELOPER
           </span>
         </h1>
 
         {/* Tagline Row: Expanding Circle Hover Behind Each Word (Part 4) */}
-        <div className="hero-stagger mt-6 md:mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs sm:text-sm font-mono tracking-widest uppercase text-[#0C0C0C] font-semibold">
+        <div className="hero-stagger mt-5 sm:mt-7 md:mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs sm:text-sm font-mono tracking-widest uppercase text-[#0C0C0C] font-semibold">
           <span className="circle-hover-parent px-3.5 py-1.5 rounded-full hover:text-[#F1E8E0] [--circle-bg:#0C0C0C] cursor-default transition-colors">
             VISUALS
           </span>
@@ -208,7 +208,7 @@ export default function Hero() {
         </div>
 
         {/* Resume Quick CTA (Part 9) */}
-        <div className="hero-stagger mt-6">
+        <div className="hero-stagger mt-5 sm:mt-6">
           <a
             href="/resume.pdf"
             target="_blank"
