@@ -8,8 +8,8 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-[#090a0e] text-white border-t border-white/10 px-6 md:px-12 py-10 select-none">
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+    <footer className="bg-[#090a0e] text-white border-t border-white/10 px-4 sm:px-6 lg:px-8 py-10 select-none">
+      <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
         {/* Left Side: Cursive Signature & Copyright */}
         <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left">
           <span className="font-script text-3xl sm:text-4xl text-[#E5C583]">

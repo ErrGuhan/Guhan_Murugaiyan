@@ -1,8 +1,6 @@
 "use client";
 
 import { useRef } from "react";
-import MagneticButton from "@/components/ui/MagneticButton";
-import { ArrowUpRight } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 
@@ -22,16 +20,7 @@ export default function Hero() {
         delay: 0.2,
       });
 
-      // Parallax effect on scroll
-      gsap.to(".hero-parallax-badge", {
-        y: -60,
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: 1.2,
-        },
-      });
+
     },
     { scope: containerRef }
   );
@@ -75,21 +64,21 @@ export default function Hero() {
       </div>
 
       {/* Main Massive Editorial Typography (Video 00:15 & 00:25) */}
-      <div className="flex-1 flex flex-col items-center justify-center text-center my-6 md:my-12">
+      <div className="flex-1 flex flex-col items-center justify-center text-center my-6 md:my-10 w-full max-w-5xl mx-auto px-4 sm:px-6">
         <h1
           ref={headlineRef}
-          className="font-syne font-black text-[16vw] leading-[0.82] tracking-tighter uppercase flex flex-col items-center text-[#121316]"
+          className="font-syne font-black uppercase flex flex-col items-center text-[#121316] w-full"
         >
           {/* CREATIVE with Liquid Wavy Distortion on Hover (Video 00:25 - 00:30) */}
           <span
-            className="hero-fade liquid-text cursor-default transition-all duration-300 hover:[filter:url(#liquid-wave-filter)] hover:scale-[1.01]"
+            className="hero-fade liquid-text text-[clamp(2.6rem,8.8vw,7.4rem)] leading-[0.88] tracking-tight cursor-default transition-all duration-300 hover:[filter:url(#liquid-wave-filter)]"
             data-cursor="pointer"
           >
             CREATIVE
           </span>
 
           {/* AI DEVELOPER (Video 00:15) */}
-          <span className="hero-fade text-[13vw] tracking-tight mt-1 text-neutral-900 font-extrabold">
+          <span className="hero-fade text-[clamp(2.1rem,7vw,5.8rem)] leading-[0.95] tracking-tight mt-2 text-neutral-900 font-extrabold">
             DEVELOPER
           </span>
         </h1>
@@ -108,35 +97,6 @@ export default function Hero() {
             EXPERIENCE
           </span>
         </div>
-      </div>
-
-      {/* Floating Rotating Circular Badge (Exact Match from Video 00:15 - 00:35) */}
-      <div className="absolute right-6 sm:right-12 md:right-16 top-1/2 -translate-y-1/2 hero-parallax-badge z-20 hidden sm:block">
-        <MagneticButton href="#contact" strength={0.4}>
-          <div className="relative w-28 h-28 md:w-36 md:h-36 flex items-center justify-center group cursor-pointer">
-            {/* Spinning Circular Text SVG */}
-            <svg
-              className="w-full h-full spin-slow"
-              viewBox="0 0 140 140"
-            >
-              <path
-                id="heroCirclePath"
-                d="M 70, 70 m -50, 0 a 50,50 0 1,1 100,0 a 50,50 0 1,1 -100,0"
-                fill="none"
-              />
-              <text className="text-[10px] font-mono tracking-[0.26em] uppercase fill-neutral-800">
-                <textPath href="#heroCirclePath" startOffset="0%">
-                  · LET&apos;S WORK TOGETHER · LET&apos;S WORK TOGETHER
-                </textPath>
-              </text>
-            </svg>
-
-            {/* Center Dark Circle with Arrow */}
-            <div className="absolute w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#121316] text-white flex items-center justify-center group-hover:bg-[#D4AF37] group-hover:text-black group-hover:scale-110 transition-all duration-300 shadow-lg">
-              <ArrowUpRight className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </div>
-          </div>
-        </MagneticButton>
       </div>
 
       {/* Bottom Row: Copyright, Animated Scroll Prompt & Location (Video 00:15) */}

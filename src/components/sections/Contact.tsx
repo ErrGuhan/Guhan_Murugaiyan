@@ -44,9 +44,9 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative min-h-screen py-24 md:py-36 px-6 md:px-12 bg-[#090a0e] text-white border-t border-white/5 overflow-hidden"
+      className="relative min-h-screen py-24 md:py-36 px-4 sm:px-6 lg:px-8 bg-[#090a0e] text-white border-t border-white/5 overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-5xl mx-auto w-full">
         {/* Section Tag Header (Video 01:52) */}
         <div className="mb-14 md:mb-18">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-[11px] font-mono tracking-widest uppercase mb-4">
@@ -54,27 +54,27 @@ export default function Contact() {
             CONTACT
           </div>
 
-          <h2 className="font-syne text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight uppercase leading-[1.05] max-w-4xl">
+          <h2 className="font-syne text-4xl sm:text-6xl font-extrabold tracking-tight uppercase leading-[1.05] max-w-3xl text-white">
             LET&apos;S CREATE <br />
             <span className="text-gold-gradient font-cinzel italic">
               SOMETHING MEANINGFUL.
             </span>
           </h2>
 
-          <p className="mt-6 text-neutral-400 text-sm sm:text-base max-w-xl font-normal leading-relaxed">
+          <p className="mt-6 text-[#CBD5E1] text-sm sm:text-base max-w-xl font-normal leading-relaxed">
             Have a project in mind, an internship opening in AI or Data Science, or
             simply want to talk about autonomous agents? I&apos;d love to hear
             from you.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           {/* Left Column: Direct Contact Quick Cards (Video 01:54) */}
           <div className="lg:col-span-5 space-y-4">
             {/* Copy Email Pill Card */}
             <div
               onClick={copyEmail}
-              className="p-5 sm:p-6 rounded-2xl bg-[#10131C] border border-white/10 hover:border-[#D4AF37]/50 transition-all duration-300 cursor-pointer group flex items-center justify-between shadow-xl"
+              className="p-5 sm:p-6 rounded-2xl bg-[#0e121a] border border-white/10 hover:border-[#D4AF37]/50 transition-all duration-300 cursor-pointer group flex items-center justify-between shadow-xl"
             >
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-[#D4AF37] group-hover:scale-110 transition-transform">
@@ -84,7 +84,7 @@ export default function Contact() {
                   <span className="text-[11px] font-mono text-neutral-400 uppercase tracking-widest block">
                     EMAIL ME
                   </span>
-                  <span className="font-mono text-sm sm:text-base text-neutral-200 group-hover:text-white transition-colors">
+                  <span className="font-mono text-sm sm:text-base text-neutral-200 group-hover:text-white transition-colors font-medium">
                     mguhan6383@gmail.com
                   </span>
                 </div>
@@ -104,7 +104,7 @@ export default function Contact() {
               href="https://www.linkedin.com/in/guhan-murugaiyan"
               target="_blank"
               rel="noreferrer"
-              className="p-5 sm:p-6 rounded-2xl bg-[#10131C] border border-white/10 hover:border-[#D4AF37]/50 transition-all duration-300 flex items-center justify-between group block shadow-xl"
+              className="p-5 sm:p-6 rounded-2xl bg-[#0e121a] border border-white/10 hover:border-[#D4AF37]/50 transition-all duration-300 flex items-center justify-between group block shadow-xl"
             >
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-[#D4AF37] group-hover:scale-110 transition-transform">
@@ -126,7 +126,7 @@ export default function Contact() {
             </a>
 
             {/* Location Pill Card */}
-            <div className="p-5 sm:p-6 rounded-2xl bg-[#10131C] border border-white/10 flex items-center justify-between shadow-xl">
+            <div className="p-5 sm:p-6 rounded-2xl bg-[#0e121a] border border-white/10 flex items-center justify-between shadow-xl">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-[#D4AF37]">
                   <MapPin className="w-5 h-5" />
@@ -144,7 +144,7 @@ export default function Contact() {
           </div>
 
           {/* Right Column: Clean Dark Contact Form (Video 01:54) */}
-          <div className="lg:col-span-7 rounded-3xl bg-[#10131C] border border-white/10 p-6 sm:p-10 shadow-2xl">
+          <div className="lg:col-span-7 rounded-3xl bg-[#0e121a] border border-white/10 p-6 sm:p-10 shadow-2xl">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div>
                 <label className="block text-xs font-mono tracking-wider uppercase text-neutral-400 mb-2">
@@ -153,7 +153,7 @@ export default function Contact() {
                 <input
                   {...register("name")}
                   placeholder="Your Name"
-                  className="w-full px-4 py-3.5 rounded-xl bg-black/40 border border-white/10 text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#D4AF37] transition-colors font-mono text-sm"
+                  className="w-full px-4 py-3.5 rounded-xl bg-[#06080d] border border-white/10 text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#D4AF37] transition-colors font-mono text-sm"
                 />
                 {errors.name && (
                   <p className="mt-1 text-xs text-rose-400 font-mono">
@@ -170,7 +170,7 @@ export default function Contact() {
                   {...register("email")}
                   type="email"
                   placeholder="your@email.com"
-                  className="w-full px-4 py-3.5 rounded-xl bg-black/40 border border-white/10 text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#D4AF37] transition-colors font-mono text-sm"
+                  className="w-full px-4 py-3.5 rounded-xl bg-[#06080d] border border-white/10 text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#D4AF37] transition-colors font-mono text-sm"
                 />
                 {errors.email && (
                   <p className="mt-1 text-xs text-rose-400 font-mono">
@@ -187,7 +187,7 @@ export default function Contact() {
                   {...register("message")}
                   rows={5}
                   placeholder="Tell me about your project or opportunity..."
-                  className="w-full px-4 py-3.5 rounded-xl bg-black/40 border border-white/10 text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#D4AF37] transition-colors font-mono text-sm resize-none"
+                  className="w-full px-4 py-3.5 rounded-xl bg-[#06080d] border border-white/10 text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#D4AF37] transition-colors font-mono text-sm resize-none"
                 />
                 {errors.message && (
                   <p className="mt-1 text-xs text-rose-400 font-mono">
@@ -202,7 +202,7 @@ export default function Contact() {
                 className={`w-full py-4 rounded-xl text-xs font-mono font-bold tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-2 ${
                   submitted
                     ? "bg-emerald-400 text-black shadow-lg"
-                    : "bg-white text-black hover:bg-[#D4AF37] shadow-xl"
+                    : "bg-[#D4AF37] text-black hover:bg-[#FFDF73] shadow-xl"
                 }`}
               >
                 {submitted ? (

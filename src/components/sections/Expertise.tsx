@@ -173,30 +173,30 @@ export default function Expertise() {
     <section
       id="expertise"
       ref={containerRef}
-      className="relative min-h-screen py-24 md:py-36 px-6 md:px-12 bg-[#090a0e] text-white border-t border-white/5 overflow-hidden"
+      className="relative min-h-screen py-24 md:py-36 px-4 sm:px-6 lg:px-8 bg-[#090a0e] text-white border-t border-white/5 overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-5xl mx-auto w-full">
         {/* Section Header */}
-        <div className="mb-14 md:mb-20">
+        <div className="mb-14 md:mb-18">
           <div className="expertise-reveal inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10 text-[#FFDF73] text-[11px] font-mono tracking-widest uppercase mb-4">
             <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
             {"// 02 — SPECIALIZATION & TECH STACK"}
           </div>
 
-          <h2 className="expertise-reveal font-syne text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight uppercase">
+          <h2 className="expertise-reveal font-syne text-4xl sm:text-6xl font-extrabold tracking-tight uppercase text-white">
             MY <span className="text-[#FFDF73]">EXPERTISE</span>
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           {/* Left Column: Statement & Interactive Physics Tech Sandbox (Video 01:00) */}
           <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
             <div>
-              <h3 className="expertise-reveal font-syne text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug text-neutral-100">
-                I design and build digital experiences where autonomy, code, and
+              <h3 className="expertise-reveal font-syne text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug text-white">
+                I design and build intelligent systems where autonomy, code, and
                 motion work as one.
               </h3>
-              <p className="expertise-reveal mt-4 text-neutral-400 text-sm leading-relaxed">
+              <p className="expertise-reveal mt-4 text-[#CBD5E1] text-sm leading-relaxed">
                 From autonomous multi-agent swarms to high-throughput Java
                 workflows and data pipelines, I build robust, intelligent
                 architectures designed to scale.
@@ -205,34 +205,34 @@ export default function Expertise() {
 
             {/* Interactive Physics Sandbox Box (Exact from Video 01:00) */}
             <div
-              className="expertise-reveal rounded-2xl bg-white/[0.02] border border-white/10 overflow-hidden shadow-2xl"
+              className="expertise-reveal rounded-2xl bg-[#0e121a] border border-white/10 overflow-hidden shadow-2xl"
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
               onMouseLeave={handleMouseUp}
             >
-              <div className="px-5 py-3 border-b border-white/10 flex items-center justify-between text-xs font-mono text-neutral-400">
-                <span className="flex items-center gap-2">
+              <div className="px-5 py-3 border-b border-white/10 flex items-center justify-between text-xs font-mono text-neutral-300 bg-white/[0.02]">
+                <span className="flex items-center gap-2 text-[#E5C583] font-semibold">
                   <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
                   INTERACTIVE TECH MATRIX
                 </span>
-                <span className="text-[10px] uppercase text-[#D4AF37]/80">
+                <span className="text-[10px] uppercase text-[#D4AF37] font-bold">
                   DRAG &amp; TOSS BADGES
                 </span>
               </div>
 
               <div
                 ref={sandboxRef}
-                className="relative w-full h-64 sm:h-72 select-none overflow-hidden"
+                className="relative w-full h-64 sm:h-72 select-none overflow-hidden bg-[#0a0d14]"
               >
                 {bubbles.map((b) => (
                   <div
                     key={b.id}
                     onMouseDown={(e) => handleMouseDown(b.id, e)}
-                    className="absolute cursor-grab active:cursor-grabbing px-3.5 py-1.5 rounded-full text-xs font-mono font-semibold border backdrop-blur-md shadow-lg transition-transform hover:scale-110 flex items-center gap-1.5"
+                    className="absolute cursor-grab active:cursor-grabbing px-3.5 py-1.5 rounded-full text-xs font-mono font-semibold border shadow-md transition-transform hover:scale-110 flex items-center gap-1.5 select-none"
                     style={{
                       transform: `translate3d(${b.x}px, ${b.y}px, 0)`,
-                      backgroundColor: "rgba(16, 19, 28, 0.85)",
-                      borderColor: "rgba(255, 255, 255, 0.15)",
+                      backgroundColor: "#131722",
+                      borderColor: "rgba(255, 255, 255, 0.18)",
                       color: b.color,
                     }}
                   >
@@ -256,10 +256,10 @@ export default function Expertise() {
                 <div
                   key={item.num}
                   onClick={() => setActiveItem(idx)}
-                  className={`p-6 sm:p-8 rounded-2xl border transition-all duration-300 cursor-pointer ${
+                  className={`p-6 sm:p-7 rounded-2xl border transition-all duration-300 cursor-pointer bg-[#0e121a] ${
                     isOpen
-                      ? "bg-white/[0.05] border-[#D4AF37]/50 shadow-xl"
-                      : "bg-white/[0.02] border-white/10 hover:border-white/20"
+                      ? "border-[#D4AF37]/60 shadow-xl"
+                      : "border-white/10 hover:border-white/25"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-4">
@@ -270,12 +270,12 @@ export default function Expertise() {
                       <div>
                         <h4
                           className={`font-syne text-xl sm:text-2xl font-bold tracking-tight transition-colors ${
-                            isOpen ? "text-[#FFDF73]" : "text-neutral-200"
+                            isOpen ? "text-[#FFDF73]" : "text-white"
                           }`}
                         >
                           {item.title}
                         </h4>
-                        <p className="text-neutral-400 text-sm mt-2 leading-relaxed">
+                        <p className="text-[#CBD5E1] text-sm mt-2 leading-relaxed">
                           {item.desc}
                         </p>
                       </div>
@@ -293,11 +293,11 @@ export default function Expertise() {
                   </div>
 
                   {/* Tags */}
-                  <div className="mt-6 flex flex-wrap gap-2 pt-4 border-t border-white/10">
+                  <div className="mt-5 flex flex-wrap gap-2 pt-4 border-t border-white/10">
                     {item.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="text-[11px] font-mono px-3 py-1 rounded-full bg-white/5 border border-white/10 text-neutral-300"
+                        className="text-[11px] font-mono px-3 py-1 rounded-full bg-white/5 border border-white/10 text-neutral-200"
                       >
                         {tag}
                       </span>
