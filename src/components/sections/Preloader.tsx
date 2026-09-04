@@ -25,13 +25,20 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     if (isRunning.current) return;
     isRunning.current = true;
 
-    // 1. Session persistence check & reduced motion check
-    const hasSeen = sessionStorage.getItem("guhan_preloader_seen");
+    // 1. Always start from the top of the website on every refresh
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+    window.scrollTo(0, 0);
+    document.body.classList.remove("curtains-open");
+    sessionStorage.removeItem("guhan_preloader_seen");
+
+    // Reduced motion accessibility check
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    if (hasSeen === "true" || prefersReducedMotion) {
+    if (prefersReducedMotion) {
       const timer = setTimeout(() => {
         setIsDone(true);
         onComplete?.();
@@ -54,7 +61,6 @@ export default function Preloader({ onComplete }: PreloaderProps) {
 
     const tl = gsap.timeline({
       onComplete: () => {
-        sessionStorage.setItem("guhan_preloader_seen", "true");
         document.body.classList.add("curtains-open");
 
         setTimeout(() => {
