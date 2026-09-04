@@ -1,8 +1,14 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { ArrowUpRight, Sparkles, Terminal } from "lucide-react";
+import {
+  ArrowUpRight,
+  ChevronLeft,
+  ChevronRight,
+  Sparkles,
+  Terminal,
+} from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -24,35 +30,49 @@ function GithubIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
 
 export default function Projects() {
   const transitionRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const gallerySectionRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const workDispRef = useRef<SVGFEDisplacementMapElement>(null);
+  const scrollTriggerInstanceRef = useRef<ScrollTrigger | null>(null);
 
-  // Marquee Tracks (Part 7)
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Marquee Tracks updated for 5 projects (Part 3)
   const techMarquee = [
     "JAVA 21",
-    "PYTHON",
     "SPRING BOOT",
-    "NEXT.JS 16",
     "REACT 19",
-    "GSAP MOTION",
+    "NEXT.JS 16",
+    "THREE.JS 3D",
     "SUPABASE",
-    "POSTGRESQL",
+    "PRISMA ORM",
+    "TYPESCRIPT",
+    "GSAP MOTION",
     "TAILWIND V4",
-    "LENIS SCROLL",
   ];
 
   const domainMarquee = [
-    "AI AGENTS",
-    "DATA ANALYTICS",
-    "JAVA ENTERPRISE",
     "STUDENT MARKETPLACE",
-    "PRODUCTIVITY OS",
-    "SYSTEMS ARCHITECTURE",
-    "DOCUMENT PARSING",
-    "AUTONOMOUS WORKFLOWS",
+    "PRODUCTIVITY TRACKER",
+    "BANKING & TRANSFER UI",
+    "3D PRODUCT CONFIGURATOR",
+    "LUXURY EVENT STYLING",
+    "CLEAN ARCHITECTURE",
+    "FULL-STACK WEB",
+    "CONCURRENT SYSTEMS",
   ];
 
-  // 1. ScrollTrigger-driven liquid melt reveal on "WORK" title (Part 7)
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // 1. ScrollTrigger-driven liquid melt reveal on "WORK" title
   useGSAP(
     () => {
       const prefersReducedMotion = window.matchMedia(
@@ -74,37 +94,108 @@ export default function Projects() {
           }
         );
       }
-
-      // 2. Project cards clip-path & slide reveal (Part 8)
-      const cards = gsap.utils.toArray<HTMLElement>(".work-card-reveal");
-      cards.forEach((card) => {
-        gsap.fromTo(
-          card,
-          {
-            clipPath: "polygon(0 15%, 100% 15%, 100% 100%, 0% 100%)",
-            opacity: 0,
-            y: 40,
-          },
-          {
-            clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0% 100%)",
-            opacity: 1,
-            y: 0,
-            duration: 0.9,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: card,
-              start: "top 82%",
-            },
-          }
-        );
-      });
     },
-    { scope: containerRef }
+    { scope: transitionRef }
   );
 
+  // 2. Horizontal Scroll Gallery: Desktop Pinned Scrub (Part 2)
+  useGSAP(
+    () => {
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+      if (isMobile || prefersReducedMotion) {
+        if (scrollTriggerInstanceRef.current) {
+          scrollTriggerInstanceRef.current.kill();
+          scrollTriggerInstanceRef.current = null;
+        }
+        return;
+      }
+
+      const track = trackRef.current;
+      const gallery = gallerySectionRef.current;
+      if (!track || !gallery) return;
+
+      const getScrollDistance = () => track.scrollWidth - window.innerWidth + 80;
+
+      const st = ScrollTrigger.create({
+        trigger: gallery,
+        pin: true,
+        start: "top top",
+        end: () => `+=${getScrollDistance()}`,
+        scrub: 1,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          const idx = Math.min(
+            REAL_PROJECTS.length - 1,
+            Math.max(0, Math.round(self.progress * (REAL_PROJECTS.length - 1)))
+          );
+          setActiveIndex(idx);
+        },
+      });
+
+      scrollTriggerInstanceRef.current = st;
+
+      gsap.to(track, {
+        x: () => -getScrollDistance(),
+        ease: "none",
+        scrollTrigger: st,
+      });
+
+      return () => {
+        st.kill();
+      };
+    },
+    { scope: gallerySectionRef, dependencies: [isMobile] }
+  );
+
+  // Programmatic navigation to card index
+  const goToIndex = useCallback(
+    (index: number) => {
+      const targetIdx = Math.max(0, Math.min(REAL_PROJECTS.length - 1, index));
+      setActiveIndex(targetIdx);
+
+      if (isMobile) {
+        const track = trackRef.current;
+        if (track) {
+          const cardWidth = track.clientWidth * 0.88;
+          track.scrollTo({ left: targetIdx * cardWidth, behavior: "smooth" });
+        }
+        return;
+      }
+
+      const st = scrollTriggerInstanceRef.current;
+      if (st) {
+        const targetProgress = targetIdx / (REAL_PROJECTS.length - 1);
+        const targetScroll = st.start + targetProgress * (st.end - st.start);
+        window.scrollTo({ top: targetScroll, behavior: "smooth" });
+      }
+    },
+    [isMobile]
+  );
+
+  // Keyboard navigation (Part 2)
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowRight") {
+      goToIndex(activeIndex + 1);
+    } else if (e.key === "ArrowLeft") {
+      goToIndex(activeIndex - 1);
+    }
+  };
+
+  // Mobile native scroll listener to update activeIndex
+  const handleMobileScroll = () => {
+    if (!isMobile || !trackRef.current) return;
+    const track = trackRef.current;
+    const cardWidth = track.clientWidth * 0.88;
+    const currentIdx = Math.round(track.scrollLeft / cardWidth);
+    setActiveIndex(Math.max(0, Math.min(REAL_PROJECTS.length - 1, currentIdx)));
+  };
+
   return (
-    <div ref={containerRef} className="relative bg-[#0A0A0A] text-[#F0F0F0] overflow-hidden">
-      {/* SVG Liquid Distortion Filter for "WORK" Title Reveal (Part 7) */}
+    <div className="relative bg-[#0A0A0A] text-[#F0F0F0] overflow-hidden select-none">
+      {/* SVG Liquid Distortion Filter for "WORK" Title Reveal */}
       <svg
         className="absolute w-0 h-0 overflow-hidden pointer-events-none"
         aria-hidden="true"
@@ -129,7 +220,7 @@ export default function Projects() {
         </defs>
       </svg>
 
-      {/* PART 7: WORK TRANSITION (Marquee + Background Grid + Liquid Title) */}
+      {/* PART 1: WORK TRANSITION (Marquee + Background Grid + Liquid Title) */}
       <section
         id="work"
         ref={transitionRef}
@@ -152,9 +243,7 @@ export default function Projects() {
             SCROLL TO EXPLORE MY
           </span>
 
-          <h2
-            className="font-display font-black text-[clamp(5rem,18vw,14rem)] leading-[0.82] tracking-tighter uppercase text-[#C9AF7C] drop-shadow-[0_0_35px_rgba(201,175,124,0.2)] [filter:url(#work-liquid-filter)]"
-          >
+          <h2 className="font-display font-black text-[clamp(5rem,18vw,14rem)] leading-[0.82] tracking-tighter uppercase text-[#C9AF7C] drop-shadow-[0_0_35px_rgba(201,175,124,0.2)] [filter:url(#work-liquid-filter)]">
             WORK
           </h2>
         </div>
@@ -171,33 +260,86 @@ export default function Projects() {
         </div>
       </section>
 
-      {/* PART 8: FEATURED CASE STUDIES (Real Projects & Authentic Code) */}
-      <section className="relative py-20 px-6 md:px-12 max-w-5xl mx-auto w-full">
-        {/* Section Tag Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-16 pb-6 border-b border-white/10">
+      {/* PART 2: HORIZONTALLY SCROLLING CASE STUDIES GALLERY */}
+      <section
+        ref={gallerySectionRef}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
+        aria-label="Selected Case Studies Horizontal Gallery"
+        className="relative min-h-screen py-16 px-4 sm:px-8 lg:px-12 flex flex-col justify-center overflow-hidden outline-none"
+      >
+        {/* Gallery Top Controls Bar: Header, Progress Dots & Arrow Controls */}
+        <div className="max-w-7xl mx-auto w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-8 mb-4 border-b border-white/10">
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-[#C9AF7C]/30 bg-[#C9AF7C]/10 text-[#C9AF7C] text-[11px] font-mono tracking-widest uppercase mb-3 font-semibold">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-[#C9AF7C]/30 bg-[#C9AF7C]/10 text-[#C9AF7C] text-[11px] font-mono tracking-widest uppercase mb-2 font-semibold">
               <Sparkles className="w-3.5 h-3.5 text-[#C9AF7C]" />
-              {"// 03 — FEATURED PROJECTS"}
+              {"// 03 — FEATURED PROJECTS (01 / 05)"}
             </div>
-            <h3 className="font-display text-3xl sm:text-5xl font-bold uppercase tracking-tight text-white">
+            <h3 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold uppercase tracking-tight text-white">
               SELECTED CASE STUDIES
             </h3>
           </div>
 
-          <p className="text-xs font-mono text-[#7A7A7A] tracking-wider uppercase max-w-xs text-left sm:text-right">
-            REAL REPOSITORIES, PRODUCTION SCHEMAS &amp; AUTHENTIC CODE.
-          </p>
+          {/* Controls: Prev/Next Buttons + 5-Dot Progress Indicator (Part 2) */}
+          <div className="flex items-center gap-4 sm:gap-6 self-end sm:self-center">
+            {/* 5-Dot Indicator */}
+            <div className="flex items-center gap-2">
+              {REAL_PROJECTS.map((p, i) => (
+                <button
+                  key={`dot-${p.id}`}
+                  onClick={() => goToIndex(i)}
+                  aria-label={`Go to project ${i + 1}`}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    activeIndex === i
+                      ? "w-8 bg-[#C9AF7C]"
+                      : "w-2 bg-white/20 hover:bg-white/50"
+                  }`}
+                />
+              ))}
+            </div>
+
+            {/* Prev / Next Arrows */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => goToIndex(activeIndex - 1)}
+                disabled={activeIndex === 0}
+                aria-label="Previous project"
+                className="circle-hover-parent w-10 h-10 rounded-full border border-white/15 text-white disabled:opacity-30 disabled:pointer-events-none hover:border-[#C9AF7C] hover:text-black [--circle-bg:#C9AF7C] transition-all flex items-center justify-center cursor-pointer"
+              >
+                <ChevronLeft className="w-4 h-4 z-10" />
+              </button>
+              <button
+                onClick={() => goToIndex(activeIndex + 1)}
+                disabled={activeIndex === REAL_PROJECTS.length - 1}
+                aria-label="Next project"
+                className="circle-hover-parent w-10 h-10 rounded-full border border-white/15 text-white disabled:opacity-30 disabled:pointer-events-none hover:border-[#C9AF7C] hover:text-black [--circle-bg:#C9AF7C] transition-all flex items-center justify-center cursor-pointer"
+              >
+                <ChevronRight className="w-4 h-4 z-10" />
+              </button>
+            </div>
+          </div>
         </div>
 
-        {/* Project Cards Stack */}
-        <div className="flex flex-col gap-14 w-full">
-          {REAL_PROJECTS.map((project) => (
+        {/* Horizontal Track Container */}
+        <div
+          ref={trackRef}
+          onScroll={handleMobileScroll}
+          className={`flex flex-row items-stretch w-full ${
+            isMobile
+              ? "overflow-x-auto scroll-smooth snap-x snap-mandatory py-4 gap-4 no-scrollbar"
+              : "flex-nowrap"
+          }`}
+        >
+          {REAL_PROJECTS.map((project, idx) => (
             <div
               key={project.id}
-              className="work-card-reveal rounded-3xl bg-[#111111] border border-white/10 hover:border-[#C9AF7C]/50 transition-all duration-500 shadow-2xl p-6 sm:p-8 lg:p-10 w-full overflow-hidden group"
+              className={`rounded-3xl bg-[#111111] border border-white/10 hover:border-[#C9AF7C]/50 transition-all duration-500 shadow-2xl p-6 sm:p-8 lg:p-10 flex flex-col justify-between group select-text ${
+                isMobile
+                  ? "w-[88vw] flex-shrink-0 snap-start"
+                  : "w-[82vw] max-w-5xl flex-shrink-0 mr-8 lg:mr-12"
+              }`}
             >
-              {/* Card Top: Number, Category & Rotating Status Badge */}
+              {/* Card Top: Case Number, Running Total & Rotating Status Badge */}
               <div className="flex items-center justify-between pb-5 border-b border-white/10">
                 <div className="flex items-center gap-3">
                   <span className="text-sm font-mono font-bold text-[#C9AF7C]">
@@ -206,14 +348,14 @@ export default function Projects() {
                   <span className="text-xs font-mono tracking-widest text-[#7A7A7A] uppercase font-semibold">
                     / {project.category}
                   </span>
+                  <span className="hidden sm:inline-block text-[11px] font-mono text-[#A8986E]">
+                    [0{idx + 1} of 05]
+                  </span>
                 </div>
 
-                {/* Rotating Circular Status Badge (Part 8) */}
-                <div className="relative w-12 h-12 flex items-center justify-center select-none">
-                  <svg
-                    className="w-full h-full spin-slow"
-                    viewBox="0 0 100 100"
-                  >
+                {/* Rotating Circular Status Badge */}
+                <div className="relative w-12 h-12 flex items-center justify-center select-none flex-shrink-0">
+                  <svg className="w-full h-full spin-slow" viewBox="0 0 100 100">
                     <path
                       id={`badgePath-${project.id}`}
                       d="M 50, 50 m -36, 0 a 36,36 0 1,1 72,0 a 36,36 0 1,1 -72,0"
@@ -221,9 +363,7 @@ export default function Projects() {
                     />
                     <text className="text-[9px] font-mono tracking-[0.24em] uppercase fill-[#C9AF7C]">
                       <textPath href={`#badgePath-${project.id}`} startOffset="0%">
-                        {project.isLive
-                          ? "LIVE DEMO ↗ • LIVE DEMO ↗ • "
-                          : "IN DEVELOPMENT • IN DEVELOPMENT • "}
+                        LIVE DEMO ↗ • LIVE DEMO ↗ • 
                       </textPath>
                     </text>
                   </svg>
@@ -233,21 +373,20 @@ export default function Projects() {
                 </div>
               </div>
 
-              {/* Project Preview Mockup Frame (Part 8) */}
+              {/* Project Preview Mockup Frame */}
               <div
-                className="relative w-full aspect-[21/9] sm:aspect-[24/9] my-6 rounded-2xl overflow-hidden border border-white/10 bg-[#161616] group/frame cursor-pointer"
+                className="relative w-full aspect-[21/9] my-5 rounded-2xl overflow-hidden border border-white/10 bg-[#161616] group/frame cursor-pointer"
                 data-cursor="view"
               >
-                {/* Fallback image with hover scale */}
                 <Image
                   src={project.image}
                   alt={project.title}
                   fill
                   className="object-cover object-center opacity-60 contrast-125 transition-transform duration-700 ease-out group-hover/frame:scale-[1.03]"
-                  sizes="(max-width: 1024px) 100vw, 900px"
+                  sizes="(max-width: 1024px) 100vw, 950px"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-6">
-                  <span className="text-[10px] font-mono text-[#C9AF7C] tracking-widest uppercase mb-1">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-5 sm:p-6">
+                  <span className="text-[10px] font-mono text-[#C9AF7C] tracking-widest uppercase mb-1 font-semibold">
                     ENGINEERED BY GUHAN MURUGAIYAN
                   </span>
                   <h4 className="font-syne text-2xl sm:text-3xl font-extrabold uppercase text-white">
@@ -257,13 +396,13 @@ export default function Projects() {
               </div>
 
               {/* Card Split: Description on Left & Real Code Snippet Block on Right */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 my-6 items-start">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 my-4 items-start">
                 <div className="lg:col-span-6 space-y-4">
                   <p className="text-sm sm:text-base text-[#CBD5E1] leading-relaxed">
                     {project.description}
                   </p>
 
-                  <div className="flex flex-wrap gap-2 pt-2">
+                  <div className="flex flex-wrap gap-2 pt-1">
                     {project.tags.map((tag) => (
                       <span
                         key={tag}
@@ -275,9 +414,9 @@ export default function Projects() {
                   </div>
                 </div>
 
-                {/* Real Code Snippet Window (Part 8) */}
+                {/* Real Code Snippet Window */}
                 <div className="lg:col-span-6 rounded-xl bg-[#07090D] border border-white/10 overflow-hidden font-mono text-xs shadow-xl">
-                  <div className="px-4 py-2.5 border-b border-white/10 flex items-center justify-between bg-white/[0.03]">
+                  <div className="px-4 py-2 border-b border-white/10 flex items-center justify-between bg-white/[0.03]">
                     <div className="flex items-center gap-1.5">
                       <div className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]" />
                       <div className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]" />
@@ -288,45 +427,37 @@ export default function Projects() {
                       <span>{project.filename}</span>
                     </div>
                   </div>
-                  <pre className="p-4 text-[11px] sm:text-xs leading-relaxed text-[#CBD5E1] overflow-x-auto max-h-56 selection:bg-[#C9AF7C] selection:text-black">
+                  <pre className="p-3.5 text-[11px] sm:text-xs leading-relaxed text-[#CBD5E1] overflow-x-auto max-h-48 selection:bg-[#C9AF7C] selection:text-black">
                     <code>{project.codeSnippet}</code>
                   </pre>
                 </div>
               </div>
 
-              {/* Card Bottom CTA Actions (Part 8) */}
-              <div className="pt-5 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+              {/* Card Bottom CTA Actions */}
+              <div className="pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
                 <span className="text-xs font-mono text-[#7A7A7A]">
                   SOURCE GROUNDED IN REPO
                 </span>
 
                 <div className="flex items-center gap-3">
-                  {project.githubUrl && (
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="circle-hover-parent px-4 py-2 rounded-full border border-white/15 text-xs font-mono font-semibold tracking-wider uppercase text-white hover:text-black [--circle-bg:#F0F0F0] flex items-center gap-1.5 transition-colors"
-                    >
-                      <GithubIcon className="w-3.5 h-3.5" />
-                      VIEW REPO
-                    </a>
-                  )}
+                  <a
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="circle-hover-parent px-4 py-2 rounded-full border border-white/15 text-xs font-mono font-semibold tracking-wider uppercase text-white hover:text-black [--circle-bg:#F0F0F0] flex items-center gap-1.5 transition-colors"
+                  >
+                    <GithubIcon className="w-3.5 h-3.5" />
+                    VIEW REPO
+                  </a>
 
-                  {project.liveUrl ? (
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="circle-hover-parent px-5 py-2 rounded-full bg-[#C9AF7C] text-black text-xs font-mono font-bold tracking-wider uppercase hover:text-white [--circle-bg:#0A0A0A] flex items-center gap-1.5 transition-all shadow-md"
-                    >
-                      LIVE DEMO <ArrowUpRight className="w-4 h-4" />
-                    </a>
-                  ) : (
-                    <span className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-[#A8986E] text-xs font-mono tracking-wider uppercase">
-                      IN DEVELOPMENT
-                    </span>
-                  )}
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="circle-hover-parent px-5 py-2 rounded-full bg-[#C9AF7C] text-black text-xs font-mono font-bold tracking-wider uppercase hover:text-white [--circle-bg:#0A0A0A] flex items-center gap-1.5 transition-all shadow-md"
+                  >
+                    LIVE DEMO <ArrowUpRight className="w-4 h-4" />
+                  </a>
                 </div>
               </div>
             </div>
