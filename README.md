@@ -83,3 +83,23 @@ npm run build
 # Start production server
 npm start
 ```
+
+---
+
+## ⚡ Vercel Deployment
+
+This project is fully optimized for Vercel edge infrastructure:
+- **Zero-Config Deployment**: Connect this repository to [Vercel](https://vercel.com/new) and it will automatically detect Next.js 16 with Turbopack.
+- **Core Web Vitals & Analytics**: Pre-configured with `@vercel/analytics` and `@vercel/speed-insights`.
+- **Edge Asset Caching & Optimization**: Configured in `next.config.ts` with AVIF/WebP image formats and security headers.
+- **SEO & Social Cards**: Automated prerendered `robots.txt`, `sitemap.xml`, dynamic OpenGraph cards (`/opengraph-image`), and web manifest.
+
+Deploy via CLI:
+```bash
+npx vercel
+```
+Or for production deployment:
+```bash
+npx vercel --prod
+```
+
