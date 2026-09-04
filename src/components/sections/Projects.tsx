@@ -5,6 +5,7 @@ import Image from "next/image";
 import { PROJECTS } from "@/lib/project-data";
 import { ArrowUpRight, Sparkles } from "lucide-react";
 import MagneticButton from "@/components/ui/MagneticButton";
+import LiquidGlass from "@/components/ui/LiquidGlass";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 
@@ -70,10 +71,15 @@ export default function Projects() {
       {/* Section Header */}
       <div className="relative z-10 px-6 md:px-12 pt-8 lg:pt-16 max-w-7xl mx-auto w-full flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gold-subtle bg-amber-400/5 text-[#FFDF73] text-[11px] font-mono tracking-widest uppercase mb-3">
+          <LiquidGlass
+            shape="pill"
+            tint="gold"
+            refractionStrength={0.4}
+            className="inline-flex items-center gap-2 px-3.5 py-1 text-[#FFDF73] text-[11px] font-mono tracking-widest uppercase mb-3"
+          >
             <Sparkles className="w-3 h-3 text-[#D4AF37]" />
             SELECTED WORKS · 2025 - 2026
-          </div>
+          </LiquidGlass>
           <h2 className="font-syne text-4xl sm:text-6xl font-extrabold tracking-tight uppercase">
             FEATURED <span className="text-gold-gradient">PROJECTS</span>
           </h2>
@@ -91,10 +97,12 @@ export default function Projects() {
           className="flex flex-col lg:flex-row gap-8 lg:gap-12 px-6 md:px-12 w-full lg:w-max items-stretch lg:items-center py-6"
         >
           {PROJECTS.map((project) => (
-            <div
+            <LiquidGlass
               key={project.id}
-              className="w-full lg:w-[720px] flex-shrink-0 rounded-3xl bg-[#121212] border border-white/10 p-6 sm:p-8 flex flex-col justify-between group hover:border-[#D4AF37]/50 transition-all duration-500 shadow-2xl overflow-hidden"
-              data-cursor="view"
+              shape="rounded"
+              tint="obsidian"
+              refractionStrength={0.6}
+              className="w-full lg:w-[720px] flex-shrink-0 p-6 sm:p-8 flex flex-col justify-between group hover:border-[#D4AF37]/60 transition-all duration-500 shadow-2xl overflow-hidden"
             >
               {/* Card Top: Number & Category */}
               <div className="flex items-center justify-between pb-6 border-b border-white/10">
@@ -102,11 +110,11 @@ export default function Projects() {
                   <span className="text-sm font-mono font-bold text-[#D4AF37]">
                     /{project.num}
                   </span>
-                  <span className="text-xs font-mono tracking-widest text-neutral-400 uppercase">
+                  <span className="text-xs font-mono tracking-widest text-neutral-300 uppercase">
                     {project.category}
                   </span>
                 </div>
-                <span className="text-xs font-mono text-neutral-500">
+                <span className="text-xs font-mono text-neutral-400">
                   {project.year}
                 </span>
               </div>
@@ -167,15 +175,20 @@ export default function Projects() {
                     )}
                     {project.liveUrl && (
                       <MagneticButton href={project.liveUrl} target="_blank" rel="noreferrer">
-                        <span className="px-4 py-2 rounded-full bg-white text-black text-xs font-mono font-bold tracking-wider uppercase hover:bg-[#D4AF37] transition-colors flex items-center gap-1">
+                        <LiquidGlass
+                          shape="pill"
+                          tint="gold"
+                          refractionStrength={0.5}
+                          className="px-4 py-2 text-xs font-mono font-bold tracking-wider uppercase text-white hover:text-black hover:bg-[#D4AF37] transition-all flex items-center gap-1"
+                        >
                           EXPLORE <ArrowUpRight className="w-3.5 h-3.5" />
-                        </span>
+                        </LiquidGlass>
                       </MagneticButton>
                     )}
                   </div>
                 </div>
               </div>
-            </div>
+            </LiquidGlass>
           ))}
         </div>
       </div>

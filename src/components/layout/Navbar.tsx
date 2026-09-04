@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import MagneticButton from "@/components/ui/MagneticButton";
+import LiquidGlass from "@/components/ui/LiquidGlass";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 
 export default function Navbar() {
@@ -10,7 +11,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      setScrolled(window.scrollY > 40);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -27,9 +28,9 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 w-full z-50 px-6 md:px-12 py-6 flex items-center justify-between transition-all duration-500 ${
+        className={`fixed top-0 left-0 w-full z-50 px-6 md:px-12 py-5 flex items-center justify-between transition-all duration-500 ${
           scrolled
-            ? "bg-[#F5F2EB]/85 dark:bg-[#0A0A0A]/85 backdrop-blur-md py-4 border-b border-black/5 dark:border-white/5"
+            ? "py-3 bg-black/40 backdrop-blur-xl border-b border-white/10 shadow-2xl"
             : "bg-transparent"
         }`}
       >
@@ -48,41 +49,54 @@ export default function Navbar() {
           </a>
         </div>
 
-        {/* Center: Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8 lg:gap-10">
-          {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="relative text-xs font-mono font-medium tracking-widest text-neutral-800 dark:text-neutral-300 hover:text-black dark:hover:text-white transition-colors uppercase group py-1"
-            >
-              {link.label}
-              <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-[#D4AF37] transition-all duration-300 group-hover:w-full" />
-            </a>
-          ))}
+        {/* Center: Desktop Liquid Glass Dock Navigation */}
+        <nav className="hidden md:flex items-center">
+          <LiquidGlass
+            shape="pill"
+            tint="obsidian"
+            refractionStrength={0.7}
+            className="px-6 py-2 flex items-center gap-8 border border-white/15"
+          >
+            {navLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="relative text-xs font-mono font-medium tracking-widest text-neutral-300 hover:text-[#FFDF73] transition-colors uppercase group py-1"
+              >
+                {link.label}
+                <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-[#D4AF37] transition-all duration-300 group-hover:w-full" />
+              </a>
+            ))}
+          </LiquidGlass>
         </nav>
 
         {/* Right: Action & Mobile Hamburger */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <div className="hidden sm:block">
             <MagneticButton href="#contact">
-              <span className="px-5 py-2.5 rounded-full border border-neutral-900/20 dark:border-white/20 text-xs font-mono tracking-wider font-semibold uppercase hover:bg-neutral-900 hover:text-white dark:hover:bg-white dark:hover:text-black transition-all duration-300 flex items-center gap-1.5">
+              <LiquidGlass
+                shape="pill"
+                tint="gold"
+                refractionStrength={0.5}
+                className="px-5 py-2 text-xs font-mono tracking-wider font-bold uppercase text-white hover:text-black hover:bg-[#D4AF37] transition-all flex items-center gap-1.5"
+              >
                 LET&apos;S TALK <ArrowUpRight className="w-3.5 h-3.5" />
-              </span>
+              </LiquidGlass>
             </MagneticButton>
           </div>
 
           <MagneticButton onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            <div
-              className="w-11 h-11 rounded-full border border-neutral-900/20 dark:border-white/20 flex items-center justify-center hover:border-[#D4AF37] transition-colors"
-              aria-label="Toggle navigation menu"
+            <LiquidGlass
+              shape="circle"
+              tint="obsidian"
+              className="w-11 h-11 flex items-center justify-center hover:border-[#D4AF37] transition-colors"
             >
               {isMenuOpen ? (
                 <X className="w-5 h-5 text-[#D4AF37]" />
               ) : (
-                <Menu className="w-5 h-5 text-neutral-900 dark:text-neutral-100" />
+                <Menu className="w-5 h-5 text-neutral-200" />
               )}
-            </div>
+            </LiquidGlass>
           </MagneticButton>
         </div>
       </header>
