@@ -1,10 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { ArrowUpRight, Check, Copy, Mail, MapPin } from "lucide-react";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name must have at least 2 characters"),
@@ -15,6 +20,7 @@ const contactSchema = z.object({
 type ContactFormData = z.infer<typeof contactSchema>;
 
 export default function Contact() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [copied, setCopied] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
@@ -26,6 +32,35 @@ export default function Contact() {
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
   });
+
+  useGSAP(
+    () => {
+      // Staggered reveal for contact cards and form (Part 10)
+      gsap.from(".contact-card-reveal", {
+        y: 35,
+        opacity: 0,
+        stagger: 0.1,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 75%",
+        },
+      });
+
+      gsap.from(".contact-form-reveal", {
+        y: 40,
+        opacity: 0,
+        duration: 0.9,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".contact-form-reveal",
+          start: "top 80%",
+        },
+      });
+    },
+    { scope: containerRef }
+  );
 
   const onSubmit = async (data: ContactFormData) => {
     void data;
@@ -44,53 +79,52 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative min-h-screen py-24 md:py-36 px-4 sm:px-6 lg:px-8 bg-[#090a0e] text-white border-t border-white/5 overflow-hidden"
+      ref={containerRef}
+      className="relative min-h-screen py-24 md:py-36 px-6 md:px-12 bg-[#0A0A0A] text-[#F0F0F0] border-t border-[#C9AF7C]/15 overflow-hidden"
     >
       <div className="max-w-5xl mx-auto w-full">
-        {/* Section Tag Header (Video 01:52) */}
+        {/* Section Tag Header */}
         <div className="mb-14 md:mb-18">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-[11px] font-mono tracking-widest uppercase mb-4">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            CONTACT
+            CONTACT &amp; INQUIRIES
           </div>
 
-          <h2 className="font-syne text-4xl sm:text-6xl font-extrabold tracking-tight uppercase leading-[1.05] max-w-3xl text-white">
+          {/* Headline with gold highlight via <span> per Part 10 */}
+          <h2 className="font-display text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight uppercase leading-[1.05] max-w-3xl text-white">
             LET&apos;S CREATE <br />
-            <span className="text-gold-gradient font-cinzel italic">
-              SOMETHING MEANINGFUL.
-            </span>
+            <span className="text-[#C9AF7C]">SOMETHING MEANINGFUL</span>.
           </h2>
 
           <p className="mt-6 text-[#CBD5E1] text-sm sm:text-base max-w-xl font-normal leading-relaxed">
-            Have a project in mind, an internship opening in AI or Data Science, or
-            simply want to talk about autonomous agents? I&apos;d love to hear
-            from you.
+            Have a project in mind, an internship opening in AI or Data Engineering,
+            or simply want to talk about autonomous agents? I&apos;d love to connect.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-          {/* Left Column: Direct Contact Quick Cards (Video 01:54) */}
+          {/* Left Column: Direct Contact Info Cards (Part 10) */}
           <div className="lg:col-span-5 space-y-4">
-            {/* Copy Email Pill Card */}
+            {/* Copy Email Card */}
             <div
               onClick={copyEmail}
-              className="p-5 sm:p-6 rounded-2xl bg-[#0e121a] border border-white/10 hover:border-[#D4AF37]/50 transition-all duration-300 cursor-pointer group flex items-center justify-between shadow-xl"
+              className="contact-card-reveal circle-hover-parent p-5 sm:p-6 rounded-2xl bg-[#111111] border border-white/10 hover:border-[#C9AF7C]/60 hover:text-[#0A0A0A] [--circle-bg:#C9AF7C] transition-all duration-300 cursor-pointer group flex items-center justify-between shadow-xl w-full"
             >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-[#D4AF37] group-hover:scale-110 transition-transform">
+              <div className="flex items-center gap-4 z-10">
+                <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-[#C9AF7C] group-hover:scale-110 group-hover:text-black transition-transform">
                   <Mail className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-mono text-neutral-400 uppercase tracking-widest block">
+                  <span className="text-[11px] font-mono text-[#7A7A7A] group-hover:text-black uppercase tracking-widest block transition-colors">
                     EMAIL ME
                   </span>
-                  <span className="font-mono text-sm sm:text-base text-neutral-200 group-hover:text-white transition-colors font-medium">
+                  <span className="font-mono text-sm sm:text-base text-[#F0F0F0] group-hover:text-black transition-colors font-medium">
                     mguhan6383@gmail.com
                   </span>
                 </div>
               </div>
 
-              <div className="text-neutral-400 group-hover:text-[#FFDF73] transition-colors pr-2">
+              <div className="text-[#7A7A7A] group-hover:text-black transition-colors pr-2 z-10">
                 {copied ? (
                   <Check className="w-5 h-5 text-emerald-400" />
                 ) : (
@@ -99,43 +133,43 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* LinkedIn Pill Card */}
+            {/* LinkedIn Card */}
             <a
-              href="https://www.linkedin.com/in/guhan-murugaiyan"
+              href="https://www.linkedin.com/in/guhanmurugaiyan"
               target="_blank"
               rel="noreferrer"
-              className="p-5 sm:p-6 rounded-2xl bg-[#0e121a] border border-white/10 hover:border-[#D4AF37]/50 transition-all duration-300 flex items-center justify-between group block shadow-xl"
+              className="contact-card-reveal circle-hover-parent p-5 sm:p-6 rounded-2xl bg-[#111111] border border-white/10 hover:border-[#C9AF7C]/60 hover:text-[#0A0A0A] [--circle-bg:#C9AF7C] transition-all duration-300 flex items-center justify-between group shadow-xl w-full"
             >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-[#D4AF37] group-hover:scale-110 transition-transform">
+              <div className="flex items-center gap-4 z-10">
+                <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-[#C9AF7C] group-hover:scale-110 group-hover:text-black transition-transform">
                   <ArrowUpRight className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-mono text-neutral-400 uppercase tracking-widest block">
+                  <span className="text-[11px] font-mono text-[#7A7A7A] group-hover:text-black uppercase tracking-widest block transition-colors">
                     CONNECT
                   </span>
-                  <span className="font-syne font-bold text-sm sm:text-base text-neutral-200 group-hover:text-white transition-colors">
-                    LinkedIn / guhan-murugaiyan
+                  <span className="font-syne font-bold text-sm sm:text-base text-[#F0F0F0] group-hover:text-black transition-colors">
+                    LinkedIn / guhanmurugaiyan
                   </span>
                 </div>
               </div>
 
-              <div className="text-neutral-400 group-hover:text-[#FFDF73] transition-colors pr-2">
+              <div className="text-[#7A7A7A] group-hover:text-black transition-colors pr-2 z-10">
                 <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </div>
             </a>
 
-            {/* Location Pill Card */}
-            <div className="p-5 sm:p-6 rounded-2xl bg-[#0e121a] border border-white/10 flex items-center justify-between shadow-xl">
+            {/* Location Card */}
+            <div className="contact-card-reveal p-5 sm:p-6 rounded-2xl bg-[#111111] border border-white/10 flex items-center justify-between shadow-xl">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-[#D4AF37]">
+                <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-[#C9AF7C]">
                   <MapPin className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-mono text-neutral-400 uppercase tracking-widest block">
-                    BASED IN
+                  <span className="text-[11px] font-mono text-[#7A7A7A] uppercase tracking-widest block">
+                    LOCATION
                   </span>
-                  <span className="font-syne font-bold text-sm sm:text-base text-neutral-200">
+                  <span className="font-syne font-bold text-sm sm:text-base text-[#F0F0F0]">
                     Vanur, Tamil Nadu, India
                   </span>
                 </div>
@@ -143,17 +177,17 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Right Column: Clean Dark Contact Form (Video 01:54) */}
-          <div className="lg:col-span-7 rounded-3xl bg-[#0e121a] border border-white/10 p-6 sm:p-10 shadow-2xl">
+          {/* Right Column: Contact Form (Part 10) */}
+          <div className="contact-form-reveal lg:col-span-7 rounded-3xl bg-[#111111] border border-white/10 p-6 sm:p-10 shadow-2xl">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div>
-                <label className="block text-xs font-mono tracking-wider uppercase text-neutral-400 mb-2">
-                  NAME
+                <label className="block text-xs font-mono tracking-wider uppercase text-[#7A7A7A] mb-2">
+                  YOUR NAME
                 </label>
                 <input
                   {...register("name")}
-                  placeholder="Your Name"
-                  className="w-full px-4 py-3.5 rounded-xl bg-[#06080d] border border-white/10 text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#D4AF37] transition-colors font-mono text-sm"
+                  placeholder="Guhan Murugaiyan"
+                  className="w-full px-4 py-3.5 rounded-xl bg-[#0A0A0A] border border-white/10 text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#C9AF7C] transition-colors font-mono text-sm"
                 />
                 {errors.name && (
                   <p className="mt-1 text-xs text-rose-400 font-mono">
@@ -163,14 +197,14 @@ export default function Contact() {
               </div>
 
               <div>
-                <label className="block text-xs font-mono tracking-wider uppercase text-neutral-400 mb-2">
-                  EMAIL
+                <label className="block text-xs font-mono tracking-wider uppercase text-[#7A7A7A] mb-2">
+                  YOUR EMAIL
                 </label>
                 <input
                   {...register("email")}
                   type="email"
-                  placeholder="your@email.com"
-                  className="w-full px-4 py-3.5 rounded-xl bg-[#06080d] border border-white/10 text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#D4AF37] transition-colors font-mono text-sm"
+                  placeholder="name@example.com"
+                  className="w-full px-4 py-3.5 rounded-xl bg-[#0A0A0A] border border-white/10 text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#C9AF7C] transition-colors font-mono text-sm"
                 />
                 {errors.email && (
                   <p className="mt-1 text-xs text-rose-400 font-mono">
@@ -180,14 +214,14 @@ export default function Contact() {
               </div>
 
               <div>
-                <label className="block text-xs font-mono tracking-wider uppercase text-neutral-400 mb-2">
-                  MESSAGE
+                <label className="block text-xs font-mono tracking-wider uppercase text-[#7A7A7A] mb-2">
+                  YOUR MESSAGE
                 </label>
                 <textarea
                   {...register("message")}
                   rows={5}
-                  placeholder="Tell me about your project or opportunity..."
-                  className="w-full px-4 py-3.5 rounded-xl bg-[#06080d] border border-white/10 text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#D4AF37] transition-colors font-mono text-sm resize-none"
+                  placeholder="Tell me about your project, internship opportunity, or idea..."
+                  className="w-full px-4 py-3.5 rounded-xl bg-[#0A0A0A] border border-white/10 text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#C9AF7C] transition-colors font-mono text-sm resize-none"
                 />
                 {errors.message && (
                   <p className="mt-1 text-xs text-rose-400 font-mono">
@@ -196,25 +230,26 @@ export default function Contact() {
                 )}
               </div>
 
+              {/* Submit Button with Expanding Circle Hover */}
               <button
                 type="submit"
                 disabled={isSubmitting || submitted}
-                className={`w-full py-4 rounded-xl text-xs font-mono font-bold tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-2 ${
+                className={`circle-hover-parent w-full py-4 rounded-xl text-xs font-mono font-bold tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-2 ${
                   submitted
                     ? "bg-emerald-400 text-black shadow-lg"
-                    : "bg-[#D4AF37] text-black hover:bg-[#FFDF73] shadow-xl"
+                    : "bg-[#C9AF7C] text-black hover:text-white [--circle-bg:#0A0A0A] shadow-xl"
                 }`}
               >
                 {submitted ? (
-                  <>
+                  <span className="z-10 flex items-center gap-2">
                     <Check className="w-4 h-4" /> MESSAGE SENT!
-                  </>
+                  </span>
                 ) : isSubmitting ? (
-                  "SENDING..."
+                  <span className="z-10">SENDING...</span>
                 ) : (
-                  <>
+                  <span className="z-10 flex items-center gap-2">
                     SEND MESSAGE <ArrowUpRight className="w-4 h-4" />
-                  </>
+                  </span>
                 )}
               </button>
             </form>

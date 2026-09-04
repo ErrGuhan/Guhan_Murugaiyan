@@ -1,313 +1,316 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { ArrowUpRight, Sparkles } from "lucide-react";
+import Image from "next/image";
+import { ArrowUpRight, Cpu, Layers, BarChart3, ShieldCheck } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 
-interface TechBubble {
-  id: string;
-  name: string;
-  color: string;
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
+interface ExpertiseArea {
+  num: string;
+  slug: string;
+  title: string;
+  desc: string;
+  tags: string[];
+  image: string;
+  icon: typeof Cpu;
 }
 
 export default function Expertise() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const sandboxRef = useRef<HTMLDivElement>(null);
-  const [activeItem, setActiveItem] = useState<number>(0);
+  const previewPanelRef = useRef<HTMLDivElement>(null);
+  const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
+  const [activeMobileIdx, setActiveMobileIdx] = useState<number | null>(null);
 
-  // Floating Draggable Tech Matrix (Video 01:00 - 01:14)
-  const [bubbles, setBubbles] = useState<TechBubble[]>([
-    { id: "1", name: "Java 21", color: "#E5C583", x: 30, y: 30, vx: 1.2, vy: -0.8 },
-    { id: "2", name: "Agentic AI", color: "#FFDF73", x: 120, y: 80, vx: -1.4, vy: 1.1 },
-    { id: "3", name: "Python", color: "#4facfe", x: 70, y: 140, vx: 1.5, vy: 0.7 },
-    { id: "4", name: "Analytics", color: "#00f5a0", x: 180, y: 40, vx: -0.9, vy: -1.2 },
-    { id: "5", name: "LLM Agents", color: "#9d4edd", x: 140, y: 170, vx: 1.1, vy: 1.3 },
-    { id: "6", name: "Spring Boot", color: "#00f2fe", x: 40, y: 210, vx: -1.3, vy: 0.9 },
-    { id: "7", name: "Data Security", color: "#ff758c", x: 170, y: 120, vx: 0.8, vy: -1.4 },
-  ]);
+  const expertiseList: ExpertiseArea[] = [
+    {
+      num: "01",
+      slug: "agentic-ai",
+      title: "Agentic AI & Multi-Agent Swarms",
+      desc: "Architecting autonomous cooperative agent networks, LLM tool calling, memory persistence, and multi-stage task decomposition pipelines.",
+      tags: ["Multi-Agent Swarm", "LLM Orchestration", "Python", "Autonomous Tools"],
+      image: "/expertise/agentic-ai.png",
+      icon: Cpu,
+    },
+    {
+      num: "02",
+      slug: "java-enterprise",
+      title: "Java Enterprise & Systems Development",
+      desc: "Building resilient object-oriented backends, concurrent transaction execution engines, clean service architectures, and Spring Boot APIs.",
+      tags: ["Core Java 21", "Spring Boot", "Concurrency", "OOP Architecture"],
+      image: "/expertise/java-enterprise.png",
+      icon: Layers,
+    },
+    {
+      num: "03",
+      slug: "data-analytics",
+      title: "Data Analytics & Insights Engineering",
+      desc: "Applied analytics workflows developed at NoviTech R&D, turning raw enterprise streams into automated anomaly alerts and executive metrics.",
+      tags: ["Data Pipelines", "Statistical Modeling", "ETL Automation", "Pandas"],
+      image: "/expertise/data-analytics.png",
+      icon: BarChart3,
+    },
+    {
+      num: "04",
+      slug: "leadership-rigor",
+      title: "Leadership & Analytical Rigor",
+      desc: "NSS community leadership paired with analytical accounting and financial integrity at Jana Fibre Glass, ensuring disciplined execution.",
+      tags: ["NSS Representative", "Accounting Precision", "Executive Comms"],
+      image: "/expertise/leadership-rigor.png",
+      icon: ShieldCheck,
+    },
+  ];
 
-  const activeDragRef = useRef<{ id: string; offsetX: number; offsetY: number } | null>(null);
+  const floatingIcons = [
+    { name: "Java 21", color: "#C9AF7C", left: "10%", top: "15%", duration: 3.2, delay: 0 },
+    { name: "Python", color: "#4facfe", left: "62%", top: "8%", duration: 3.8, delay: 0.4 },
+    { name: "Spring Boot", color: "#68d391", left: "32%", top: "42%", duration: 3.5, delay: 0.8 },
+    { name: "Next.js", color: "#F0F0F0", left: "70%", top: "50%", duration: 4.1, delay: 0.2 },
+    { name: "Supabase", color: "#3ecf8e", left: "15%", top: "72%", duration: 3.6, delay: 1.1 },
+    { name: "GSAP", color: "#FFDF73", left: "55%", top: "78%", duration: 3.9, delay: 0.6 },
+  ];
 
+  // GSAP quickTo cursor tracking for preview panel (Part 6)
   useEffect(() => {
-    let animId: number;
+    const isTouch = window.matchMedia("(pointer: coarse)").matches;
+    if (isTouch) return;
 
-    const updatePhysics = () => {
-      if (!sandboxRef.current) return;
-      const rect = sandboxRef.current.getBoundingClientRect();
-      const maxX = rect.width - 110;
-      const maxY = rect.height - 40;
+    const panel = previewPanelRef.current;
+    if (!panel) return;
 
-      setBubbles((prev) =>
-        prev.map((b) => {
-          if (activeDragRef.current && activeDragRef.current.id === b.id) {
-            return b;
-          }
+    const setX = gsap.quickTo(panel, "x", { duration: 0.25, ease: "power3.out" });
+    const setY = gsap.quickTo(panel, "y", { duration: 0.25, ease: "power3.out" });
 
-          let newX = b.x + b.vx;
-          let newY = b.y + b.vy;
-          let newVx = b.vx;
-          let newVy = b.vy;
-
-          if (newX <= 5) {
-            newX = 5;
-            newVx = -newVx * 0.9;
-          } else if (newX >= maxX) {
-            newX = maxX;
-            newVx = -newVx * 0.9;
-          }
-
-          if (newY <= 5) {
-            newY = 5;
-            newVy = -newVy * 0.9;
-          } else if (newY >= maxY) {
-            newY = maxY;
-            newVy = -newVy * 0.9;
-          }
-
-          // Gentle ambient drift
-          if (Math.abs(newVx) < 0.2) newVx += (Math.random() - 0.5) * 0.3;
-          if (Math.abs(newVy) < 0.2) newVy += (Math.random() - 0.5) * 0.3;
-
-          return { ...b, x: newX, y: newY, vx: newVx, vy: newVy };
-        })
-      );
-
-      animId = requestAnimationFrame(updatePhysics);
+    const handleMouseMove = (e: MouseEvent) => {
+      setX(e.clientX + 24);
+      setY(e.clientY - 90);
     };
 
-    animId = requestAnimationFrame(updatePhysics);
-    return () => cancelAnimationFrame(animId);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
-
-  const handleMouseDown = (id: string, e: React.MouseEvent) => {
-    if (!sandboxRef.current) return;
-    const rect = sandboxRef.current.getBoundingClientRect();
-    const bubble = bubbles.find((b) => b.id === id);
-    if (!bubble) return;
-
-    activeDragRef.current = {
-      id,
-      offsetX: e.clientX - rect.left - bubble.x,
-      offsetY: e.clientY - rect.top - bubble.y,
-    };
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!activeDragRef.current || !sandboxRef.current) return;
-    const rect = sandboxRef.current.getBoundingClientRect();
-    const { id, offsetX, offsetY } = activeDragRef.current;
-
-    const newX = e.clientX - rect.left - offsetX;
-    const newY = e.clientY - rect.top - offsetY;
-
-    setBubbles((prev) =>
-      prev.map((b) =>
-        b.id === id
-          ? {
-              ...b,
-              x: newX,
-              y: newY,
-              vx: (newX - b.x) * 0.4,
-              vy: (newY - b.y) * 0.4,
-            }
-          : b
-      )
-    );
-  };
-
-  const handleMouseUp = () => {
-    activeDragRef.current = null;
-  };
 
   useGSAP(
     () => {
-      gsap.from(".expertise-reveal", {
+      // 1. Idle float animation for floating tech icons (Part 6)
+      floatingIcons.forEach((icon, idx) => {
+        gsap.to(`.floating-icon-${idx}`, {
+          y: "-=18",
+          rotation: idx % 2 === 0 ? 5 : -5,
+          duration: icon.duration,
+          delay: icon.delay,
+          ease: "sine.inOut",
+          repeat: -1,
+          yoyo: true,
+        });
+      });
+
+      // 2. Staggered reveal for expertise rows
+      gsap.from(".expertise-row", {
         y: 40,
         opacity: 0,
-        stagger: 0.1,
-        duration: 1,
+        stagger: 0.12,
+        duration: 0.9,
         ease: "power3.out",
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top 75%",
-          toggleActions: "play none none reverse",
         },
       });
     },
     { scope: containerRef }
   );
 
-  const accordionItems = [
-    {
-      num: "01",
-      title: "Agentic AI & Multi-Agent Swarms",
-      desc: "Architecting autonomous cooperative agent networks, LLM tool calling, memory management, and task decomposition pipelines.",
-      tags: ["Multi-Agent", "LLM Orchestration", "Bioinformatics AI"],
-    },
-    {
-      num: "02",
-      title: "Java Enterprise & Systems Development",
-      desc: "Building resilient object-oriented backends, concurrent task execution engines, and structured software design patterns.",
-      tags: ["Core Java 21", "Multithreading", "OOP & Clean Arch"],
-    },
-    {
-      num: "03",
-      title: "Data Analytics & Insights Engineering",
-      desc: "Practical analytics workflows applied at NoviTech R&D, converting messy raw data into actionable dashboards and statistical models.",
-      tags: ["Data Workflows", "Statistical Insights", "ETL Automation"],
-    },
-    {
-      num: "04",
-      title: "Leadership & Analytical Rigor",
-      desc: "NSS community leadership paired with analytical accounting experience at Jana Fibre Glass, ensuring meticulous precision.",
-      tags: ["Team Leadership", "Financial Analysis", "Communication"],
-    },
-  ];
+  const activeHoverItem = expertiseList.find((item) => item.slug === hoveredSlug);
 
   return (
     <section
       id="expertise"
       ref={containerRef}
-      className="relative min-h-screen py-24 md:py-36 px-4 sm:px-6 lg:px-8 bg-[#090a0e] text-white border-t border-white/5 overflow-hidden"
+      className="relative min-h-screen py-24 md:py-36 px-6 md:px-12 bg-[#0A0A0A] text-[#F0F0F0] border-t border-[#C9AF7C]/15 overflow-hidden"
     >
       <div className="max-w-5xl mx-auto w-full">
-        {/* Section Header */}
+        {/* Section Eyebrow & Header (Part 6) */}
         <div className="mb-14 md:mb-18">
-          <div className="expertise-reveal inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10 text-[#FFDF73] text-[11px] font-mono tracking-widest uppercase mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
-            {"// 02 — SPECIALIZATION & TECH STACK"}
-          </div>
+          <span className="text-xs font-mono tracking-[0.2em] text-[#C9AF7C] uppercase mb-3 block font-semibold">
+            — 03 · EXPERTISE
+          </span>
 
-          <h2 className="expertise-reveal font-syne text-4xl sm:text-6xl font-extrabold tracking-tight uppercase text-white">
-            MY <span className="text-[#FFDF73]">EXPERTISE</span>
+          <h2 className="font-display text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight uppercase text-white">
+            <span className="text-[#7A7A7A]">MY</span> EXPERTISE
           </h2>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-          {/* Left Column: Statement & Interactive Physics Tech Sandbox (Video 01:00) */}
-          <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
+          {/* Left Column: Overview, Floating Tech Icons & Tag Pills (Part 6) */}
+          <div className="lg:col-span-5 flex flex-col justify-between space-y-8">
             <div>
-              <h3 className="expertise-reveal font-syne text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug text-white">
+              <h3 className="font-syne text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug text-[#F0F0F0]">
                 I design and build intelligent systems where autonomy, code, and
-                motion work as one.
+                concurrency scale in harmony.
               </h3>
-              <p className="expertise-reveal mt-4 text-[#CBD5E1] text-sm leading-relaxed">
-                From autonomous multi-agent swarms to high-throughput Java
-                workflows and data pipelines, I build robust, intelligent
-                architectures designed to scale.
+              <p className="mt-4 text-[#CBD5E1] text-sm leading-relaxed">
+                From autonomous multi-agent networks to resilient Java backends and
+                data pipelines, I deliver production systems engineered with architectural
+                rigor and speed.
               </p>
             </div>
 
-            {/* Interactive Physics Sandbox Box (Exact from Video 01:00) */}
-            <div
-              className="expertise-reveal rounded-2xl bg-[#0e121a] border border-white/10 overflow-hidden shadow-2xl"
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
-            >
-              <div className="px-5 py-3 border-b border-white/10 flex items-center justify-between text-xs font-mono text-neutral-300 bg-white/[0.02]">
-                <span className="flex items-center gap-2 text-[#E5C583] font-semibold">
-                  <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
-                  INTERACTIVE TECH MATRIX
+            {/* Floating Tech Stack Cluster Container (Part 6) */}
+            <div className="relative w-full h-72 rounded-2xl bg-[#111111] border border-[#C9AF7C]/20 overflow-hidden shadow-2xl p-4">
+              <div className="flex items-center justify-between border-b border-white/10 pb-2 mb-2">
+                <span className="text-[10px] font-mono tracking-widest uppercase text-[#C9AF7C] font-semibold">
+                  CORE TECHNICAL MATRIX
                 </span>
-                <span className="text-[10px] uppercase text-[#D4AF37] font-bold">
-                  DRAG &amp; TOSS BADGES
-                </span>
+                <span className="w-2 h-2 rounded-full bg-[#C9AF7C] animate-pulse" />
               </div>
 
-              <div
-                ref={sandboxRef}
-                className="relative w-full h-64 sm:h-72 select-none overflow-hidden bg-[#0a0d14]"
-              >
-                {bubbles.map((b) => (
-                  <div
-                    key={b.id}
-                    onMouseDown={(e) => handleMouseDown(b.id, e)}
-                    className="absolute cursor-grab active:cursor-grabbing px-3.5 py-1.5 rounded-full text-xs font-mono font-semibold border shadow-md transition-transform hover:scale-110 flex items-center gap-1.5 select-none"
-                    style={{
-                      transform: `translate3d(${b.x}px, ${b.y}px, 0)`,
-                      backgroundColor: "#131722",
-                      borderColor: "rgba(255, 255, 255, 0.18)",
-                      color: b.color,
-                    }}
-                  >
-                    <span
-                      className="w-1.5 h-1.5 rounded-full"
-                      style={{ backgroundColor: b.color }}
-                    />
-                    {b.name}
-                  </div>
-                ))}
-              </div>
+              {/* Floating badges with individual continuous float loop */}
+              {floatingIcons.map((icon, idx) => (
+                <div
+                  key={icon.name}
+                  className={`floating-icon-${idx} absolute px-3.5 py-1.5 rounded-full text-xs font-mono font-semibold border shadow-lg backdrop-blur-sm select-none transition-transform hover:scale-110 cursor-default`}
+                  style={{
+                    left: icon.left,
+                    top: icon.top,
+                    backgroundColor: "#161616",
+                    borderColor: `${icon.color}40`,
+                    color: icon.color,
+                  }}
+                >
+                  <span
+                    className="inline-block w-1.5 h-1.5 rounded-full mr-1.5 align-middle"
+                    style={{ backgroundColor: icon.color }}
+                  />
+                  {icon.name}
+                </div>
+              ))}
+            </div>
+
+            {/* Top 4-5 Skills Pill Row (Part 6 & 9) */}
+            <div className="flex flex-wrap gap-2 pt-2">
+              {[
+                "Java Development",
+                "AI Agent Architect",
+                "AI Architect",
+                "Data Analytics",
+                "Concurrent Systems",
+              ].map((skill) => (
+                <span
+                  key={skill}
+                  className="text-xs font-mono px-3.5 py-1.5 rounded-full bg-[#111111] border border-[#C9AF7C]/25 text-[#F0F0F0] font-medium"
+                >
+                  {skill}
+                </span>
+              ))}
             </div>
           </div>
 
-          {/* Right Column: Interactive Accordion Cards (Video 01:05 - 01:14) */}
+          {/* Right Column: Numbered List Rows (01-04) (Part 6) */}
           <div className="lg:col-span-7 flex flex-col space-y-4">
-            {accordionItems.map((item, idx) => {
-              const isOpen = activeItem === idx;
+            {expertiseList.map((item, idx) => {
+              const IconComp = item.icon;
+              const isMobileActive = activeMobileIdx === idx;
 
               return (
                 <div
                   key={item.num}
-                  onClick={() => setActiveItem(idx)}
-                  className={`p-6 sm:p-7 rounded-2xl border transition-all duration-300 cursor-pointer bg-[#0e121a] ${
-                    isOpen
-                      ? "border-[#D4AF37]/60 shadow-xl"
-                      : "border-white/10 hover:border-white/25"
+                  onMouseEnter={() => setHoveredSlug(item.slug)}
+                  onMouseLeave={() => setHoveredSlug(null)}
+                  onClick={() =>
+                    setActiveMobileIdx(isMobileActive ? null : idx)
+                  }
+                  className={`expertise-row group relative p-6 sm:p-7 rounded-2xl border transition-all duration-300 cursor-pointer bg-[#111111] ${
+                    isMobileActive || hoveredSlug === item.slug
+                      ? "border-[#C9AF7C] shadow-2xl bg-[#141414]"
+                      : "border-white/10 hover:border-[#C9AF7C]/40"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-start gap-4 sm:gap-6">
-                      <span className="font-mono text-sm sm:text-base font-bold text-[#D4AF37]">
+                      <span className="font-mono text-sm sm:text-base font-bold text-[#C9AF7C] mt-1">
                         {item.num}
                       </span>
+
                       <div>
-                        <h4
-                          className={`font-syne text-xl sm:text-2xl font-bold tracking-tight transition-colors ${
-                            isOpen ? "text-[#FFDF73]" : "text-white"
-                          }`}
-                        >
-                          {item.title}
-                        </h4>
-                        <p className="text-[#CBD5E1] text-sm mt-2 leading-relaxed">
+                        <div className="flex items-center gap-2.5 mb-1.5">
+                          {/* Row Icon in Box with subtle scale/rotate on hover */}
+                          <div className="w-8 h-8 rounded-lg bg-[#0A0A0A] border border-[#C9AF7C]/30 flex items-center justify-center text-[#C9AF7C] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                            <IconComp className="w-4 h-4" />
+                          </div>
+
+                          <h4 className="font-syne text-lg sm:text-xl font-bold tracking-tight text-[#F0F0F0] group-hover:text-[#C9AF7C] transition-colors">
+                            {item.title}
+                          </h4>
+                        </div>
+
+                        <p className="text-[#CBD5E1] text-xs sm:text-sm mt-2 leading-relaxed">
                           {item.desc}
                         </p>
                       </div>
                     </div>
 
-                    <div
-                      className={`w-9 h-9 rounded-full border border-white/10 flex items-center justify-center transition-all ${
-                        isOpen
-                          ? "bg-[#D4AF37] text-black rotate-45"
-                          : "text-neutral-400 hover:text-white"
-                      }`}
-                    >
+                    <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-[#7A7A7A] group-hover:text-[#C9AF7C] group-hover:border-[#C9AF7C]/50 transition-colors flex-shrink-0">
                       <ArrowUpRight className="w-4 h-4" />
                     </div>
                   </div>
 
-                  {/* Tags */}
-                  <div className="mt-5 flex flex-wrap gap-2 pt-4 border-t border-white/10">
+                  {/* Skill Tag Pills */}
+                  <div className="mt-4 flex flex-wrap gap-2 pt-3 border-t border-white/10">
                     {item.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="text-[11px] font-mono px-3 py-1 rounded-full bg-white/5 border border-white/10 text-neutral-200"
+                        className="text-[11px] font-mono px-3 py-1 rounded-full bg-white/5 border border-white/10 text-neutral-300"
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
+
+                  {/* Mobile Tap-Expanded Preview (Part 6) */}
+                  {isMobileActive && (
+                    <div className="mt-4 pt-4 border-t border-[#C9AF7C]/30 block md:hidden animate-in fade-in duration-300">
+                      <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-[#C9AF7C]/40">
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, 400px"
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
               );
             })}
           </div>
         </div>
+      </div>
+
+      {/* Floating Desktop Cursor-Following Preview Panel (Part 6) */}
+      <div
+        ref={previewPanelRef}
+        className={`fixed top-0 left-0 pointer-events-none z-[99990] hidden md:block w-72 aspect-video rounded-xl overflow-hidden border border-[#C9AF7C]/80 shadow-[0_12px_40px_rgba(0,0,0,0.8)] bg-black/90 transition-[opacity,transform] duration-300 ${
+          hoveredSlug ? "opacity-100 scale-100" : "opacity-0 scale-95"
+        }`}
+      >
+        {activeHoverItem && (
+          <div className="relative w-full h-full">
+            <Image
+              src={activeHoverItem.image}
+              alt={activeHoverItem.title}
+              fill
+              className="object-cover"
+              sizes="300px"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-2.5">
+              <span className="text-[10px] font-mono tracking-wider text-[#C9AF7C] uppercase font-semibold">
+                {activeHoverItem.title}
+              </span>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

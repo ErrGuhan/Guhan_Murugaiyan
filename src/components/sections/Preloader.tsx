@@ -8,20 +8,22 @@ interface PreloaderProps {
 
 export default function Preloader({ onComplete }: PreloaderProps) {
   const [progress, setProgress] = useState(0);
-  const [showHello, setShowHello] = useState(false);
+  const [showMonogram, setShowMonogram] = useState(false);
   const [isDone, setIsDone] = useState(false);
   const isRunning = useRef(false);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
     if (isRunning.current) return;
     isRunning.current = true;
 
-    // Check reduced motion
+    // 1. Check if already seen in current browser session
+    const hasSeen = sessionStorage.getItem("guhan_preloader_seen");
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    if (prefersReducedMotion) {
+    if (hasSeen === "true" || prefersReducedMotion) {
       const timer = setTimeout(() => {
         setIsDone(true);
         onComplete?.();
@@ -29,8 +31,8 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       return () => clearTimeout(timer);
     }
 
-    // Milestones from reference video: 0%, 13%, 27%, 45%, 55%, 72%, 88%, 91%, 99%, 100%
-    const milestones = [0, 13, 27, 45, 55, 72, 88, 91, 99, 100];
+    // 2. Realistic smooth simulated progress 0% -> 100% (~1.4s)
+    const milestones = [0, 14, 28, 46, 58, 74, 86, 92, 98, 100];
     let index = 0;
 
     function nextStep() {
@@ -40,74 +42,75 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         index++;
 
         if (val === 100) {
-          // Pause briefly, then show cursive "hello"
+          // Pause briefly (180ms)
           setTimeout(() => {
-            setShowHello(true);
+            setShowMonogram(true);
 
-            // After displaying hello for 0.7s, trigger curtains
+            // Monogram lingers for ~500ms, then curtains slide open
             setTimeout(() => {
+              sessionStorage.setItem("guhan_preloader_seen", "true");
               document.body.classList.add("curtains-open");
 
-              // After curtains slide open, remove preloader from DOM
               setTimeout(() => {
                 setIsDone(true);
                 onComplete?.();
-              }, 900);
-            }, 750);
-          }, 250);
+              }, 950);
+            }, 550);
+          }, 180);
           return;
         }
 
-        // Realistic variable speed matching authentic asset loading
-        let delay = 100 + Math.random() * 120;
-        if (val === 91 || val === 99) delay = 320; // Suspense pause before 100%
+        let delay = 90 + Math.random() * 80;
+        if (val === 92 || val === 98) delay = 220; // Suspense pause before settling at 100%
         setTimeout(nextStep, delay);
       }
     }
 
-    const startTimer = setTimeout(nextStep, 150);
+    const startTimer = setTimeout(nextStep, 100);
     return () => clearTimeout(startTimer);
   }, [onComplete]);
 
   if (isDone) return null;
 
-  // SVG ring circumference for r=68 is 2 * Math.PI * 68 ≈ 427.26
-  const circumference = 2 * Math.PI * 68;
+  // Path length for custom stylized circular "G" loader
+  const circumference = 2 * Math.PI * 46;
   const strokeDashoffset = circumference - (progress / 100) * circumference;
 
   return (
-    <div className="fixed inset-0 z-[99999] flex items-center justify-center overflow-hidden bg-black pointer-events-auto">
-      {/* Curtain Panels for Split Reveal (Top and Bottom) */}
-      <div className="curtain curtain-top bg-[#090a0e]" />
-      <div className="curtain curtain-bottom bg-[#090a0e]" />
+    <div
+      id="preloader-overlay"
+      className="fixed inset-0 z-[99999] flex items-center justify-center overflow-hidden bg-[#0A0A0A] pointer-events-auto"
+    >
+      {/* Curtain Panels for Split Reveal (Part 2) */}
+      <div className="curtain curtain-top bg-[#0A0A0A]" />
+      <div className="curtain curtain-bottom bg-[#0A0A0A]" />
 
       {/* Preloader Centered Content */}
-      <div
-        id="preloader-content"
-        className="relative z-[100000] flex flex-col items-center justify-center transition-opacity duration-500"
-      >
-        {!showHello ? (
-          <div className="relative w-44 h-44 flex items-center justify-center">
-            {/* SVG Gold Ring Loader (Matching Video 00:00 - 00:05) */}
+      <div className="relative z-[100000] flex flex-col items-center justify-center transition-opacity duration-400 select-none">
+        {!showMonogram ? (
+          <div className="relative w-40 h-40 flex items-center justify-center">
+            {/* Custom stylized G monogram stroke ring */}
             <svg
               className="w-full h-full -rotate-90 transform"
-              viewBox="0 0 160 160"
+              viewBox="0 0 120 120"
             >
+              {/* Background faint track */}
               <circle
-                cx="80"
-                cy="80"
-                r="68"
+                cx="60"
+                cy="60"
+                r="46"
                 fill="transparent"
                 stroke="rgba(255, 255, 255, 0.08)"
-                strokeWidth="4"
+                strokeWidth="3.5"
               />
+              {/* Animated Gold Progress Stroke */}
               <circle
-                cx="80"
-                cy="80"
-                r="68"
+                cx="60"
+                cy="60"
+                r="46"
                 fill="transparent"
-                stroke="#D4AF37"
-                strokeWidth="4.5"
+                stroke="#C9AF7C"
+                strokeWidth="4"
                 strokeDasharray={circumference}
                 strokeDashoffset={strokeDashoffset}
                 strokeLinecap="round"
@@ -115,18 +118,24 @@ export default function Preloader({ onComplete }: PreloaderProps) {
               />
             </svg>
 
-            {/* Percentage Number in Editorial Serif (Video 00:00 - 00:05) */}
-            <div className="absolute inset-0 flex items-center justify-center select-none">
-              <span className="font-cinzel text-3xl sm:text-4xl font-bold tracking-tight text-[#E5C583]">
+            {/* Centered stylized G monogram silhouette & Counter */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <span className="font-cinzel text-2xl font-bold tracking-wider text-[#F0F0F0]">
                 {progress}%
+              </span>
+              <span className="text-[9px] font-mono tracking-[0.2em] text-[#C9AF7C] uppercase mt-0.5">
+                GUHAN
               </span>
             </div>
           </div>
         ) : (
-          /* Golden Cursive "hello" (Matching Video 00:08 - 00:12) */
-          <div className="flex flex-col items-center select-none animate-in fade-in zoom-in-95 duration-500">
-            <span className="font-script text-7xl sm:text-8xl md:text-9xl text-[#E5C583] tracking-wide drop-shadow-[0_0_20px_rgba(212,175,55,0.4)]">
-              hello
+          /* Cursive Monogram Mark (stylized lowercase "g" for Guhan) fading in */
+          <div className="flex flex-col items-center animate-in fade-in zoom-in-95 duration-500">
+            <span className="font-script text-8xl sm:text-9xl text-[#C9AF7C] tracking-wide drop-shadow-[0_0_25px_rgba(201,175,124,0.35)]">
+              g
+            </span>
+            <span className="text-[10px] font-mono tracking-[0.25em] text-[#A8986E] uppercase -mt-2">
+              PORTFOLIO &apos;26
             </span>
           </div>
         )}

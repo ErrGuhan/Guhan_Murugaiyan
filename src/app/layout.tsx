@@ -5,12 +5,20 @@ import {
   Plus_Jakarta_Sans,
   JetBrains_Mono,
   Italianno,
+  Anton,
 } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import SmoothScroll from "@/components/layout/SmoothScroll";
 import CustomCursor from "@/components/layout/CustomCursor";
+
+const anton = Anton({
+  variable: "--font-anton",
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
 
 const syne = Syne({
   variable: "--font-syne",
@@ -125,9 +133,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${syne.variable} ${cinzel.variable} ${jakarta.variable} ${mono.variable} ${italianno.variable}`}
+      className={`${anton.variable} ${syne.variable} ${cinzel.variable} ${jakarta.variable} ${mono.variable} ${italianno.variable}`}
     >
-      <body className="antialiased selection:bg-[#D4AF37] selection:text-black">
+      <body className="antialiased selection:bg-[#C9AF7C] selection:text-black">
         {/* Film grain texture */}
         <div className="grain-overlay" aria-hidden="true" />
 

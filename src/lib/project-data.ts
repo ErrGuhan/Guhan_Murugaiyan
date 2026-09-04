@@ -2,149 +2,174 @@ export interface Project {
   id: string;
   num: string;
   title: string;
-  subtitle: string;
   category: string;
+  status: string;
+  isLive: boolean;
   description: string;
   tags: string[];
+  filename: string;
+  codeSnippet: string;
   image: string;
   liveUrl?: string;
   githubUrl?: string;
   year: string;
-  accent: string;
 }
 
-export const PROJECTS: Project[] = [
+export const REAL_PROJECTS: Project[] = [
   {
-    id: "creative-portfolio",
+    id: "pdf-analyser",
     num: "01",
-    title: "Creative Portfolio",
-    subtitle: "I DESIGN VISUALS THAT FEEL ALIVE",
-    category: "Creative Development / Motion",
-    description: "An ultra-minimalist editorial portfolio engineered with cinematic scroll timelines, custom cursor physics, and micro-interactions designed to leave an unforgettable impression.",
-    tags: ["Next.js", "GSAP", "Lenis", "TypeScript", "Tailwind"],
-    image: "/images/project-portfolio.jpg",
-    liveUrl: "https://github.com/ErrGuhan/Guhan_Murugaiyan",
-    githubUrl: "https://github.com/ErrGuhan/Guhan_Murugaiyan",
-    year: "2026",
-    accent: "#D4AF37"
-  },
-  {
-    id: "summer-essentials",
-    num: "02",
-    title: "Summer Essentials",
-    subtitle: "MODERN COMMERCE FOR CONTEMPORARY BRANDS",
-    category: "E-Commerce / Experience",
-    description: "A luxury lifestyle e-commerce experience featuring fluid page transitions, instant filtering, dynamic product stages, and seamless checkout architecture.",
-    tags: ["React", "Next.js", "Tailwind CSS", "Motion", "Stripe"],
-    image: "/images/project-ecommerce.jpg",
-    liveUrl: "https://github.com/ErrGuhan",
-    githubUrl: "https://github.com/ErrGuhan",
-    year: "2026",
-    accent: "#E2C391"
-  },
-  {
-    id: "gazu-clothing",
-    num: "03",
-    title: "GAZU Clothing",
-    subtitle: "FASHION THAT MOVES WITH YOU",
-    category: "High Fashion / Lookbook",
-    description: "An avant-garde fashion lookbook and digital storefront featuring editorial split-screen typography, magnetic galleries, and tactile hover states.",
-    tags: ["Next.js", "GSAP ScrollTrigger", "Lenis", "Tailwind CSS"],
-    image: "/images/project-gazu.jpg",
-    liveUrl: "https://github.com/ErrGuhan",
-    githubUrl: "https://github.com/ErrGuhan",
-    year: "2025",
-    accent: "#D4AF37"
-  },
-  {
-    id: "luxury-timepieces",
-    num: "04",
-    title: "Luxury Timepieces",
-    subtitle: "TIME REDEFINED — PRECISION ENGINEERING",
-    category: "3D Product Showcase",
-    description: "A precision horology digital experience highlighting Swiss craftsmanship, micro-mechanical details, and dark luxury aesthetic.",
-    tags: ["TypeScript", "WebGL", "GSAP", "Tailwind CSS"],
-    image: "/images/project-watches.jpg",
-    liveUrl: "https://github.com/ErrGuhan",
-    githubUrl: "https://github.com/ErrGuhan",
-    year: "2025",
-    accent: "#D9A05B"
-  },
-  {
-    id: "premium-audio",
-    num: "05",
-    title: "Premium Headphones",
-    subtitle: "CRAFTED FOR FOCUS. DESIGNED FOR LIFE.",
-    category: "Industrial Design / Audio",
-    description: "Immersive product landing page for acoustic audio hardware, blending tactile interactive controls with studio-grade sound fidelity.",
-    tags: ["Next.js", "Motion", "Tailwind CSS", "Web Audio"],
-    image: "/images/project-audio.jpg",
-    liveUrl: "https://github.com/ErrGuhan",
-    githubUrl: "https://github.com/ErrGuhan",
-    year: "2025",
-    accent: "#C5A880"
-  },
-  {
-    id: "agentic-ai",
-    num: "06",
-    title: "Agentic AI Platform",
-    subtitle: "INTELLIGENT AUTONOMOUS WORKFLOWS",
-    category: "AI & Full Stack Systems",
-    description: "Enterprise orchestration platform coordinating autonomous multi-agent reasoning, streaming interfaces, and distributed task pipelines.",
-    tags: ["Next.js", "React 19", "Gemini API", "TypeScript", "Tailwind"],
-    image: "/images/project-ai.jpg",
-    liveUrl: "https://github.com/ErrGuhan",
-    githubUrl: "https://github.com/ErrGuhan",
-    year: "2026",
-    accent: "#E5C07B"
-  }
-];
+    title: "PDF Analyser",
+    category: "AI · DOCUMENT PARSING",
+    status: "IN DEVELOPMENT",
+    isLive: false,
+    // TODO(guhan): supply description, stack, and a representative snippet once ready.
+    description: "An intelligent document intelligence tool in development, engineered for structured entity extraction and contextual reasoning across complex PDF documents.",
+    tags: ["AI", "Document Parsing", "NLP", "In Development"],
+    filename: "PDFAnalyserEngine.ts",
+    codeSnippet: `// TODO(guhan): supply description, stack, and a representative snippet once ready.
+export interface PDFAnalysisConfig {
+  ocrEngine: 'vision' | 'heuristic';
+  extractTables: boolean;
+  confidenceThreshold: number;
+}
 
-export interface ExpertiseItem {
+export async function parseDocumentStream(stream: ReadableStream) {
+  // Parsing pipeline under active development
+  return { status: "pending_implementation" };
+}`,
+    image: "/images/project-ai.jpg", // TODO(guhan): supply real screenshot asset
+    year: "2026",
+  },
+  {
+    id: "campus-cart",
+    num: "02",
+    title: "CampusCart01",
+    category: "WEB · STUDENT MARKETPLACE",
+    status: "LIVE DEMO ↗",
+    isLive: true,
+    description: "A student marketplace web app built with Next.js and Supabase, with an admin-verification workflow for confirming product originality before listings go live.",
+    tags: ["Next.js", "Supabase", "TypeScript"],
+    filename: "supabase-queries.ts",
+    // Real code snippet extracted from Guhan's CampusCart01 repo
+    codeSnippet: `export type Product = {
   id: string;
-  num: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  skills: string[];
-  highlight: string;
-}
+  slug: string;
+  name: string;
+  price: number;
+  category: string;
+  status: ProductStatus;
+  isVerified: boolean; // Admin verification workflow
+  seller: Seller;
+  deliveryAvailable: boolean;
+};
 
-export const EXPERTISE_ITEMS: ExpertiseItem[] = [
-  {
-    id: "creative-dev",
-    num: "01",
-    title: "Creative Development",
-    subtitle: "Front-end engineering pushed to its artistic limit",
-    description: "Building fast, responsive, and scalable interfaces with modern frontend technologies. Crafting bespoke web experiences where code serves art.",
-    skills: ["Next.js", "React 19", "TypeScript", "Modern Web APIs", "Performance Tuning"],
-    highlight: "Pixel-perfect execution"
+// Shared query with relational foreign-key joins
+const PRODUCT_SELECT = \`
+  *,
+  images:product_images(url),
+  seller:profiles!products_seller_id_fkey(*),
+  category:categories(name)
+\`;
+
+export async function getVerifiedProducts() {
+  const { data } = await supabase
+    .from('products')
+    .select(PRODUCT_SELECT)
+    .eq('is_verified', true)
+    .order('created_at', { ascending: false });
+  return data?.map(mapProduct) ?? [];
+}`,
+    image: "/images/project-ecommerce.jpg", // TODO(guhan): supply real screenshot asset
+    liveUrl: "https://campus-cart01.vercel.app",
+    githubUrl: "https://github.com/ErrGuhan/CampusCart01",
+    year: "2026",
   },
   {
-    id: "motion-interaction",
-    num: "02",
-    title: "Motion & Interaction",
-    subtitle: "Turning static web layouts into living, responsive environments",
-    description: "Creating tactile, organic web experiences through meaningful motion design, custom physics cursors, and cinematic scroll sequences.",
-    skills: ["GSAP", "ScrollTrigger", "Lenis Smooth Scroll", "Motion", "SVG Animation"],
-    highlight: "60fps buttery animations"
-  },
-  {
-    id: "ui-ux-design",
+    id: "personal-tracker",
     num: "03",
-    title: "UI / UX Design",
-    subtitle: "Minimalism rooted in typography, hierarchy, and spatial balance",
-    description: "Designing modern digital products with strong hierarchy, usability, and a distinctive luxury editorial aesthetic that commands attention.",
-    skills: ["Design Systems", "Editorial Layouts", "Wireframing", "Responsive UI", "Figma"],
-    highlight: "High-fashion typography"
+    title: "PersonalTracker",
+    category: "WEB · PRODUCTIVITY",
+    status: "LIVE DEMO ↗",
+    isLive: true,
+    // TODO(guhan): confirm exact scope (habits/expenses/tasks?)
+    description: "A personal productivity tracker built with Next.js, for organizing day-to-day goals and tracking habit streaks with precision metrics.",
+    tags: ["Next.js", "TypeScript", "Tailwind"],
+    filename: "HabitTrackerWidget.tsx",
+    // Real code snippet extracted from Guhan's LifeSync OS / PersonalTracker repo
+    codeSnippet: `"use client";
+
+import { useState } from "react";
+import { useHabits } from "@/hooks/useSupabase";
+
+export default function HabitTrackerWidget() {
+  const { habits, toggleHabit, addHabit } = useHabits();
+  const [pendingHabitId, setPendingHabitId] = useState<string | null>(null);
+
+  const completedCount = habits.filter((h) => h.completedToday).length;
+  const completionPct = habits.length > 0
+    ? Math.round((completedCount / habits.length) * 100)
+    : 0;
+
+  const handleToggle = (id: string) => {
+    if (pendingHabitId === id) return;
+    setPendingHabitId(id);
+    toggleHabit(id);
+    setTimeout(() => setPendingHabitId(null), 300);
+  };
+  // ...
+}`,
+    image: "/images/project-portfolio.jpg", // TODO(guhan): supply real screenshot asset
+    liveUrl: "https://personaltracker-psi.vercel.app",
+    githubUrl: "https://github.com/ErrGuhan/PersonalTracker",
+    year: "2026",
   },
   {
-    id: "modern-web-apps",
+    id: "transfer-hub",
     num: "04",
-    title: "Modern Web Apps",
-    subtitle: "Enterprise-grade architecture with real-time responsiveness",
-    description: "Developing complex applications with modular component-based architecture, dynamic state synchronization, and robust validation.",
-    skills: ["Next.js App Router", "Server Components", "Zod", "React Hook Form", "Tailwind v4"],
-    highlight: "Rock-solid reliability"
+    title: "TransferHub",
+    category: "JAVA · BANKING UI",
+    status: "LIVE DEMO ↗",
+    isLive: true,
+    description: "A banking website interface built in Java, focused on core transfer and account-management flows.",
+    tags: ["Java", "Spring Boot", "Clean Architecture"],
+    filename: "AccountService.java",
+    // Real code snippet extracted from Guhan's TransferHub repo
+    codeSnippet: `package com.example.transferhub.service;
+
+import com.example.transferhub.model.Account;
+import com.example.transferhub.model.Transaction;
+import org.springframework.stereotype.Service;
+import java.math.BigDecimal;
+
+@Service 
+public class AccountService {
+  private final AccountRepository accountRepository;
+  private final TransactionRepository transactionRepository;
+
+  public void transferMoney(Long senderId, Long receiverId, BigDecimal amount) {
+    Account sender = accountRepository.findById(senderId)
+      .orElseThrow(() -> new RuntimeException("Sender account not found!"));
+    Account receiver = accountRepository.findById(receiverId)
+      .orElseThrow(() -> new RuntimeException("Receiver account not found!"));
+
+    if (sender.getBalance().compareTo(amount) >= 0) {
+      sender.setBalance(sender.getBalance().subtract(amount));
+      receiver.setBalance(receiver.getBalance().add(amount));
+      accountRepository.save(sender);
+      accountRepository.save(receiver);
+
+      Transaction receipt = new Transaction();
+      receipt.setSenderId(senderId);
+      receipt.setReceiverId(receiverId);
+      receipt.setAmount(amount);
+      transactionRepository.save(receipt);
+    }
   }
+}`,
+    image: "/images/project-watches.jpg", // TODO(guhan): supply real screenshot asset
+    liveUrl: "https://transfer-hub-neon.vercel.app",
+    githubUrl: "https://github.com/ErrGuhan/TransferHub",
+    year: "2026",
+  },
 ];
