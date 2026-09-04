@@ -15,8 +15,8 @@ export default function Preloader({ onComplete }: PreloaderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const welcomeScreenRef = useRef<HTMLDivElement>(null);
   const portfolioScreenRef = useRef<HTMLDivElement>(null);
-  const welcomeFlourishRef = useRef<SVGPathElement>(null);
-  const portfolioFlourishRef = useRef<SVGPathElement>(null);
+  const upperCurtainsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const lowerCurtainsRef = useRef<(HTMLDivElement | null)[]>([]);
   const isRunning = useRef(false);
 
   useEffect(() => {
@@ -24,25 +24,21 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     if (isRunning.current) return;
     isRunning.current = true;
 
-    // 1. Always start from the top of the website on every refresh
+    // Start from the top on page reload
     if ("scrollRestoration" in history) {
       history.scrollRestoration = "manual";
     }
     window.scrollTo(0, 0);
-    document.body.classList.remove("curtains-open");
     sessionStorage.removeItem("guhan_preloader_seen");
 
-    const welcomeChars = welcomeScreenRef.current?.querySelectorAll(".welcome-char");
-    const portfolioChars = portfolioScreenRef.current?.querySelectorAll(".portfolio-char");
+    const welcomeLetters = welcomeScreenRef.current?.querySelectorAll(".welcome-letter");
+    const portfolioLetters = portfolioScreenRef.current?.querySelectorAll(".portfolio-letter");
 
-    // Reduced motion accessibility check
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
     if (prefersReducedMotion) {
-      if (welcomeChars) gsap.set(welcomeChars, { clipPath: "none", opacity: 1 });
-      if (portfolioChars) gsap.set(portfolioChars, { clipPath: "none", opacity: 1 });
       const timer = setTimeout(() => {
         setIsDone(true);
         onComplete?.();
@@ -51,121 +47,123 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       return () => clearTimeout(timer);
     }
 
-    // 2. Pre-calculate path lengths for underline flourishes
-    if (welcomeFlourishRef.current) {
-      const len = welcomeFlourishRef.current.getTotalLength();
-      welcomeFlourishRef.current.style.strokeDasharray = `${len}`;
-      welcomeFlourishRef.current.style.strokeDashoffset = `${len}`;
-    }
-
-    if (portfolioFlourishRef.current) {
-      const len = portfolioFlourishRef.current.getTotalLength();
-      portfolioFlourishRef.current.style.strokeDasharray = `${len}`;
-      portfolioFlourishRef.current.style.strokeDashoffset = `${len}`;
-    }
-
     const tl = gsap.timeline({
       onComplete: () => {
-        document.body.classList.add("curtains-open");
-
-        setTimeout(() => {
-          setIsDone(true);
-          onComplete?.();
-
-          if (typeof window !== "undefined") {
-            window.dispatchEvent(new Event("resize"));
-            ScrollTrigger.refresh();
-          }
-        }, 850);
+        setIsDone(true);
+        onComplete?.();
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new Event("resize"));
+          ScrollTrigger.refresh();
+        }
       },
     });
 
     // =========================================================================
-    // PHASE 1: "Welcome" Minimal Handwriting Flow (Apple Hello-Style)
-    // Writes each letter sequentially from left to right with no glow
+    // PHASE 1: "Welcome" - Bold Apple "Hello" Style Handwriting
+    // Letters write sequentially one at a time from left to right with no glow
     // =========================================================================
-    if (welcomeChars && welcomeChars.length) {
+    if (welcomeLetters && welcomeLetters.length) {
       tl.to(
-        welcomeChars,
+        welcomeLetters,
         {
-          clipPath: "polygon(-30% -40%, 130% -40%, 115% 140%, -45% 140%)",
+          clipPath: "polygon(-25% -30%, 125% -30%, 110% 130%, -35% 130%)",
           opacity: 1,
-          duration: 0.18,
-          stagger: 0.11,
-          ease: "power1.inOut",
-        },
-        "+=0.15"
-      );
-    }
-
-    // Underline flourish sweeps smoothly underneath as last letter forms
-    if (welcomeFlourishRef.current) {
-      tl.to(
-        welcomeFlourishRef.current,
-        {
-          strokeDashoffset: 0,
-          duration: 0.55,
-          ease: "power2.inOut",
-        },
-        "-=0.18"
-      );
-    }
-
-    // Hold to appreciate the clean calligraphy
-    tl.to({}, { duration: 0.65 });
-
-    // Minimal dissolve & subtle scale out
-    tl.to(welcomeScreenRef.current, {
-      opacity: 0,
-      scale: 0.98,
-      duration: 0.35,
-      ease: "power2.inOut",
-    });
-
-    // =========================================================================
-    // PHASE 2: "Guhan's Portfolio" Minimal Handwriting Flow
-    // Writes each letter sequentially from left to right with no glow
-    // =========================================================================
-    tl.set(portfolioScreenRef.current, {
-      opacity: 1,
-      scale: 0.99,
-    });
-
-    if (portfolioChars && portfolioChars.length) {
-      tl.to(
-        portfolioChars,
-        {
-          clipPath: "polygon(-30% -40%, 130% -40%, 115% 140%, -45% 140%)",
-          opacity: 1,
-          duration: 0.15,
-          stagger: 0.075,
+          duration: 0.16,
+          stagger: 0.09,
           ease: "power1.inOut",
         },
         "+=0.1"
       );
     }
 
-    if (portfolioFlourishRef.current) {
+    // Brief hold to appreciate the completed word
+    tl.to({}, { duration: 0.55 });
+
+    // Clean dissolve out of "Welcome"
+    tl.to(welcomeScreenRef.current, {
+      opacity: 0,
+      scale: 0.98,
+      duration: 0.25,
+      ease: "power2.inOut",
+    });
+
+    // =========================================================================
+    // PHASE 2: "Guhan's Portfolio" - Bold Apple "Hello" Style Handwriting
+    // Letters write sequentially one at a time from left to right
+    // =========================================================================
+    tl.set(portfolioScreenRef.current, {
+      opacity: 1,
+      scale: 0.99,
+    });
+
+    if (portfolioLetters && portfolioLetters.length) {
       tl.to(
-        portfolioFlourishRef.current,
+        portfolioLetters,
         {
-          strokeDashoffset: 0,
-          duration: 0.6,
-          ease: "power2.inOut",
+          clipPath: "polygon(-25% -30%, 125% -30%, 110% 130%, -35% 130%)",
+          opacity: 1,
+          duration: 0.14,
+          stagger: 0.065,
+          ease: "power1.inOut",
         },
-        "-=0.18"
+        "+=0.08"
       );
     }
 
-    // Hold to appreciate the completed title
-    tl.to({}, { duration: 0.7 });
+    // Brief hold to admire
+    tl.to({}, { duration: 0.6 });
 
-    // Smooth dissolve into the hero curtain reveal
+    // Quick text dissolve immediately before the curtain opens
     tl.to(portfolioScreenRef.current, {
       opacity: 0,
       scale: 1.02,
-      duration: 0.4,
-      ease: "power2.inOut",
+      duration: 0.2,
+      ease: "power2.in",
+    });
+
+    // =========================================================================
+    // PHASE 3: 12-Piece Split Curtain Lifting Sequence
+    // Upper 6 panels lift UP, Lower 6 panels drop DOWN in a center-out wave
+    // =========================================================================
+    // Sequence order: center columns (2 & 3) first, then adjacent (1 & 4), then outer (0 & 5)
+    const columnOrder = [2, 3, 1, 4, 0, 5];
+    const columnDelays: Record<number, number> = {
+      2: 0,
+      3: 0,
+      1: 0.08,
+      4: 0.08,
+      0: 0.16,
+      5: 0.16,
+    };
+
+    columnOrder.forEach((colIdx) => {
+      const upper = upperCurtainsRef.current[colIdx];
+      const lower = lowerCurtainsRef.current[colIdx];
+      const delay = columnDelays[colIdx];
+
+      if (upper) {
+        tl.to(
+          upper,
+          {
+            yPercent: -100,
+            duration: 0.82,
+            ease: "power3.inOut",
+          },
+          `<+=${delay}`
+        );
+      }
+
+      if (lower) {
+        tl.to(
+          lower,
+          {
+            yPercent: 100,
+            duration: 0.82,
+            ease: "power3.inOut",
+          },
+          `<`
+        );
+      }
     });
 
     return () => {
@@ -179,100 +177,91 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     <div
       ref={containerRef}
       id="preloader-overlay"
-      className="fixed inset-0 z-[99999] flex items-center justify-center overflow-hidden bg-[#0A0A0A] pointer-events-auto select-none"
+      className="fixed inset-0 z-[99999] flex items-center justify-center overflow-hidden pointer-events-none select-none"
     >
-      {/* Curtain Panels for Split Reveal */}
-      <div className="curtain curtain-top bg-[#0A0A0A]" />
-      <div className="curtain curtain-bottom bg-[#0A0A0A]" />
+      {/* =======================================================================
+          12-Piece Split Curtain System (Upper 6 Panels & Lower 6 Panels)
+         ======================================================================= */}
+      <div className="fixed inset-0 z-[99990] pointer-events-none overflow-hidden">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div
+            key={`curtain-col-${i}`}
+            className="absolute top-0 bottom-0"
+            style={{
+              left: `${(i * 100) / 6}%`,
+              width: `calc(100% / 6 + 1px)`,
+            }}
+          >
+            {/* Upper Half Panel (Lifts UP) */}
+            <div
+              ref={(el) => {
+                upperCurtainsRef.current[i] = el;
+              }}
+              className="absolute top-0 left-0 w-full h-[50.5vh] bg-[#0A0A0A] origin-top will-change-transform"
+            />
+            {/* Bottom Half Panel (Drops DOWN) */}
+            <div
+              ref={(el) => {
+                lowerCurtainsRef.current[i] = el;
+              }}
+              className="absolute bottom-0 left-0 w-full h-[50.5vh] bg-[#0A0A0A] origin-bottom will-change-transform"
+            />
+          </div>
+        ))}
+      </div>
 
-      {/* Preloader Centered Content Container */}
-      <div className="relative z-[100000] flex flex-col items-center justify-center w-full max-w-2xl sm:max-w-3xl md:max-w-4xl px-4 sm:px-6">
-        {/* =======================================================================
-            PHASE 1: "Welcome" (Minimalist Apple Hello-Style Letter Handwriting)
-           ======================================================================= */}
+      {/* =======================================================================
+          Centered Typography Content (Apple Hello Theme, Bold, No Glow)
+         ======================================================================= */}
+      <div className="relative z-[99995] flex flex-col items-center justify-center w-full max-w-5xl px-6 pointer-events-none">
+        {/* PHASE 1: "Welcome" */}
         <div
           ref={welcomeScreenRef}
           className="flex flex-col items-center justify-center w-full"
         >
-          <div className="relative inline-block overflow-visible py-2">
-            <h1
-              className="font-script text-7xl sm:text-8xl md:text-9xl lg:text-[10rem] text-[#C9AF7C] italic tracking-normal whitespace-nowrap px-4 py-1 select-none flex items-center justify-center"
-            >
-              {"Welcome".split("").map((char, index) => (
+          <h1
+            className="font-script font-bold text-[clamp(4.2rem,12vw,9rem)] text-[#C9AF7C] leading-none tracking-normal whitespace-nowrap px-4 py-2 select-none flex items-center justify-center"
+          >
+            {"Welcome".split("").map((char, index) => (
+              <span
+                key={`welcome-${index}`}
+                className="welcome-letter inline-block will-change-[clip-path,opacity]"
+                style={{
+                  clipPath: "polygon(-25% -30%, -25% -30%, -35% 130%, -35% 130%)",
+                  opacity: 0,
+                }}
+              >
+                {char}
+              </span>
+            ))}
+          </h1>
+        </div>
+
+        {/* PHASE 2: "Guhan's Portfolio" */}
+        <div
+          ref={portfolioScreenRef}
+          className="absolute inset-0 flex flex-col items-center justify-center w-full opacity-0 pointer-events-none"
+        >
+          <h2
+            className="font-script font-bold text-[clamp(2.6rem,7.5vw,5.5rem)] text-[#C9AF7C] leading-none tracking-normal whitespace-nowrap px-4 py-2 select-none flex items-center justify-center"
+          >
+            {"Guhan's Portfolio".split("").map((char, index) =>
+              char === " " ? (
+                <span key={`space-${index}`} className="inline-block w-[0.28em]">&nbsp;</span>
+              ) : (
                 <span
-                  key={`welcome-${index}`}
-                  className="welcome-char inline-block will-change-[clip-path,opacity]"
+                  key={`portfolio-${index}`}
+                  className="portfolio-letter inline-block will-change-[clip-path,opacity]"
                   style={{
-                    clipPath: "polygon(-30% -40%, -30% -40%, -45% 140%, -45% 140%)",
+                    clipPath: "polygon(-25% -30%, -25% -30%, -35% 130%, -35% 130%)",
                     opacity: 0,
                   }}
                 >
                   {char}
                 </span>
-              ))}
-            </h1>
-          </div>
-
-          {/* Underline Flourish - Minimalist & Crisp */}
-          <svg
-            className="w-full max-w-sm sm:max-w-md h-6 sm:h-8 mt-1 overflow-visible"
-            viewBox="0 0 600 40"
-          >
-            <path
-              ref={welcomeFlourishRef}
-              d="M 140,20 C 250,32 370,30 460,18"
-              fill="none"
-              stroke="#C9AF7C"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-            />
-          </svg>
-        </div>
-
-        {/* =======================================================================
-            PHASE 2: "Guhan's Portfolio" (Minimalist Apple Hello-Style Letter Handwriting)
-           ======================================================================= */}
-        <div
-          ref={portfolioScreenRef}
-          className="absolute inset-0 flex flex-col items-center justify-center w-full opacity-0 pointer-events-none"
-        >
-          <div className="relative inline-block overflow-visible py-2">
-            <h2
-              className="font-script text-5xl sm:text-7xl md:text-8xl lg:text-9xl text-[#C9AF7C] italic tracking-normal whitespace-nowrap px-4 py-1 select-none flex items-center justify-center"
-            >
-              {"Guhan's Portfolio".split("").map((char, index) =>
-                char === " " ? (
-                  <span key={`space-${index}`} className="inline-block w-[0.25em]">&nbsp;</span>
-                ) : (
-                  <span
-                    key={`portfolio-${index}`}
-                    className="portfolio-char inline-block will-change-[clip-path,opacity]"
-                    style={{
-                      clipPath: "polygon(-30% -40%, -30% -40%, -45% 140%, -45% 140%)",
-                      opacity: 0,
-                    }}
-                  >
-                    {char}
-                  </span>
-                )
-              )}
-            </h2>
-          </div>
-
-          {/* Underline Flourish - Minimalist & Crisp */}
-          <svg
-            className="w-full max-w-md sm:max-w-xl h-6 sm:h-8 mt-1 overflow-visible"
-            viewBox="0 0 700 40"
-          >
-            <path
-              ref={portfolioFlourishRef}
-              d="M 100,20 C 270,32 450,30 600,18"
-              fill="none"
-              stroke="#C9AF7C"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-            />
-          </svg>
+              )
+            )}
+          </h2>
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@ import {
   Cinzel,
   Plus_Jakarta_Sans,
   JetBrains_Mono,
-  Italianno,
+  Dancing_Script,
   Anton,
 } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
@@ -48,10 +48,10 @@ const mono = JetBrains_Mono({
   display: "swap",
 });
 
-const italianno = Italianno({
+const dancingScript = Dancing_Script({
   variable: "--font-script",
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["700"],
   display: "swap",
 });
 
@@ -133,7 +133,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${anton.variable} ${syne.variable} ${cinzel.variable} ${jakarta.variable} ${mono.variable} ${italianno.variable}`}
+      className={`${anton.variable} ${syne.variable} ${cinzel.variable} ${jakarta.variable} ${mono.variable} ${dancingScript.variable}`}
     >
       <body className="antialiased selection:bg-[#C9AF7C] selection:text-black">
         {/* Film grain texture */}
