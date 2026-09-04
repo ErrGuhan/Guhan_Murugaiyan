@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import {
   ArrowUpRight,
@@ -92,7 +92,7 @@ export default function Projects() {
     { scope: transitionRef }
   );
 
-  // 2. Programmatic scroll to card index
+  // 2. Centered programmatic scroll to card index
   const scrollToIndex = useCallback((index: number) => {
     const track = trackRef.current;
     if (!track) return;
@@ -100,28 +100,36 @@ export default function Projects() {
     setActiveIndex(targetIdx);
 
     const cards = track.querySelectorAll<HTMLElement>(".project-card");
-    if (cards[targetIdx]) {
-      cards[targetIdx].scrollIntoView({
+    const targetCard = cards[targetIdx];
+    if (targetCard) {
+      const cardLeft = targetCard.offsetLeft;
+      const cardWidth = targetCard.offsetWidth;
+      const trackWidth = track.clientWidth;
+      const targetScroll = cardLeft - (trackWidth - cardWidth) / 2;
+
+      track.scrollTo({
+        left: Math.max(0, targetScroll),
         behavior: "smooth",
-        block: "nearest",
-        inline: "center",
       });
     }
   }, []);
 
-  // 3. Track scroll listener to update active index in real time
-  const handleScroll = () => {
+  // 3. Viewport-accurate scroll listener using getBoundingClientRect
+  const handleScroll = useCallback(() => {
     const track = trackRef.current;
     if (!track) return;
     const cards = track.querySelectorAll<HTMLElement>(".project-card");
     if (!cards.length) return;
 
-    const trackCenter = track.scrollLeft + track.clientWidth / 2;
+    const trackRect = track.getBoundingClientRect();
+    const trackCenter = trackRect.left + trackRect.width / 2;
+
     let closestIdx = 0;
     let minDistance = Infinity;
 
     cards.forEach((card, i) => {
-      const cardCenter = card.offsetLeft + card.clientWidth / 2;
+      const cardRect = card.getBoundingClientRect();
+      const cardCenter = cardRect.left + cardRect.width / 2;
       const dist = Math.abs(trackCenter - cardCenter);
       if (dist < minDistance) {
         minDistance = dist;
@@ -130,27 +138,52 @@ export default function Projects() {
     });
 
     setActiveIndex(closestIdx);
-  };
+  }, []);
 
-  // 4. Mouse wheel handler: smooth horizontal scroll with edge chaining
-  const handleWheel = (e: React.WheelEvent) => {
+  // 4. Native non-passive wheel listener with Lenis edge chaining
+  useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
 
-    // If scrolling mostly horizontally (touchpad), let it scroll naturally
-    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    // Reset scroll to first card on mount
+    track.scrollLeft = 0;
+    setActiveIndex(0);
 
-    // Check if at boundaries
-    const maxScroll = track.scrollWidth - track.clientWidth;
-    const isAtStart = track.scrollLeft <= 15 && e.deltaY < 0;
-    const isAtEnd = track.scrollLeft >= maxScroll - 15 && e.deltaY > 0;
+    let debounceTimer: NodeJS.Timeout | null = null;
 
-    // If at boundary, allow page to continue scrolling vertically
-    if (isAtStart || isAtEnd) return;
+    const onNativeWheel = (e: WheelEvent) => {
+      // If touchpad horizontal swipe, let native browser horizontal scroll work
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        return;
+      }
 
-    // Otherwise, translate wheel delta to horizontal movement
-    track.scrollLeft += e.deltaY * 0.9;
-  };
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      const isAtStart = track.scrollLeft <= 8 && e.deltaY < 0;
+      const isAtEnd = track.scrollLeft >= maxScroll - 8 && e.deltaY > 0;
+
+      // If at boundary, seamlessly chain to vertical smooth scrolling
+      if (isAtStart || isAtEnd) {
+        const lenis = (window as unknown as { __lenis?: { scrollTo: (y: number) => void } }).__lenis;
+        if (lenis) {
+          lenis.scrollTo(window.scrollY + e.deltaY * 1.3);
+        }
+        return;
+      }
+
+      // Convert vertical mouse wheel into horizontal translation
+      e.preventDefault();
+      track.scrollLeft += e.deltaY * 0.95;
+
+      if (debounceTimer) clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(handleScroll, 40);
+    };
+
+    track.addEventListener("wheel", onNativeWheel, { passive: false });
+    return () => {
+      track.removeEventListener("wheel", onNativeWheel);
+      if (debounceTimer) clearTimeout(debounceTimer);
+    };
+  }, [handleScroll]);
 
   // 5. Desktop Drag-to-Scroll (Mouse down + drag)
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -165,8 +198,9 @@ export default function Projects() {
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDragging.current || !trackRef.current) return;
     e.preventDefault();
-    const walk = (e.pageX - startX.current) * 1.4;
+    const walk = (e.pageX - startX.current) * 1.35;
     trackRef.current.scrollLeft = scrollStart.current - walk;
+    handleScroll();
   };
 
   const handleMouseUpOrLeave = () => {
@@ -201,7 +235,7 @@ export default function Projects() {
               ref={workDispRef}
               in="SourceGraphic"
               in2="noise"
-              scale="35"
+              scale="0"
               xChannelSelector="R"
               yChannelSelector="G"
             />
@@ -312,19 +346,17 @@ export default function Projects() {
         {/* Horizontal Track Container */}
         <div
           ref={trackRef}
-          data-lenis-prevent="true"
-          onWheel={handleWheel}
           onScroll={handleScroll}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUpOrLeave}
           onMouseLeave={handleMouseUpOrLeave}
-          className="flex flex-row items-stretch w-full overflow-x-auto scroll-smooth snap-x snap-mandatory py-4 px-2 no-scrollbar cursor-grab active:cursor-grabbing gap-6 sm:gap-8 lg:gap-10"
+          className="relative flex flex-row items-stretch w-full overflow-x-auto scroll-smooth snap-x snap-mandatory py-6 px-4 sm:px-8 md:px-12 lg:px-24 no-scrollbar cursor-grab active:cursor-grabbing gap-6 sm:gap-8 lg:gap-10"
         >
           {REAL_PROJECTS.map((project, idx) => (
             <div
               key={project.id}
-              className="project-card rounded-3xl bg-[#111111] border border-white/10 hover:border-[#C9AF7C]/50 transition-all duration-500 shadow-2xl p-6 sm:p-8 lg:p-10 flex flex-col justify-between group select-text w-[86vw] max-w-4xl lg:max-w-5xl flex-shrink-0 snap-center"
+              className="project-card relative rounded-3xl bg-[#111111] border border-white/10 hover:border-[#C9AF7C]/50 transition-all duration-500 shadow-2xl p-6 sm:p-8 lg:p-10 flex flex-col justify-between group select-text w-[88vw] sm:w-[82vw] md:w-[78vw] lg:w-[72vw] max-w-5xl flex-shrink-0 snap-center"
             >
               {/* Card Top: Case Number, Running Total & Rotating Status Badge */}
               <div className="flex items-center justify-between pb-5 border-b border-white/10">

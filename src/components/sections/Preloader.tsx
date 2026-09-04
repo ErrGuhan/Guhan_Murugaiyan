@@ -2,6 +2,9 @@
 
 import { useEffect, useState, useRef } from "react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface PreloaderProps {
   onComplete?: () => void;
@@ -45,6 +48,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       const timer = setTimeout(() => {
         setIsDone(true);
         onComplete?.();
+        ScrollTrigger.refresh();
       }, 0);
       return () => clearTimeout(timer);
     }
@@ -72,6 +76,11 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         setTimeout(() => {
           setIsDone(true);
           onComplete?.();
+
+          if (typeof window !== "undefined") {
+            window.dispatchEvent(new Event("resize"));
+            ScrollTrigger.refresh();
+          }
         }, 850);
       },
     });
