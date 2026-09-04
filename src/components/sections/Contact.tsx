@@ -4,8 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { ArrowUpRight, Check, Copy, Mail, MapPin, Send, Sparkles } from "lucide-react";
-import MagneticButton from "@/components/ui/MagneticButton";
+import { ArrowUpRight, Check, Copy, Mail, MapPin } from "lucide-react";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name must have at least 2 characters"),
@@ -29,16 +28,15 @@ export default function Contact() {
   });
 
   const onSubmit = async (data: ContactFormData) => {
-    // Simulated smooth submission with validated payload
     void data;
     await new Promise((resolve) => setTimeout(resolve, 800));
     setSubmitted(true);
     reset();
-    setTimeout(() => setSubmitted(false), 5000);
+    setTimeout(() => setSubmitted(false), 4000);
   };
 
   const copyEmail = () => {
-    navigator.clipboard.writeText("dev@campuscart.com");
+    navigator.clipboard.writeText("mguhan6383@gmail.com");
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
   };
@@ -46,50 +44,53 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative min-h-screen py-24 md:py-36 px-6 md:px-12 bg-[#0A0A0A] text-white border-t border-white/10 overflow-hidden"
+      className="relative min-h-screen py-24 md:py-36 px-6 md:px-12 bg-[#090a0e] text-white border-t border-white/5 overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
-        <div className="mb-16 md:mb-20">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gold-subtle bg-amber-400/5 text-[#FFDF73] text-[11px] font-mono tracking-widest uppercase mb-4">
-            <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
-            INITIATE COLLABORATION
+        {/* Section Tag Header (Video 01:52) */}
+        <div className="mb-14 md:mb-18">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-[11px] font-mono tracking-widest uppercase mb-4">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            CONTACT
           </div>
 
           <h2 className="font-syne text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight uppercase leading-[1.05] max-w-4xl">
             LET&apos;S CREATE <br />
-            <span className="text-gold-gradient">SOMETHING MEANINGFUL.</span>
+            <span className="text-gold-gradient font-cinzel italic">
+              SOMETHING MEANINGFUL.
+            </span>
           </h2>
 
           <p className="mt-6 text-neutral-400 text-sm sm:text-base max-w-xl font-normal leading-relaxed">
-            Have a project in mind, a vision to bring to life, or looking to build
-            an elite creative web product? I&apos;d love to hear from you.
+            Have a project in mind, an internship opening in AI or Data Science, or
+            simply want to talk about autonomous agents? I&apos;d love to hear
+            from you.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          {/* Left Column: Direct Contact Info Cards (Reference Video 01:54) */}
+          {/* Left Column: Direct Contact Quick Cards (Video 01:54) */}
           <div className="lg:col-span-5 space-y-4">
-            {/* Email Card */}
+            {/* Copy Email Pill Card */}
             <div
               onClick={copyEmail}
-              className="p-6 rounded-2xl bg-[#121212] border border-white/10 hover:border-[#D4AF37]/50 transition-all duration-300 cursor-pointer group flex items-center justify-between"
+              className="p-5 sm:p-6 rounded-2xl bg-[#10131C] border border-white/10 hover:border-[#D4AF37]/50 transition-all duration-300 cursor-pointer group flex items-center justify-between shadow-xl"
             >
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-[#D4AF37] group-hover:scale-110 transition-transform">
                   <Mail className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-mono text-neutral-500 uppercase tracking-widest block">
+                  <span className="text-[11px] font-mono text-neutral-400 uppercase tracking-widest block">
                     EMAIL ME
                   </span>
                   <span className="font-mono text-sm sm:text-base text-neutral-200 group-hover:text-white transition-colors">
-                    dev@campuscart.com
+                    mguhan6383@gmail.com
                   </span>
                 </div>
               </div>
 
-              <div className="text-neutral-500 group-hover:text-[#FFDF73] transition-colors">
+              <div className="text-neutral-400 group-hover:text-[#FFDF73] transition-colors pr-2">
                 {copied ? (
                   <Check className="w-5 h-5 text-emerald-400" />
                 ) : (
@@ -98,127 +99,125 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* LinkedIn Card */}
+            {/* LinkedIn Pill Card */}
             <a
-              href="https://linkedin.com"
+              href="https://www.linkedin.com/in/guhan-murugaiyan"
               target="_blank"
               rel="noreferrer"
-              className="p-6 rounded-2xl bg-[#121212] border border-white/10 hover:border-[#D4AF37]/50 transition-all duration-300 flex items-center justify-between group block"
+              className="p-5 sm:p-6 rounded-2xl bg-[#10131C] border border-white/10 hover:border-[#D4AF37]/50 transition-all duration-300 flex items-center justify-between group block shadow-xl"
             >
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-[#D4AF37] group-hover:scale-110 transition-transform">
                   <ArrowUpRight className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-mono text-neutral-500 uppercase tracking-widest block">
+                  <span className="text-[11px] font-mono text-neutral-400 uppercase tracking-widest block">
                     CONNECT
                   </span>
                   <span className="font-syne font-bold text-sm sm:text-base text-neutral-200 group-hover:text-white transition-colors">
-                    LinkedIn / Professional
+                    LinkedIn / guhan-murugaiyan
                   </span>
                 </div>
               </div>
-              <ArrowUpRight className="w-4 h-4 text-neutral-500 group-hover:text-[#FFDF73] transition-colors" />
+
+              <div className="text-neutral-400 group-hover:text-[#FFDF73] transition-colors pr-2">
+                <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </div>
             </a>
 
-            {/* Location Card */}
-            <div className="p-6 rounded-2xl bg-[#121212] border border-white/10 flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-[#D4AF37]">
-                <MapPin className="w-5 h-5" />
-              </div>
-              <div>
-                <span className="text-[11px] font-mono text-neutral-500 uppercase tracking-widest block">
-                  LOCATION & TIMEZONE
-                </span>
-                <span className="font-syne font-bold text-sm sm:text-base text-neutral-200">
-                  Tamil Nadu, India · IST (UTC+5:30)
-                </span>
+            {/* Location Pill Card */}
+            <div className="p-5 sm:p-6 rounded-2xl bg-[#10131C] border border-white/10 flex items-center justify-between shadow-xl">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-[#D4AF37]">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="text-[11px] font-mono text-neutral-400 uppercase tracking-widest block">
+                    BASED IN
+                  </span>
+                  <span className="font-syne font-bold text-sm sm:text-base text-neutral-200">
+                    Vanur, Tamil Nadu, India
+                  </span>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Contact Form (Reference Video 01:54) */}
-          <div className="lg:col-span-7 bg-[#121212] border border-white/10 rounded-3xl p-8 sm:p-10 shadow-2xl relative">
-            {submitted ? (
-              <div className="py-16 text-center space-y-4 animate-in fade-in duration-500">
-                <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 mx-auto flex items-center justify-center">
-                  <Check className="w-8 h-8" />
-                </div>
-                <h3 className="font-syne text-2xl font-bold text-white uppercase">
-                  Message Sent Successfully
-                </h3>
-                <p className="text-sm font-mono text-neutral-400 max-w-sm mx-auto">
-                  Thank you for reaching out! I will review your inquiry and get back to you promptly.
-                </p>
+          {/* Right Column: Clean Dark Contact Form (Video 01:54) */}
+          <div className="lg:col-span-7 rounded-3xl bg-[#10131C] border border-white/10 p-6 sm:p-10 shadow-2xl">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              <div>
+                <label className="block text-xs font-mono tracking-wider uppercase text-neutral-400 mb-2">
+                  NAME
+                </label>
+                <input
+                  {...register("name")}
+                  placeholder="Your Name"
+                  className="w-full px-4 py-3.5 rounded-xl bg-black/40 border border-white/10 text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#D4AF37] transition-colors font-mono text-sm"
+                />
+                {errors.name && (
+                  <p className="mt-1 text-xs text-rose-400 font-mono">
+                    {errors.name.message}
+                  </p>
+                )}
               </div>
-            ) : (
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                <div>
-                  <label className="block text-xs font-mono uppercase tracking-widest text-neutral-400 mb-2">
-                    Name
-                  </label>
-                  <input
-                    {...register("name")}
-                    type="text"
-                    placeholder="Your Name"
-                    className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3.5 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-[#D4AF37] transition-colors"
-                  />
-                  {errors.name && (
-                    <p className="mt-1.5 text-xs text-rose-400 font-mono">
-                      {errors.name.message}
-                    </p>
-                  )}
-                </div>
 
-                <div>
-                  <label className="block text-xs font-mono uppercase tracking-widest text-neutral-400 mb-2">
-                    Email
-                  </label>
-                  <input
-                    {...register("email")}
-                    type="email"
-                    placeholder="your.email@domain.com"
-                    className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3.5 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-[#D4AF37] transition-colors"
-                  />
-                  {errors.email && (
-                    <p className="mt-1.5 text-xs text-rose-400 font-mono">
-                      {errors.email.message}
-                    </p>
-                  )}
-                </div>
+              <div>
+                <label className="block text-xs font-mono tracking-wider uppercase text-neutral-400 mb-2">
+                  EMAIL
+                </label>
+                <input
+                  {...register("email")}
+                  type="email"
+                  placeholder="your@email.com"
+                  className="w-full px-4 py-3.5 rounded-xl bg-black/40 border border-white/10 text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#D4AF37] transition-colors font-mono text-sm"
+                />
+                {errors.email && (
+                  <p className="mt-1 text-xs text-rose-400 font-mono">
+                    {errors.email.message}
+                  </p>
+                )}
+              </div>
 
-                <div>
-                  <label className="block text-xs font-mono uppercase tracking-widest text-neutral-400 mb-2">
-                    Message
-                  </label>
-                  <textarea
-                    {...register("message")}
-                    rows={4}
-                    placeholder="Tell me about your project, goals, or timeline..."
-                    className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3.5 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-[#D4AF37] transition-colors resize-none"
-                  />
-                  {errors.message && (
-                    <p className="mt-1.5 text-xs text-rose-400 font-mono">
-                      {errors.message.message}
-                    </p>
-                  )}
-                </div>
+              <div>
+                <label className="block text-xs font-mono tracking-wider uppercase text-neutral-400 mb-2">
+                  MESSAGE
+                </label>
+                <textarea
+                  {...register("message")}
+                  rows={5}
+                  placeholder="Tell me about your project or opportunity..."
+                  className="w-full px-4 py-3.5 rounded-xl bg-black/40 border border-white/10 text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#D4AF37] transition-colors font-mono text-sm resize-none"
+                />
+                {errors.message && (
+                  <p className="mt-1 text-xs text-rose-400 font-mono">
+                    {errors.message.message}
+                  </p>
+                )}
+              </div>
 
-                <div className="pt-2">
-                  <MagneticButton type="submit" strength={0.25}>
-                    <span className="w-full sm:w-auto px-8 py-4 rounded-full bg-white hover:bg-[#D4AF37] text-black font-mono font-bold text-xs tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-2 shadow-lg">
-                      {isSubmitting ? (
-                        "SENDING..."
-                      ) : (
-                        <>
-                          SEND MESSAGE <Send className="w-3.5 h-3.5" />
-                        </>
-                      )}
-                    </span>
-                  </MagneticButton>
-                </div>
-              </form>
-            )}
+              <button
+                type="submit"
+                disabled={isSubmitting || submitted}
+                className={`w-full py-4 rounded-xl text-xs font-mono font-bold tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-2 ${
+                  submitted
+                    ? "bg-emerald-400 text-black shadow-lg"
+                    : "bg-white text-black hover:bg-[#D4AF37] shadow-xl"
+                }`}
+              >
+                {submitted ? (
+                  <>
+                    <Check className="w-4 h-4" /> MESSAGE SENT!
+                  </>
+                ) : isSubmitting ? (
+                  "SENDING..."
+                ) : (
+                  <>
+                    SEND MESSAGE <ArrowUpRight className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+            </form>
           </div>
         </div>
       </div>
