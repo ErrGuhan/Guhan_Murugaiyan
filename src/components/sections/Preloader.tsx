@@ -10,18 +10,13 @@ interface PreloaderProps {
   onComplete?: () => void;
 }
 
-const WELCOME_CHARS = "Welcome".split("");
-const PORTFOLIO_CHARS = "Guhan's Portfolio".split("");
-
 export default function Preloader({ onComplete }: PreloaderProps) {
   const [isDone, setIsDone] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const welcomeScreenRef = useRef<HTMLDivElement>(null);
   const portfolioScreenRef = useRef<HTMLDivElement>(null);
-  const welcomeCharRefs = useRef<(HTMLSpanElement | null)[]>([]);
-  const portfolioCharRefs = useRef<(HTMLSpanElement | null)[]>([]);
-  const welcomeCaretRef = useRef<HTMLSpanElement>(null);
-  const portfolioCaretRef = useRef<HTMLSpanElement>(null);
+  const welcomeTextWrapperRef = useRef<HTMLHeadingElement>(null);
+  const portfolioTextWrapperRef = useRef<HTMLHeadingElement>(null);
   const welcomeFlourishRef = useRef<SVGPathElement>(null);
   const portfolioFlourishRef = useRef<SVGPathElement>(null);
   const isRunning = useRef(false);
@@ -45,6 +40,12 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     ).matches;
 
     if (prefersReducedMotion) {
+      if (welcomeTextWrapperRef.current) {
+        welcomeTextWrapperRef.current.style.clipPath = "none";
+      }
+      if (portfolioTextWrapperRef.current) {
+        portfolioTextWrapperRef.current.style.clipPath = "none";
+      }
       const timer = setTimeout(() => {
         setIsDone(true);
         onComplete?.();
@@ -66,9 +67,6 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       portfolioFlourishRef.current.style.strokeDashoffset = `${len}`;
     }
 
-    const wChars = welcomeCharRefs.current.filter(Boolean);
-    const pChars = portfolioCharRefs.current.filter(Boolean);
-
     const tl = gsap.timeline({
       onComplete: () => {
         document.body.classList.add("curtains-open");
@@ -85,30 +83,31 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       },
     });
 
-    // --- PHASE 1: "WELCOME" CALLIGRAPHY TYPING/WRITING ANIMATION (2.2s) ---
-    tl.set(welcomeCaretRef.current, { opacity: 1 })
-      .to(wChars, {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        filter: "blur(0px)",
-        duration: 0.5,
-        stagger: 0.18,
-        ease: "power2.out",
-      })
-      .to(welcomeCaretRef.current, { opacity: 0, duration: 0.2 }, "-=0.15")
+    // --- PHASE 1: "WELCOME" LIQUID CALLIGRAPHY WRITING FLOW (NO TYPING, NO CURSOR) ---
+    tl.fromTo(
+      welcomeTextWrapperRef.current,
+      {
+        clipPath: "polygon(-10% -40%, -5% -40%, -15% 140%, -18% 140%)",
+      },
+      {
+        clipPath: "polygon(-10% -40%, 118% -40%, 106% 140%, -18% 140%)",
+        duration: 1.75,
+        ease: "power1.inOut",
+      }
+    )
+      .set(welcomeTextWrapperRef.current, { clipPath: "none" })
       .to(
         welcomeFlourishRef.current,
         {
           strokeDashoffset: 0,
-          duration: 0.6,
+          duration: 0.65,
           ease: "power2.inOut",
         },
-        "-=0.2"
+        "-=0.25"
       )
-      // Hold to enjoy the glowing finished word
-      .to({}, { duration: 0.6 })
-      // Fade & scale out Welcome screen
+      // Hold to enjoy the glowing handwriting
+      .to({}, { duration: 0.65 })
+      // Smooth fade & scale out
       .to(welcomeScreenRef.current, {
         opacity: 0,
         scale: 0.96,
@@ -116,38 +115,39 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         ease: "power2.in",
       })
 
-      // --- PHASE 2: "GUHAN'S PORTFOLIO" CALLIGRAPHY TYPING/WRITING ANIMATION (2.4s) ---
+      // --- PHASE 2: "GUHAN'S PORTFOLIO" LIQUID CALLIGRAPHY WRITING FLOW (NO TYPING, NO CURSOR) ---
       .set(portfolioScreenRef.current, {
         opacity: 1,
         scale: 0.98,
       })
-      .set(portfolioCaretRef.current, { opacity: 1 })
-      .to(pChars, {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        filter: "blur(0px)",
-        duration: 0.4,
-        stagger: 0.11,
-        ease: "power2.out",
-      })
-      .to(portfolioCaretRef.current, { opacity: 0, duration: 0.2 }, "-=0.15")
+      .fromTo(
+        portfolioTextWrapperRef.current,
+        {
+          clipPath: "polygon(-10% -40%, -5% -40%, -15% 140%, -18% 140%)",
+        },
+        {
+          clipPath: "polygon(-10% -40%, 118% -40%, 106% 140%, -18% 140%)",
+          duration: 1.95,
+          ease: "power1.inOut",
+        }
+      )
+      .set(portfolioTextWrapperRef.current, { clipPath: "none" })
       .to(
         portfolioFlourishRef.current,
         {
           strokeDashoffset: 0,
-          duration: 0.65,
+          duration: 0.7,
           ease: "power2.inOut",
         },
-        "-=0.2"
+        "-=0.25"
       )
-      // Savor the completed gold signature
+      // Hold to enjoy the signature
       .to({}, { duration: 0.7 })
-      // Smooth fade & gentle scale out into hero
+      // Dissolve out into hero
       .to(portfolioScreenRef.current, {
         opacity: 0,
         scale: 1.04,
-        duration: 0.4,
+        duration: 0.45,
         ease: "power2.in",
       });
 
@@ -171,28 +171,23 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       {/* Preloader Centered Content Container */}
       <div className="relative z-[100000] flex flex-col items-center justify-center w-full max-w-2xl sm:max-w-3xl md:max-w-4xl px-4 sm:px-6">
         {/* =======================================================================
-            PHASE 1: CLEAN BOLD "WELCOME" (Pure Typography, Zero Stroke, Warm Glow)
+            PHASE 1: BOLD "WELCOME" (Continuous Liquid Writing Flow, Zero Cursor)
            ======================================================================= */}
         <div
           ref={welcomeScreenRef}
           className="flex flex-col items-center justify-center w-full"
         >
-          <div className="font-script text-7xl sm:text-8xl md:text-9xl text-[#C9AF7C] italic tracking-wide flex items-baseline justify-center whitespace-nowrap drop-shadow-[0_0_25px_rgba(201,175,124,0.65)] [text-shadow:0_0_30px_rgba(201,175,124,0.6),0_0_60px_rgba(201,175,124,0.3)]">
-            {WELCOME_CHARS.map((char, i) => (
-              <span
-                key={i}
-                ref={(el) => {
-                  welcomeCharRefs.current[i] = el;
-                }}
-                className="inline-block opacity-0 translate-y-2 scale-90 blur-sm will-change-transform"
-              >
-                {char}
-              </span>
-            ))}
-            <span
-              ref={welcomeCaretRef}
-              className="inline-block w-1 sm:w-1.5 h-[0.75em] bg-[#FFF8E7] rounded-full ml-1.5 opacity-0 shadow-[0_0_15px_#C9AF7C,0_0_30px_#C9AF7C]"
-            />
+          <div className="relative inline-block overflow-visible py-2">
+            <h1
+              ref={welcomeTextWrapperRef}
+              className="font-script font-bold text-7xl sm:text-8xl md:text-9xl lg:text-[10rem] text-[#C9AF7C] italic tracking-wide whitespace-nowrap drop-shadow-[0_0_30px_rgba(201,175,124,0.7)] [text-shadow:0_0_25px_rgba(201,175,124,0.65),0_0_55px_rgba(201,175,124,0.35)] px-6 py-1 select-none will-change-[clip-path]"
+              style={{
+                WebkitTextStroke: "0.8px #C9AF7C",
+                clipPath: "polygon(-10% -40%, -5% -40%, -15% 140%, -18% 140%)",
+              }}
+            >
+              Welcome
+            </h1>
           </div>
 
           {/* Underline Flourish */}
@@ -212,28 +207,23 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         </div>
 
         {/* =======================================================================
-            PHASE 2: CLEAN BOLD "GUHAN'S PORTFOLIO" (Zero Stroke, Warm Glow)
+            PHASE 2: BOLD "GUHAN'S PORTFOLIO" (Continuous Liquid Writing Flow, Zero Cursor)
            ======================================================================= */}
         <div
           ref={portfolioScreenRef}
           className="absolute inset-0 flex flex-col items-center justify-center w-full opacity-0 pointer-events-none"
         >
-          <div className="font-script text-5xl sm:text-7xl md:text-8xl text-[#C9AF7C] italic tracking-wide flex items-baseline justify-center whitespace-nowrap drop-shadow-[0_0_25px_rgba(201,175,124,0.65)] [text-shadow:0_0_30px_rgba(201,175,124,0.6),0_0_60px_rgba(201,175,124,0.3)]">
-            {PORTFOLIO_CHARS.map((char, i) => (
-              <span
-                key={i}
-                ref={(el) => {
-                  portfolioCharRefs.current[i] = el;
-                }}
-                className="inline-block opacity-0 translate-y-2 scale-90 blur-sm will-change-transform"
-              >
-                {char === " " ? "\u00A0" : char}
-              </span>
-            ))}
-            <span
-              ref={portfolioCaretRef}
-              className="inline-block w-1 sm:w-1.5 h-[0.75em] bg-[#FFF8E7] rounded-full ml-1.5 opacity-0 shadow-[0_0_15px_#C9AF7C,0_0_30px_#C9AF7C]"
-            />
+          <div className="relative inline-block overflow-visible py-2">
+            <h2
+              ref={portfolioTextWrapperRef}
+              className="font-script font-bold text-5xl sm:text-7xl md:text-8xl lg:text-9xl text-[#C9AF7C] italic tracking-wide whitespace-nowrap drop-shadow-[0_0_30px_rgba(201,175,124,0.7)] [text-shadow:0_0_25px_rgba(201,175,124,0.65),0_0_55px_rgba(201,175,124,0.35)] px-6 py-1 select-none will-change-[clip-path]"
+              style={{
+                WebkitTextStroke: "0.8px #C9AF7C",
+                clipPath: "polygon(-10% -40%, -5% -40%, -15% 140%, -18% 140%)",
+              }}
+            >
+              Guhan&apos;s Portfolio
+            </h2>
           </div>
 
           {/* Underline Flourish */}
