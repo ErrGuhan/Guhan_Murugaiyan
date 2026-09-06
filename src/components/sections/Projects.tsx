@@ -34,7 +34,6 @@ export default function Projects() {
   const stickyInnerRef = useRef<HTMLDivElement>(null);
   const gallerySectionRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const workDispRef = useRef<SVGFEDisplacementMapElement>(null);
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
@@ -57,7 +56,6 @@ export default function Projects() {
 
   const totalProjects = REAL_PROJECTS.length;
 
-  // Responsive & Reduced Motion Detection
   useEffect(() => {
     const checkState = () => {
       setIsMobile(window.innerWidth < 768);
@@ -70,29 +68,6 @@ export default function Projects() {
     return () => window.removeEventListener("resize", checkState);
   }, []);
 
-  // Liquid distortion text reveal on "WORK"
-  useGSAP(
-    () => {
-      if (!prefersReducedMotion && workDispRef.current) {
-        gsap.fromTo(
-          workDispRef.current,
-          { attr: { scale: 35 } },
-          {
-            attr: { scale: 0 },
-            scrollTrigger: {
-              trigger: transitionRef.current,
-              start: "top 85%",
-              end: "bottom 45%",
-              scrub: 1.2,
-            },
-          }
-        );
-      }
-    },
-    { scope: transitionRef, dependencies: [prefersReducedMotion] }
-  );
-
-  // Desktop Pinned Horizontal Scroll Architecture
   useEffect(() => {
     if (isMobile || prefersReducedMotion) {
       if (pinnedWrapperRef.current) {
@@ -114,13 +89,11 @@ export default function Projects() {
     let travelDistance = 0;
 
     const calculateAndBind = () => {
-      // Clean up previous trigger if exists
       if (st) {
         st.kill();
         st = null;
       }
 
-      // Exact horizontal travel required to bring last project into final frame
       const maxScroll = track.scrollWidth - stickyInner.clientWidth;
       travelDistance = Math.max(0, maxScroll);
 
@@ -130,25 +103,19 @@ export default function Projects() {
         return;
       }
 
-      // Vertical driver height strictly equals 1 viewport height + horizontal travel distance
-      // This produces an exact 1:1 scroll relationship with zero artificial dead space.
       wrapper.style.height = `${window.innerHeight + travelDistance}px`;
-
-      // Set initial transform
       gsap.set(track, { x: 0 });
 
-      // Create ScrollTrigger bound to the driver container
       st = ScrollTrigger.create({
         trigger: wrapper,
         start: "top top",
         end: "bottom bottom",
-        scrub: true, // 1:1 immediate sync with Lenis smooth scroll
+        scrub: true,
         invalidateOnRefresh: true,
         onUpdate: (self) => {
           const currentX = -travelDistance * self.progress;
           gsap.set(track, { x: currentX });
 
-          // Update active index based on progress
           const rawIdx = Math.round(self.progress * (totalProjects - 1));
           const boundedIdx = Math.min(totalProjects - 1, Math.max(0, rawIdx));
           setActiveIndex(boundedIdx);
@@ -158,11 +125,9 @@ export default function Projects() {
       ScrollTrigger.refresh();
     };
 
-    // Calculate immediately and also after layout settles
     calculateAndBind();
     const timer = setTimeout(calculateAndBind, 120);
 
-    // ResizeObserver watches track and container dimensions dynamically
     const ro = new ResizeObserver(() => {
       calculateAndBind();
     });
@@ -184,7 +149,6 @@ export default function Projects() {
     };
   }, [isMobile, prefersReducedMotion, totalProjects]);
 
-  // Mobile IntersectionObserver to update activeIndex on vertical scroll
   useEffect(() => {
     if (!isMobile) return;
     const cards = trackRef.current?.querySelectorAll<HTMLElement>(".project-card");
@@ -206,7 +170,6 @@ export default function Projects() {
     return () => observer.disconnect();
   }, [isMobile]);
 
-  // Programmatic scroll to specific card index
   const scrollToIndex = useCallback(
     (index: number) => {
       const targetIdx = Math.max(0, Math.min(totalProjects - 1, index));
@@ -269,42 +232,41 @@ export default function Projects() {
   const isStackedMode = isMobile || prefersReducedMotion;
 
   return (
-    <section id="work" className="relative w-full bg-[#0A0A0A] text-[#F0F0F0] select-none">
-      <svg className="absolute w-0 h-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        <defs>
-          <filter id="work-liquid-filter" x="-20%" y="-20%" width="140%" height="140%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.04 0.08" numOctaves="3" result="noise" />
-            <feDisplacementMap ref={workDispRef} in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" />
-          </filter>
-        </defs>
-      </svg>
-
-      {/* Part A: Marquee & WORK Title Banner */}
+    <section id="work" className="relative w-full bg-[#0B0B0F] text-white select-none border-t-[3px] border-black">
+      {/* Part A: Comic Hazard Striping & Heavy Distorted WORK Title Banner */}
       <div
         ref={transitionRef}
-        className="relative pt-20 sm:pt-24 pb-12 sm:pb-16 overflow-hidden border-t border-[#C9AF7C]/15 select-none bg-grid-pattern"
+        className="relative pt-20 sm:pt-24 pb-12 sm:pb-16 overflow-hidden border-b-[3px] border-black select-none bg-halftone-dark"
       >
-        <div className="relative py-2.5 border-y border-white/10 overflow-hidden bg-black/60">
-          <div className="animate-marquee-left space-x-8 text-xs sm:text-sm font-mono tracking-widest text-[#A8986E] uppercase">
+        {/* Top Marquee Hazard Tape */}
+        <div className="relative py-2.5 border-y-[3px] border-black overflow-hidden bg-[#FFE600] text-black shadow-[0_4px_0px_#000000]">
+          <div className="animate-marquee-left space-x-8 text-xs sm:text-sm font-mono font-black tracking-widest uppercase">
             {[...techMarquee, ...techMarquee, ...techMarquee].map((item, idx) => (
-              <span key={`tech-${idx}`} className="hover:text-[#F0F0F0] transition-colors">{item} •</span>
+              <span key={`tech-${idx}`} className="hover:text-white transition-colors">{item} ★</span>
             ))}
           </div>
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto px-6 py-10 sm:py-12 flex flex-col items-center text-center">
-          <span className="text-xs font-mono tracking-[0.25em] text-[#C9AF7C] uppercase mb-3 font-semibold">
-            SCROLL TO EXPLORE MY
-          </span>
-          <h2 className="font-display font-black text-[clamp(4.5rem,17vw,13rem)] leading-[0.82] tracking-tighter uppercase text-[#C9AF7C] drop-shadow-[0_0_35px_rgba(201,175,124,0.2)] [filter:url(#work-liquid-filter)]">
+        {/* Center Distorted WORK Title */}
+        <div className="relative z-10 max-w-5xl mx-auto px-6 py-10 sm:py-14 flex flex-col items-center text-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-white text-black border-[3px] border-black shadow-[3px_3px_0px_#000000] rounded-lg text-xs font-mono font-black tracking-widest uppercase mb-3 -rotate-1">
+            <Sparkles className="w-3.5 h-3.5 text-[#FFE600] fill-[#FFE600]" />
+            <span>ARC CASE STUDIES // FEATURED WORK</span>
+          </div>
+
+          <h2
+            data-text="WORK"
+            className="comic-glitch-text text-[clamp(4.5rem,18vw,14rem)] leading-[0.82] tracking-tighter uppercase text-[#FFE600] drop-shadow-[7px_7px_0px_#000000]"
+          >
             WORK
           </h2>
         </div>
 
-        <div className="relative py-2.5 border-y border-white/10 overflow-hidden bg-black/60">
-          <div className="animate-marquee-right space-x-8 text-xs sm:text-sm font-mono tracking-widest text-neutral-400 uppercase">
+        {/* Bottom Marquee Hazard Tape */}
+        <div className="relative py-2.5 border-y-[3px] border-black overflow-hidden bg-[#00F0FF] text-black shadow-[0_4px_0px_#000000]">
+          <div className="animate-marquee-right space-x-8 text-xs sm:text-sm font-mono font-black tracking-widest uppercase">
             {[...domainMarquee, ...domainMarquee, ...domainMarquee].map((item, idx) => (
-              <span key={`domain-${idx}`} className="hover:text-[#C9AF7C] transition-colors">{item} •</span>
+              <span key={`domain-${idx}`} className="hover:text-white transition-colors">{item} ⚡</span>
             ))}
           </div>
         </div>
@@ -320,8 +282,8 @@ export default function Projects() {
           ref={stickyInnerRef}
           className={
             isStackedMode
-              ? "relative w-full py-12 px-4 sm:px-6 bg-[#0A0A0A]"
-              : "sticky top-0 w-full h-[100dvh] overflow-hidden bg-[#0A0A0A] flex flex-col justify-between py-4 sm:py-6"
+              ? "relative w-full py-12 px-4 sm:px-6 bg-[#0B0B0F] bg-halftone-dark"
+              : "sticky top-0 w-full h-[100dvh] overflow-hidden bg-[#0B0B0F] bg-halftone-dark flex flex-col justify-between py-4 sm:py-6"
           }
         >
           <div
@@ -334,51 +296,51 @@ export default function Projects() {
             }`}
           >
             {/* Header & Gallery Navigation Controls */}
-            <div className="max-w-7xl mx-auto w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 pb-3 sm:pb-4 border-b border-white/10 flex-shrink-0">
+            <div className="max-w-7xl mx-auto w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 pb-3 sm:pb-4 border-b-[3px] border-black flex-shrink-0">
               <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C9AF7C]/30 bg-[#C9AF7C]/10 text-[#C9AF7C] text-[11px] font-mono tracking-widest uppercase mb-1.5 font-semibold">
-                  <Sparkles className="w-3.5 h-3.5 text-[#C9AF7C]" />
-                  {`// 05 — FEATURED PROJECTS (0${activeIndex + 1} / 0${totalProjects})`}
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg border-[2.5px] border-black bg-[#FFE600] text-black shadow-[2.5px_2.5px_0px_#000000] text-[11px] font-mono tracking-widest uppercase mb-1 font-black">
+                  <Sparkles className="w-3.5 h-3.5 fill-black" />
+                  {`// 05 — MISSION ARC (0${activeIndex + 1} / 0${totalProjects})`}
                 </div>
-                <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold uppercase tracking-tight text-white">
+                <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tight text-white -webkit-text-stroke-[1.5px_#000] drop-shadow-[3px_3px_0px_#000000]">
                   SELECTED CASE STUDIES
                 </h3>
               </div>
 
               <div className="flex items-center gap-4 sm:gap-6 self-end sm:self-center">
-                {/* Dots indicator */}
+                {/* Dots indicator with comic borders */}
                 <div className="flex items-center gap-1.5 sm:gap-2">
                   {REAL_PROJECTS.map((p, i) => (
                     <button
                       key={`dot-${p.id}`}
                       onClick={() => scrollToIndex(i)}
                       aria-label={`Go to project ${i + 1}`}
-                      className={`h-2 rounded-full transition-all duration-300 ${
+                      className={`h-3 rounded-md border-[2px] border-black transition-all ${
                         activeIndex === i
-                          ? "w-7 sm:w-8 bg-[#C9AF7C]"
-                          : "w-2 bg-white/20 hover:bg-white/50"
+                          ? "w-8 bg-[#FFE600] shadow-[2px_2px_0px_#000000]"
+                          : "w-3 bg-neutral-600 hover:bg-white"
                       }`}
                     />
                   ))}
                 </div>
 
-                {/* Left / Right arrows */}
+                {/* Left / Right arrows with 3px black borders & 3px shadows */}
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => scrollToIndex(activeIndex - 1)}
                     disabled={activeIndex === 0}
                     aria-label="Previous project"
-                    className="circle-hover-parent w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-white/15 text-white disabled:opacity-30 disabled:pointer-events-none hover:border-[#C9AF7C] hover:text-black [--circle-bg:#C9AF7C] transition-all flex items-center justify-center cursor-pointer"
+                    className="comic-btn w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white text-black border-[2.5px] border-black shadow-[3px_3px_0px_#000000] disabled:opacity-30 disabled:pointer-events-none hover:bg-[#FFE600] flex items-center justify-center cursor-pointer"
                   >
-                    <ChevronLeft className="w-4 h-4 z-10" />
+                    <ChevronLeft className="w-5 h-5 stroke-[3]" />
                   </button>
                   <button
                     onClick={() => scrollToIndex(activeIndex + 1)}
                     disabled={activeIndex === totalProjects - 1}
                     aria-label="Next project"
-                    className="circle-hover-parent w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-white/15 text-white disabled:opacity-30 disabled:pointer-events-none hover:border-[#C9AF7C] hover:text-black [--circle-bg:#C9AF7C] transition-all flex items-center justify-center cursor-pointer"
+                    className="comic-btn w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white text-black border-[2.5px] border-black shadow-[3px_3px_0px_#000000] disabled:opacity-30 disabled:pointer-events-none hover:bg-[#FFE600] flex items-center justify-center cursor-pointer"
                   >
-                    <ChevronRight className="w-4 h-4 z-10" />
+                    <ChevronRight className="w-5 h-5 stroke-[3]" />
                   </button>
                 </div>
               </div>
@@ -410,7 +372,7 @@ export default function Projects() {
                 {REAL_PROJECTS.map((project, idx) => (
                   <div
                     key={project.id}
-                    className="project-card relative rounded-3xl bg-[#111111] border border-white/10 hover:border-[#C9AF7C]/50 transition-all duration-500 shadow-2xl p-4 sm:p-5 lg:p-6 flex flex-col justify-between group select-text flex-shrink-0"
+                    className="project-card comic-card relative rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000] hover:shadow-[7px_7px_0px_#000000] p-4 sm:p-5 lg:p-6 flex flex-col justify-between group select-text flex-shrink-0"
                     style={
                       isStackedMode
                         ? { width: "100%", maxWidth: "560px" }
@@ -421,30 +383,28 @@ export default function Projects() {
                     }
                   >
                     {/* Top Case Bar */}
-                    <div className="flex items-center justify-between pb-3 border-b border-white/10 flex-shrink-0">
-                      <div className="flex items-center gap-3">
-                        <span className="text-sm font-mono font-bold text-[#C9AF7C]">CASE {project.num}</span>
-                        <span className="text-xs font-mono tracking-widest text-[#7A7A7A] uppercase font-semibold">/ {project.category}</span>
-                        <span className="hidden sm:inline-block text-[11px] font-mono text-[#A8986E]">
-                          [0{idx + 1} of 0{totalProjects}]
+                    <div className="flex items-center justify-between pb-3 border-b-[2px] border-black flex-shrink-0">
+                      <div className="flex items-center gap-2.5">
+                        <span className="px-2 py-0.5 rounded-md bg-[#FFE600] text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] font-mono font-black text-xs">
+                          ARC {project.num}
+                        </span>
+                        <span className="text-xs font-mono tracking-wider text-neutral-300 uppercase font-black">
+                          / {project.category}
+                        </span>
+                        <span className="hidden sm:inline-block text-[11px] font-mono text-[#FFE600] font-bold">
+                          [0{idx + 1} / 0{totalProjects}]
                         </span>
                       </div>
-                      <div className="relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center select-none flex-shrink-0">
-                        <svg className="w-full h-full spin-slow" viewBox="0 0 100 100">
-                          <path id={`badgePath-${project.id}`} d="M 50, 50 m -36, 0 a 36,36 0 1,1 72,0 a 36,36 0 1,1 -72,0" fill="transparent" />
-                          <text className="text-[9px] font-mono tracking-[0.24em] uppercase fill-[#C9AF7C]">
-                            <textPath href={`#badgePath-${project.id}`} startOffset="0%">LIVE DEMO ↗ • LIVE DEMO ↗ • </textPath>
-                          </text>
-                        </svg>
-                        <div className="absolute w-4 h-4 rounded-full bg-[#161616] border border-[#C9AF7C]/40 flex items-center justify-center">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#C9AF7C]" />
-                        </div>
-                      </div>
+
+                      {/* Comic Status Tag */}
+                      <span className="px-2.5 py-0.5 rounded-md bg-[#00E676] text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] text-[10px] font-mono font-black tracking-wider uppercase">
+                        RELEASED ⚡
+                      </span>
                     </div>
 
-                    {/* Project Preview Image */}
+                    {/* Project Preview Image with 3px border & 3px shadow */}
                     <div
-                      className="relative w-full my-2.5 sm:my-3 rounded-2xl overflow-hidden border border-white/10 bg-[#161616] group/frame cursor-pointer flex-shrink-0"
+                      className="relative w-full my-2.5 sm:my-3 rounded-xl overflow-hidden border-[3px] border-black shadow-[3px_3px_0px_#000000] bg-[#161616] group/frame cursor-pointer flex-shrink-0"
                       style={{ aspectRatio: "21/8", maxHeight: "180px" }}
                       data-cursor="view"
                     >
@@ -452,14 +412,14 @@ export default function Projects() {
                         src={project.image}
                         alt={project.title}
                         fill
-                        className="object-cover object-center opacity-60 contrast-125 transition-transform duration-700 ease-out group-hover/frame:scale-[1.03]"
+                        className="object-cover object-center opacity-85 contrast-125 transition-transform duration-500 ease-out group-hover/frame:scale-[1.03]"
                         sizes="(max-width: 1024px) 100vw, 760px"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-3 sm:p-4">
-                        <span className="text-[9px] sm:text-[10px] font-mono text-[#C9AF7C] tracking-widest uppercase mb-0.5 font-semibold">
-                          ENGINEERED BY GUHAN MURUGAIYAN
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3 sm:p-4">
+                        <span className="text-[10px] font-mono text-[#FFE600] tracking-widest uppercase mb-0.5 font-black">
+                          ARCHITECT: GUHAN MURUGAIYAN
                         </span>
-                        <h4 className="font-syne text-lg sm:text-xl lg:text-2xl font-extrabold uppercase text-white">
+                        <h4 className="font-syne text-lg sm:text-xl lg:text-2xl font-black uppercase text-white drop-shadow-[2px_2px_0px_#000000]">
                           {project.title}
                         </h4>
                       </div>
@@ -468,44 +428,51 @@ export default function Projects() {
                     {/* Content & Code Grid */}
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 my-1 sm:my-2 items-start flex-1 min-h-0">
                       <div className="lg:col-span-6 space-y-2">
-                        <p className="text-xs sm:text-sm text-[#CBD5E1] leading-relaxed line-clamp-2 sm:line-clamp-3">
+                        <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed line-clamp-2 sm:line-clamp-3">
                           {project.description}
                         </p>
                         <div className="flex flex-wrap gap-1.5 pt-1">
                           {project.tags.map((tag) => (
-                            <span key={tag} className="text-[10px] sm:text-[11px] font-mono px-2 sm:px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-neutral-300">
+                            <span
+                              key={tag}
+                              className="text-[10px] sm:text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-md bg-[#1C1C26] border-[1.5px] border-black shadow-[1.5px_1.5px_0px_#000000] text-white"
+                            >
                               {tag}
                             </span>
                           ))}
                         </div>
                       </div>
-                      <div className="lg:col-span-6 rounded-xl bg-[#07090D] border border-white/10 overflow-hidden font-mono text-xs shadow-xl">
-                        <div className="px-3 py-1.5 border-b border-white/10 flex items-center justify-between bg-white/[0.03]">
+
+                      {/* Comic Terminal Code Box */}
+                      <div className="lg:col-span-6 rounded-xl bg-[#08080C] border-[2.5px] border-black shadow-[3px_3px_0px_#000000] overflow-hidden font-mono text-xs">
+                        <div className="px-3 py-1.5 border-b-[2px] border-black flex items-center justify-between bg-[#13131A]">
                           <div className="flex items-center gap-1.5">
-                            <div className="w-2 h-2 rounded-full bg-[#FF5F56]" />
-                            <div className="w-2 h-2 rounded-full bg-[#FFBD2E]" />
-                            <div className="w-2 h-2 rounded-full bg-[#27C93F]" />
+                            <div className="w-2.5 h-2.5 rounded-full bg-[#FF2A55] border border-black" />
+                            <div className="w-2.5 h-2.5 rounded-full bg-[#FFE600] border border-black" />
+                            <div className="w-2.5 h-2.5 rounded-full bg-[#00E676] border border-black" />
                           </div>
-                          <div className="flex items-center gap-1.5 text-[10px] text-[#A8986E]">
-                            <Terminal className="w-3 h-3" />
+                          <div className="flex items-center gap-1.5 text-[10px] text-[#FFE600] font-black">
+                            <Terminal className="w-3 h-3 stroke-[2.5]" />
                             <span>{project.filename}</span>
                           </div>
                         </div>
-                        <pre className="p-2 sm:p-2.5 text-[10px] sm:text-[11px] leading-relaxed text-[#CBD5E1] overflow-x-auto max-h-20 sm:max-h-24 selection:bg-[#C9AF7C] selection:text-black">
+                        <pre className="p-2 sm:p-2.5 text-[10px] sm:text-[11px] leading-relaxed text-neutral-300 overflow-x-auto max-h-20 sm:max-h-24 selection:bg-[#FFE600] selection:text-black">
                           <code>{project.codeSnippet}</code>
                         </pre>
                       </div>
                     </div>
 
                     {/* Action Links Footer */}
-                    <div className="pt-2.5 sm:pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-2.5 mt-auto flex-shrink-0">
-                      <span className="text-[11px] font-mono text-[#7A7A7A]">SOURCE GROUNDED IN REPO</span>
+                    <div className="pt-2.5 sm:pt-3 border-t-[2px] border-black flex flex-wrap items-center justify-between gap-2.5 mt-auto flex-shrink-0">
+                      <span className="text-[11px] font-mono font-bold text-neutral-400">
+                        VERIFIED REPO SOURCE
+                      </span>
                       <div className="flex items-center gap-2">
                         <a
                           href={project.githubUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="circle-hover-parent px-3 py-1.5 rounded-full border border-white/15 text-[11px] font-mono font-semibold tracking-wider uppercase text-white hover:text-black [--circle-bg:#F0F0F0] flex items-center gap-1.5 transition-colors"
+                          className="comic-btn px-3 py-1.5 rounded-lg bg-white text-black text-[11px] font-mono font-black tracking-wider uppercase flex items-center gap-1.5 hover:bg-[#00F0FF]"
                         >
                           <GithubIcon className="w-3.5 h-3.5" /> REPO
                         </a>
@@ -513,9 +480,9 @@ export default function Projects() {
                           href={project.liveUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="circle-hover-parent px-3.5 py-1.5 rounded-full bg-[#C9AF7C] text-black text-[11px] font-mono font-bold tracking-wider uppercase hover:text-white [--circle-bg:#0A0A0A] flex items-center gap-1.5 transition-all shadow-md"
+                          className="comic-btn px-3.5 py-1.5 rounded-lg bg-[#FFE600] text-black text-[11px] font-mono font-black tracking-wider uppercase hover:bg-[#00E676] flex items-center gap-1.5"
                         >
-                          LIVE DEMO <ArrowUpRight className="w-3.5 h-3.5" />
+                          LIVE DEMO <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
                         </a>
                       </div>
                     </div>
@@ -525,8 +492,8 @@ export default function Projects() {
             </div>
 
             {/* Bottom Scroll Prompt */}
-            <div className="flex-shrink-0 flex items-center justify-center gap-3 text-[11px] font-mono text-white/30 tracking-widest uppercase select-none">
-              <span>{isStackedMode ? "↓ scroll down to explore projects ↓" : "← scroll vertically to explore projects →"}</span>
+            <div className="flex-shrink-0 flex items-center justify-center gap-3 text-[11px] font-mono font-bold text-neutral-400 tracking-widest uppercase select-none">
+              <span>{isStackedMode ? "↓ SCROLL DOWN FOR NEXT MISSION ARC ↓" : "← SCROLL VERTICALLY TO NAVIGATE CASE STUDIES →"}</span>
             </div>
           </div>
         </div>

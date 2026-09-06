@@ -135,7 +135,7 @@ export default function RootLayout({
       lang="en"
       className={`${anton.variable} ${syne.variable} ${cinzel.variable} ${jakarta.variable} ${mono.variable} ${dancingScript.variable}`}
     >
-      <body className="antialiased selection:bg-[#C9AF7C] selection:text-black">
+      <body className="antialiased selection:bg-[#FFE600] selection:text-black">
         {/* Film grain texture */}
         <div className="grain-overlay" aria-hidden="true" />
 

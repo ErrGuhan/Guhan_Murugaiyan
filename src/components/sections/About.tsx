@@ -5,11 +5,11 @@ import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { FileText, Mail } from "lucide-react";
+import { FileText, Mail, ShieldCheck, Sparkles } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-function GithubIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
+function GithubIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
     <svg className={className} fill="currentColor" viewBox="0 0 24 24">
       <path
@@ -27,14 +27,14 @@ export default function About() {
 
   useGSAP(
     () => {
-      // 1. Horizontal divider line draws in on scroll-into-view (Part 5)
+      // 1. Horizontal divider line draws in on scroll
       if (dividerRef.current) {
         gsap.fromTo(
           dividerRef.current,
           { scaleX: 0 },
           {
             scaleX: 1,
-            duration: 1.1,
+            duration: 0.9,
             ease: "power3.inOut",
             transformOrigin: "left center",
             scrollTrigger: {
@@ -45,13 +45,14 @@ export default function About() {
         );
       }
 
-      // 2. Photo card slides in from left with slight scale (0.95 -> 1) (Part 5)
+      // 2. Photo card slides in from left with comic spring
       gsap.from(".about-photo-card", {
         x: -45,
+        rotation: -4,
         scale: 0.95,
         opacity: 0,
-        duration: 1,
-        ease: "power3.out",
+        duration: 0.85,
+        ease: "back.out(1.4)",
         scrollTrigger: {
           trigger: ".about-photo-card",
           start: "top 80%",
@@ -63,7 +64,7 @@ export default function About() {
         y: 35,
         opacity: 0,
         stagger: 0.1,
-        duration: 0.9,
+        duration: 0.8,
         ease: "power3.out",
         scrollTrigger: {
           trigger: ".about-text-wrapper",
@@ -71,13 +72,14 @@ export default function About() {
         },
       });
 
-      // 4. Stats grid items staggered entrance (~0.06s stagger) (Part 5)
+      // 4. Stats grid items staggered entrance
       gsap.from(".about-stat-item", {
         y: 25,
+        scale: 0.95,
         opacity: 0,
-        stagger: 0.06,
-        duration: 0.75,
-        ease: "power2.out",
+        stagger: 0.07,
+        duration: 0.6,
+        ease: "back.out(1.7)",
         scrollTrigger: {
           trigger: ".about-stats-grid",
           start: "top 85%",
@@ -88,143 +90,160 @@ export default function About() {
   );
 
   const facts = [
-    { label: "BASED", value: "India (Tamil Nadu)" },
-    { label: "FOCUS", value: "AI & Data Systems" },
-    { label: "ROLE", value: "AI Developer" },
-    { label: "MINDSET", value: "Always Learning" },
-    { label: "EDUCATION", value: "B.Tech CSE (2024–2028)" },
-    { label: "LEADERSHIP", value: "NSS Representative" },
+    { label: "BASE LOCATION", value: "India (Tamil Nadu)", icon: "📍" },
+    { label: "SPECIALTY", value: "AI & Autonomous Systems", icon: "⚡" },
+    { label: "PRIMARY CLASS", value: "AI Developer / Engineer", icon: "⚔️" },
+    { label: "PASSIVE TRAIT", value: "Always Leveling Up", icon: "🔥" },
+    { label: "ACADEMY", value: "B.Tech CSE (2024–2028)", icon: "🎓" },
+    { label: "GUILD ROLE", value: "NSS Representative", icon: "🛡️" },
   ];
 
   return (
     <section
       id="about"
       ref={containerRef}
-      className="relative min-h-screen py-24 md:py-36 px-6 md:px-12 bg-[#0A0A0A] text-[#F0F0F0] overflow-hidden border-t border-[#C9AF7C]/15"
+      className="relative min-h-screen py-24 md:py-36 px-6 md:px-12 bg-[#0B0B0F] text-white overflow-hidden border-t-[3px] border-black bg-halftone-dark"
     >
       <div className="max-w-5xl mx-auto w-full">
-        {/* Section Heading & Eyebrow (Part 5) */}
+        {/* Section Heading & Manga Eyebrow */}
         <div className="mb-14 md:mb-18 flex flex-col items-start">
-          <span className="text-xs font-mono tracking-[0.2em] text-[#C9AF7C] uppercase mb-3 font-semibold">
-            — 02 · THE PERSON BEHIND THE CODE
-          </span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#FFE600] text-black border-[3px] border-black shadow-[3px_3px_0px_#000000] rounded-lg text-xs font-mono font-black tracking-widest uppercase mb-3">
+            <Sparkles className="w-3.5 h-3.5 fill-black" />
+            <span>— 02 · CHARACTER PROFILE &amp; ORIGIN</span>
+          </div>
 
-          <h2 className="font-display text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight uppercase text-[#F0F0F0]">
-            ABOUT ME
+          <h2
+            data-text="ABOUT ME"
+            className="comic-glitch-text text-4xl sm:text-6xl md:text-7xl leading-tight tracking-tight uppercase text-white drop-shadow-[5px_5px_0px_#000000]"
+          >
+            ABOUT <span className="text-[#FFE600]">ME</span>
           </h2>
 
-          {/* Thin Horizontal Divider Line Drawing in on Scroll (Part 5) */}
+          {/* Solid 3px Manga Divider Line */}
           <div
             ref={dividerRef}
-            className="w-full h-[1px] bg-gradient-to-r from-[#C9AF7C] via-[#C9AF7C]/40 to-transparent mt-6"
+            className="w-full h-[3px] bg-[#FFE600] border-y border-black mt-6"
           />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-          {/* Left Column: Profile Card with Grayscale/Duotone Tint, Overlay & Links (Part 5) */}
+          {/* Left Column: Manga Character Card with 3px border and 4px shadow */}
           <div className="lg:col-span-5 flex flex-col items-center lg:items-start">
             <div
-              className="about-photo-card relative w-full max-w-sm sm:max-w-md aspect-[4/5] rounded-2xl overflow-hidden border border-[#C9AF7C]/20 shadow-2xl group bg-[#111111]"
+              className="about-photo-card comic-card relative w-full max-w-sm sm:max-w-md aspect-[4/5] rounded-2xl overflow-hidden border-[3px] border-black shadow-[4px_4px_0px_#000000] group bg-[#17171C]"
               data-cursor="view"
             >
-              {/* Subtle duotone gradient vignette */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-10" />
+              {/* Halftone Vignette */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent z-10" />
 
               <Image
                 src="/images/profile.jpg"
                 alt="Guhan Murugaiyan"
                 fill
-                className="object-cover object-center grayscale contrast-125 group-hover:scale-105 group-hover:grayscale-0 transition-all duration-700 ease-out"
+                className="object-cover object-center grayscale contrast-125 group-hover:scale-105 group-hover:grayscale-0 transition-all duration-500 ease-out"
                 sizes="(max-width: 768px) 100vw, 450px"
                 priority
               />
 
-              {/* Name Overlay Top-Left (Part 5) */}
-              <div className="absolute top-4 left-4 z-20 bg-black/75 px-3 py-1.5 rounded-md border border-[#C9AF7C]/30 backdrop-blur-sm">
-                <span className="text-[10px] font-mono tracking-widest text-[#C9AF7C] uppercase font-bold">
+              {/* Manga Name Badge Top-Left with 3px border */}
+              <div className="absolute top-4 left-4 z-20 bg-[#FFE600] text-black px-3 py-1.5 rounded-lg border-[2.5px] border-black shadow-[3px_3px_0px_#000000] -rotate-2">
+                <span className="text-[11px] font-mono tracking-wider uppercase font-black block">
                   GUHAN MURUGAIYAN
+                </span>
+                <span className="text-[9px] font-mono tracking-widest text-neutral-800 uppercase block font-bold">
+                  CREATIVE ARCHITECT // LVL 99
                 </span>
               </div>
 
-              {/* Bottom Edge: 3 Icon Links (Code, Resume, Contact) (Part 5) */}
-              <div className="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between bg-black/80 px-4 py-2.5 rounded-xl border border-white/10 backdrop-blur-md">
-                <span className="text-[11px] font-mono text-[#F0F0F0] font-medium tracking-wider">
-                  QUICK CONNECT
+              {/* Bottom Edge: Manga Action Quick Connect with 3px borders */}
+              <div className="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between bg-black/90 px-4 py-2.5 rounded-xl border-[2.5px] border-black shadow-[3px_3px_0px_#000000]">
+                <span className="text-[11px] font-mono text-[#FFE600] font-black tracking-wider uppercase">
+                  QUICK CONNECT ⚡
                 </span>
                 <div className="flex items-center gap-2">
                   <a
                     href="https://github.com/ErrGuhan"
                     target="_blank"
                     rel="noreferrer"
-                    className="p-1.5 rounded-lg bg-white/10 text-[#C9AF7C] hover:bg-[#C9AF7C] hover:text-black transition-colors"
+                    className="comic-btn p-2 rounded-lg bg-white text-black hover:bg-[#FFE600] transition-colors"
                     title="GitHub Profile"
                   >
-                    <GithubIcon className="w-3.5 h-3.5" />
+                    <GithubIcon className="w-4 h-4" />
                   </a>
                   <a
                     href="/resume.pdf"
                     target="_blank"
                     rel="noreferrer"
-                    className="p-1.5 rounded-lg bg-white/10 text-[#C9AF7C] hover:bg-[#C9AF7C] hover:text-black transition-colors"
+                    className="comic-btn p-2 rounded-lg bg-white text-black hover:bg-[#00F0FF] transition-colors"
                     title="Download Resume"
                   >
-                    <FileText className="w-3.5 h-3.5" />
+                    <FileText className="w-4 h-4" />
                   </a>
                   <a
                     href="#contact"
-                    className="p-1.5 rounded-lg bg-white/10 text-[#C9AF7C] hover:bg-[#C9AF7C] hover:text-black transition-colors"
+                    className="comic-btn p-2 rounded-lg bg-white text-black hover:bg-[#FF2A55] hover:text-white transition-colors"
                     title="Send Message"
                   >
-                    <Mail className="w-3.5 h-3.5" />
+                    <Mail className="w-4 h-4" />
                   </a>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Editorial Bio Statement & 3x2 Stats Grid (Part 5) */}
+          {/* Right Column: Narrative Comic Box & RPG Attribute Grid */}
           <div className="about-text-wrapper lg:col-span-7 flex flex-col justify-between space-y-8">
-            <div>
-              <span className="about-text-reveal text-xs font-mono text-[#C9AF7C] tracking-widest uppercase mb-3 block font-semibold">
-                — WHO AM I?
+            {/* Comic Speech/Narrative Dialogue Box */}
+            <div className="comic-card p-6 sm:p-8 rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000] relative">
+              <span className="about-text-reveal text-xs font-mono text-[#FFE600] tracking-widest uppercase mb-3 block font-black">
+                // MANIFESTO &amp; CREED
               </span>
 
-              {/* Large headline with selectively gold-highlighted keywords (Part 5) */}
-              <h3 className="about-text-reveal font-syne text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight leading-[1.2] uppercase text-[#F0F0F0]">
+              {/* Large headline with comic font styling */}
+              <h3 className="about-text-reveal font-syne text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-[1.2] uppercase text-white">
                 I BUILD{" "}
-                <span className="text-[#C9AF7C]">INTELLIGENT SYSTEMS</span> WHERE{" "}
-                <span className="text-[#C9AF7C]">DATA MEETS AUTONOMY</span>.
+                <span className="text-[#FFE600] drop-shadow-[2px_2px_0px_#000000]">
+                  INTELLIGENT SYSTEMS
+                </span>{" "}
+                WHERE{" "}
+                <span className="text-[#00F0FF] drop-shadow-[2px_2px_0px_#000000]">
+                  DATA MEETS AUTONOMY
+                </span>
+                .
               </h3>
 
-              {/* 2-Column Body Paragraph (Part 5) */}
-              <div className="about-text-reveal mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-[#CBD5E1] text-sm leading-relaxed">
+              {/* 2-Column Body Narrative */}
+              <div className="about-text-reveal mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-neutral-300 text-sm leading-relaxed">
                 <p>
-                  I am an <strong>AI Developer and Computer Science Engineer</strong> deeply
+                  I am an <strong className="text-white font-black">AI Developer and Computer Science Engineer</strong> deeply
                   passionate about constructing autonomous multi-agent networks,
                   concurrent backends, and high-throughput data workflows that scale
                   reliably without manual intervention.
                 </p>
-                <p className="text-[#A0AEC0]">
+                <p className="text-neutral-400">
                   I care about the architectural details that elevate software: autonomous
                   collaboration, fault-tolerant execution, and turning raw data into
                   meaningful business intelligence. Beyond code, I proudly represent the{" "}
-                  <strong>National Service Scheme (NSS)</strong>, championing community
+                  <strong className="text-[#FFE600] font-black">National Service Scheme (NSS)</strong>, championing community
                   leadership and disciplined execution.
                 </p>
               </div>
             </div>
 
-            {/* Stats Grid: 3 columns x 2 rows (Part 5) */}
-            <div className="about-stats-grid grid grid-cols-2 sm:grid-cols-3 gap-3.5 pt-6 border-t border-white/10">
+            {/* Character RPG Stats Grid (3 cols x 2 rows) with 3px black borders & 4px shadows */}
+            <div className="about-stats-grid grid grid-cols-2 sm:grid-cols-3 gap-3.5 pt-2">
               {facts.map((fact) => (
                 <div
                   key={fact.label}
-                  className="about-stat-item p-4 rounded-xl bg-[#111111] border border-white/10 hover:border-[#C9AF7C]/50 transition-colors"
+                  className="about-stat-item comic-card p-4 rounded-xl bg-[#17171C] border-[3px] border-black shadow-[4px_4px_0px_#000000] hover:bg-[#FFE600] hover:text-black group transition-all"
                 >
-                  <span className="text-[10px] font-mono text-[#C9AF7C] uppercase tracking-widest block mb-1 font-bold">
-                    {fact.label}
-                  </span>
-                  <span className="font-syne font-bold text-sm sm:text-base text-[#F0F0F0] block">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-[10px] font-mono text-[#FFE600] group-hover:text-black uppercase tracking-widest font-black block">
+                      {fact.label}
+                    </span>
+                    <span className="text-sm">{fact.icon}</span>
+                  </div>
+                  <span className="font-syne font-bold text-sm sm:text-base text-white group-hover:text-black block leading-snug">
                     {fact.value}
                   </span>
                 </div>

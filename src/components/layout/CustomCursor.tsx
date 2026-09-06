@@ -16,8 +16,6 @@ export default function CustomCursor() {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (isTouch || prefersReducedMotion) return;
 
-    document.body.classList.add("custom-cursor-active");
-
     const cursor = cursorRef.current;
     if (!cursor) return;
 
@@ -25,6 +23,9 @@ export default function CustomCursor() {
     const setY = gsap.quickTo(cursor, "y", { duration: 0.18, ease: "power3.out" });
 
     const onMouseMove = (e: MouseEvent) => {
+      if (!document.body.classList.contains("custom-cursor-active")) {
+        document.body.classList.add("custom-cursor-active");
+      }
       setIsVisible(true);
       setX(e.clientX);
       setY(e.clientY);
@@ -33,7 +34,7 @@ export default function CustomCursor() {
       if (!target) return;
 
       const viewable = target.closest("[data-cursor='view']");
-      const interactive = target.closest("a, button, [role='button'], input, textarea, .circle-hover-parent, [data-cursor='pointer']");
+      const interactive = target.closest("a, button, [role='button'], input, textarea, .comic-btn, .comic-card, .circle-hover-parent, [data-cursor='pointer']");
 
       if (viewable) {
         setIsViewMode(true);
@@ -49,6 +50,7 @@ export default function CustomCursor() {
 
     const onMouseLeave = () => {
       setIsVisible(false);
+      document.body.classList.remove("custom-cursor-active");
     };
 
     window.addEventListener("mousemove", onMouseMove, { passive: true });
@@ -69,13 +71,13 @@ export default function CustomCursor() {
         isVisible ? "opacity-100" : "opacity-0"
       } ${
         isViewMode
-          ? "w-16 h-16 bg-[#0C0C0C]/90 border border-[#C9AF7C] text-[#C9AF7C] text-[10px] font-mono font-bold tracking-widest shadow-lg"
+          ? "w-16 h-16 bg-[#FFE600] border-[2.5px] border-black text-black text-[10px] font-mono font-black tracking-widest shadow-[3px_3px_0px_#000000]"
           : isHovered
-          ? "w-12 h-12 bg-[#C9AF7C]/25 border border-[#C9AF7C]/80 backdrop-blur-[1px] scale-110"
-          : "w-3.5 h-3.5 bg-[#F1E8E0] border border-[#0C0C0C]/40 shadow-sm"
+          ? "w-12 h-12 bg-[#FFE600]/30 border-[2px] border-[#FFE600] backdrop-blur-[1px] scale-110 shadow-[2px_2px_0px_#000000]"
+          : "w-3.5 h-3.5 bg-[#FFE600] border-[1.5px] border-black shadow-[1.5px_1.5px_0px_#000000]"
       }`}
     >
-      {isViewMode && <span className="select-none tracking-widest animate-pulse">VIEW</span>}
+      {isViewMode && <span className="select-none tracking-widest animate-pulse font-black">VIEW</span>}
     </div>
   );
 }
