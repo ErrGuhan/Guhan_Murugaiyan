@@ -540,6 +540,16 @@ html.lenis, html.lenis body {
   }
 }
 
+/* Mobile & Touch: completely eliminate custom cursor */
+@media (max-width: 1023px), (hover: none), (pointer: coarse) {
+  .custom-cursor-element {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
+
 /* Hide scrollbar */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
