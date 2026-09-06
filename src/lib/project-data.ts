@@ -55,7 +55,7 @@ export async function getVerifiedProducts() {
     .order('created_at', { ascending: false });
   return data?.map(mapProduct) ?? [];
 }`,
-    image: "/images/project-ecommerce.jpg",
+    image: "/images/campuscart-preview.jpg",
     liveUrl: "https://campus-cart01.vercel.app",
     githubUrl: "https://github.com/ErrGuhan/CampusCart01",
     year: "2026",
@@ -93,7 +93,7 @@ export default function HabitTrackerWidget() {
   };
   // ...
 }`,
-    image: "/images/project-portfolio.jpg",
+    image: "/images/personaltracker-preview.jpg",
     liveUrl: "https://personaltracker-psi.vercel.app",
     githubUrl: "https://github.com/ErrGuhan/PersonalTracker",
     year: "2026",
@@ -190,7 +190,7 @@ export function ParametricDoor({
     </mesh>
   );
 }`,
-    image: "/images/project-gazu.jpg",
+    image: "/images/janafibre-preview.jpg",
     liveUrl: "https://janafibre.vercel.app",
     githubUrl: "https://github.com/ErrGuhan/JanaFibreGlass",
     year: "2026",
@@ -232,7 +232,7 @@ export default async function HomePage() {
 
   return <HomeHeroAndCategories categories={categoriesFromDb} />;
 }`,
-    image: "/images/project-audio.jpg",
+    image: "/images/tharikadecors-preview.jpg",
     liveUrl: "https://tharikadecors.vercel.app",
     githubUrl: "https://github.com/ErrGuhan/TharikaDecors",
     year: "2026",
