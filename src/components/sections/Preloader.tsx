@@ -37,7 +37,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     if (hasFinished.current) return;
     hasFinished.current = true;
 
-    // Stop ongoing animation
+    // Stop ongoing entrance animation
     if (mainTimelineRef.current) {
       mainTimelineRef.current.kill();
     }
@@ -97,10 +97,10 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       slashTl.to(
         textElements,
         {
-          scale: 1.45,
+          scale: 1.35,
           opacity: 0,
           filter: "blur(12px)",
-          duration: 0.3,
+          duration: 0.28,
           ease: "power2.inOut",
         },
         "<"
@@ -149,7 +149,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       );
     }
 
-    // Fade out slash blade line
+    // 5. Fade out slash blade line
     if (slashBladeRef.current) {
       slashTl.to(
         slashBladeRef.current,
@@ -186,8 +186,8 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     mainTimelineRef.current = tl;
 
     // Reset initial states
-    gsap.set(phase2Ref.current, { opacity: 0, xPercent: 120, skewX: 20 });
     gsap.set(phase1Ref.current, { opacity: 1, xPercent: 0, skewX: 0 });
+    gsap.set(phase2Ref.current, { opacity: 0, xPercent: 120, skewX: 20 });
 
     // Initial shockwave burst
     if (shockwaveRef.current) {
@@ -199,19 +199,19 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       );
     }
 
-    // Smooth counter progression (0 -> 50% during Phase 1 across 2.0s)
+    // Smooth counter progression (0 -> 50% during Phase 1 across 1.7s)
     tl.to(
       progressObj,
       {
         val: 50,
-        duration: 2.0,
+        duration: 1.7,
         ease: "power1.inOut",
         onUpdate: () => setProgress(Math.round(progressObj.val)),
       },
       0
     );
 
-    // Phase 1 Kinetic Slam: "WELCOME TO MY ARC"
+    // Phase 1 Kinetic Slam: "HELLO! EVERYONE..."
     if (phase1Ref.current) {
       const badge = phase1Ref.current.querySelector(".p1-badge");
       const title = phase1Ref.current.querySelector(".p1-title");
@@ -229,8 +229,8 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       if (title) {
         tl.fromTo(
           title,
-          { scale: 1.7, opacity: 0, y: 30 },
-          { scale: 1, opacity: 1, y: 0, duration: 0.7, ease: "elastic.out(1, 0.72)" },
+          { scale: 1.6, opacity: 0, y: 25 },
+          { scale: 1, opacity: 1, y: 0, duration: 0.65, ease: "elastic.out(1, 0.75)" },
           0.12
         );
       }
@@ -239,13 +239,13 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         tl.fromTo(
           sub,
           { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" },
-          0.45
+          { y: 0, opacity: 1, duration: 0.45, ease: "power2.out" },
+          0.4
         );
       }
     }
 
-    // At 2.1s: Phase 1 whips away to left with speedline blur
+    // At 1.75s: Phase 1 whips away to left with speedline blur
     if (phase1Ref.current) {
       tl.to(
         phase1Ref.current,
@@ -256,23 +256,23 @@ export default function Preloader({ onComplete }: PreloaderProps) {
           duration: 0.35,
           ease: "power3.in",
         },
-        2.1
+        1.75
       );
     }
 
-    // Counter surges from 50% to 100% (Overdrive) across 1.8s
+    // Counter surges from 50% to 100% (Overdrive) across 1.4s
     tl.to(
       progressObj,
       {
         val: 100,
-        duration: 1.8,
+        duration: 1.4,
         ease: "power2.out",
         onUpdate: () => setProgress(Math.round(progressObj.val)),
       },
-      2.2
+      1.8
     );
 
-    // Phase 2 Character Reveal Slam: "GUHAN MURUGAIYAN"
+    // Phase 2 Presentation Slam: "WELCOME TO MY ARC"
     if (phase2Ref.current) {
       const badge = phase2Ref.current.querySelector(".p2-badge");
       const title = phase2Ref.current.querySelector(".p2-title");
@@ -284,18 +284,18 @@ export default function Preloader({ onComplete }: PreloaderProps) {
           xPercent: 0,
           skewX: 0,
           opacity: 1,
-          duration: 0.55,
+          duration: 0.5,
           ease: "back.out(1.5)",
         },
-        2.3
+        1.9
       );
 
       if (badge) {
         tl.fromTo(
           badge,
           { y: -20, opacity: 0, scale: 0.8 },
-          { y: 0, opacity: 1, scale: 1, duration: 0.45, ease: "back.out(2)" },
-          2.4
+          { y: 0, opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2)" },
+          2.0
         );
       }
 
@@ -303,8 +303,8 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         tl.fromTo(
           title,
           { scale: 1.4, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 0.65, ease: "elastic.out(1, 0.75)" },
-          2.45
+          { scale: 1, opacity: 1, duration: 0.6, ease: "elastic.out(1, 0.75)" },
+          2.05
         );
       }
 
@@ -312,19 +312,19 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         tl.fromTo(
           sub,
           { y: 15, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.45, ease: "power2.out" },
-          2.7
+          { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" },
+          2.25
         );
       }
     }
 
-    // Hold Phase 2 proudly so user can take in the character title and effects, then trigger Katana Slash at ~4.5s
-    tl.to({}, { duration: 1.2 }, 3.3);
+    // Hold Phase 2, then trigger Katana Slash at ~3.4s
+    tl.to({}, { duration: 0.8 }, 2.6);
 
-    // Failsafe safety timer (5.8s max)
+    // Safety fallback timer (4.6s max)
     const safetyTimer = setTimeout(() => {
       triggerKatanaSlash();
-    }, 5800);
+    }, 4600);
 
     return () => {
       clearTimeout(safetyTimer);
@@ -369,40 +369,20 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       {/* 3. Upper Diagonal Shard (Slices UP & LEFT on climax) */}
       <div
         ref={upperShardRef}
-        className="fixed inset-0 z-[99990] bg-[#0B0B0F] pointer-events-none will-change-transform bg-halftone-dark"
+        className="fixed inset-0 z-[99990] bg-[#0B0B0F] pointer-events-none will-change-transform bg-halftone-dark border-b-[3px] border-[#FFE600]"
         style={{
           clipPath: "polygon(0% 0%, 100% 0%, 100% 38%, 0% 62%)",
         }}
-      >
-        {/* Yellow Diagonal Cut Edge Rim */}
-        <div
-          className="absolute inset-0 pointer-events-none border-b-[4px] border-[#FFE600]"
-          style={{
-            clipPath: "polygon(0% 60.5%, 100% 36.5%, 100% 38%, 0% 62%)",
-            background: "#FFE600",
-            boxShadow: "0 0 20px #FFE600",
-          }}
-        />
-      </div>
+      />
 
       {/* 4. Lower Diagonal Shard (Slices DOWN & RIGHT on climax) */}
       <div
         ref={lowerShardRef}
-        className="fixed inset-0 z-[99990] bg-[#0B0B0F] pointer-events-none will-change-transform bg-halftone-dark"
+        className="fixed inset-0 z-[99990] bg-[#0B0B0F] pointer-events-none will-change-transform bg-halftone-dark border-t-[3px] border-[#00F0FF]"
         style={{
           clipPath: "polygon(0% 62%, 100% 38%, 100% 100%, 0% 100%)",
         }}
-      >
-        {/* Cyan Diagonal Cut Edge Rim */}
-        <div
-          className="absolute inset-0 pointer-events-none border-t-[4px] border-[#00F0FF]"
-          style={{
-            clipPath: "polygon(0% 62%, 100% 38%, 100% 39.5%, 0% 63.5%)",
-            background: "#00F0FF",
-            boxShadow: "0 0 20px #00F0FF",
-          }}
-        />
-      </div>
+      />
 
       {/* 5. Radial Manga Speedlines Background */}
       <div className="absolute inset-0 z-[99992] pointer-events-none overflow-hidden animate-speedline-pulse opacity-25">
@@ -440,7 +420,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
           <span className="tracking-wider">ARC &apos;26 // OVERDRIVE</span>
         </div>
 
-        {/* Center: Bouncing Audio/Power Equalizer */}
+        {/* Center: Audio/Power Equalizer */}
         <div className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#17171C] border-[2.5px] border-black shadow-[3px_3px_0px_#000000]">
           <span className="w-1 bg-[#00F0FF] rounded-full animate-eq-1" />
           <span className="w-1 bg-[#FFE600] rounded-full animate-eq-2" />
@@ -458,38 +438,38 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         </div>
       </div>
 
-      {/* 8. Main Stage: Dynamic Kinetic Text Presentation */}
-      <div className="relative z-[99994] flex flex-col items-center justify-center w-full max-w-5xl px-4 sm:px-6 pointer-events-none text-center">
-        {/* PHASE 1 (FIRST): "GUHAN MURUGAIYAN" */}
+      {/* 8. Main Stage: Clean Symmetrical Presentation Stages */}
+      <div className="relative z-[99994] flex items-center justify-center w-full max-w-5xl h-[280px] sm:h-[340px] px-4 sm:px-6 pointer-events-none text-center">
+        {/* PHASE 1: "HELLO! EVERYONE..." */}
         <div
           ref={phase1Ref}
-          className="absolute flex flex-col items-center justify-center w-full will-change-transform"
+          className="absolute inset-0 flex flex-col items-center justify-center w-full will-change-transform"
         >
           <div className="p1-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-[#FFE600] text-black border-[3px] border-black shadow-[4px_4px_0px_#000000] text-xs font-mono font-black tracking-widest uppercase mb-4 -rotate-1">
             <Sparkles className="w-4 h-4 fill-black" />
-            <span>PROTAGONIST // LVL 99 ARCHITECT</span>
+            <span>TRANSMISSION // INCOMING MESSAGE</span>
           </div>
 
           <h1
-            className="p1-title font-display font-black text-[clamp(2.5rem,8.5vw,6.5rem)] text-white tracking-tight leading-[0.92] drop-shadow-[6px_6px_0px_#000000]"
+            className="p1-title font-display font-black uppercase text-[clamp(2.4rem,8.2vw,6.4rem)] text-white tracking-tight leading-[0.92] drop-shadow-[6px_6px_0px_#000000]"
             style={{
               WebkitTextStroke: "2.5px #000000",
             }}
           >
-            GUHAN <span className="text-[#FFE600]">MURUGAIYAN</span>
+            HELLO! <span className="text-[#FFE600]">EVERYONE...</span>
           </h1>
 
           <div className="p1-sub inline-flex items-center gap-2 font-mono text-xs sm:text-sm text-[#00F0FF] font-black tracking-widest mt-5 uppercase">
             <span className="inline-block w-2.5 h-0.5 bg-[#00F0FF]" />
-            <span>AI DEVELOPER &amp; CREATIVE ARCHITECT</span>
+            <span>GUHAN MURUGAIYAN // CREATIVE ARCHITECT</span>
             <span className="inline-block w-2.5 h-0.5 bg-[#00F0FF]" />
           </div>
         </div>
 
-        {/* PHASE 2 (SECOND): "WELCOME TO MY ARC" */}
+        {/* PHASE 2: "WELCOME TO MY ARC" */}
         <div
           ref={phase2Ref}
-          className="flex flex-col items-center justify-center w-full will-change-transform"
+          className="absolute inset-0 flex flex-col items-center justify-center w-full will-change-transform"
         >
           <div className="p2-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-[#00F0FF] text-black border-[3px] border-black shadow-[4px_4px_0px_#000000] text-xs font-mono font-black tracking-widest uppercase mb-4 rotate-1">
             <Zap className="w-4 h-4 fill-black" />
@@ -497,7 +477,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
           </div>
 
           <h2
-            className="p2-title font-display font-black text-[clamp(2.8rem,9.5vw,7.2rem)] text-[#FFE600] tracking-tight leading-[0.92] drop-shadow-[6px_6px_0px_#000000]"
+            className="p2-title font-display font-black uppercase text-[clamp(2.6rem,9vw,7rem)] text-[#FFE600] tracking-tight leading-[0.92] drop-shadow-[6px_6px_0px_#000000]"
             style={{
               WebkitTextStroke: "2.5px #000000",
             }}
