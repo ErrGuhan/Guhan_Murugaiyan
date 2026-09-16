@@ -12,7 +12,10 @@ interface PreloaderProps {
 }
 
 export default function Preloader({ onComplete }: PreloaderProps) {
-  const [isDone, setIsDone] = useState(false);
+  const [isDone, setIsDone] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  });
   const [progress, setProgress] = useState(0);
 
   // Structural & Animation Refs
@@ -170,7 +173,6 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     ).matches;
 
     if (prefersReducedMotion) {
-      setIsDone(true);
       onComplete?.();
       return;
     }
@@ -417,7 +419,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         {/* Left: System Status Pill */}
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#17171C] border-[2.5px] border-black shadow-[3px_3px_0px_#000000] text-xs font-mono font-black text-[#FFE600]">
           <Zap className="w-3.5 h-3.5 fill-[#FFE600]" />
-          <span className="tracking-wider">ARC &apos;26 // OVERDRIVE</span>
+          <span className="tracking-wider">{"ARC '26 // OVERDRIVE"}</span>
         </div>
 
         {/* Center: Audio/Power Equalizer */}
@@ -447,7 +449,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         >
           <div className="p1-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-[#FFE600] text-black border-[3px] border-black shadow-[4px_4px_0px_#000000] text-xs font-mono font-black tracking-widest uppercase mb-4 -rotate-1">
             <Sparkles className="w-4 h-4 fill-black" />
-            <span>TRANSMISSION // INCOMING MESSAGE</span>
+            <span>{"TRANSMISSION // INCOMING MESSAGE"}</span>
           </div>
 
           <h1
@@ -461,7 +463,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
 
           <div className="p1-sub inline-flex items-center gap-2 font-mono text-xs sm:text-sm text-[#00F0FF] font-black tracking-widest mt-5 uppercase">
             <span className="inline-block w-2.5 h-0.5 bg-[#00F0FF]" />
-            <span>GUHAN MURUGAIYAN // CREATIVE ARCHITECT</span>
+            <span>{"GUHAN MURUGAIYAN // CREATIVE ARCHITECT"}</span>
             <span className="inline-block w-2.5 h-0.5 bg-[#00F0FF]" />
           </div>
         </div>
@@ -473,7 +475,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         >
           <div className="p2-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-[#00F0FF] text-black border-[3px] border-black shadow-[4px_4px_0px_#000000] text-xs font-mono font-black tracking-widest uppercase mb-4 rotate-1">
             <Zap className="w-4 h-4 fill-black" />
-            <span>ARC &apos;26 // PROLOGUE</span>
+            <span>{"ARC '26 // PROLOGUE"}</span>
           </div>
 
           <h2
@@ -487,7 +489,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
 
           <div className="p2-sub inline-flex items-center gap-2 font-mono text-xs sm:text-sm text-[#FFE600] font-black tracking-widest mt-5 uppercase">
             <span className="inline-block w-2.5 h-0.5 bg-[#FFE600]" />
-            <span>CHAPTER 01 // THE JOURNEY BEGINS</span>
+            <span>{"CHAPTER 01 // THE JOURNEY BEGINS"}</span>
             <span className="inline-block w-2.5 h-0.5 bg-[#FFE600]" />
           </div>
         </div>

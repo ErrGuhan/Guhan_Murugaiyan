@@ -33,10 +33,14 @@ export default function Navbar() {
 
   // Lock body scroll and listen for Escape key when mobile menu is open
   useEffect(() => {
+    const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
+
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
+      lenis?.stop();
     } else {
       document.body.style.overflow = "";
+      lenis?.start();
     }
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -48,6 +52,7 @@ export default function Navbar() {
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       document.body.style.overflow = "";
+      lenis?.start();
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isMenuOpen]);
@@ -134,7 +139,7 @@ export default function Navbar() {
                 PORTFOLIO <span className="text-[#FFE600] drop-shadow-[1px_1px_0px_#000] font-black">⚡</span>
               </span>
               <span className="text-[9px] font-mono tracking-widest text-neutral-500 uppercase mt-0.5">
-                ARC &apos;26 // DEV
+                {"ARC '26 // DEV"}
               </span>
             </div>
           </a>
@@ -230,7 +235,7 @@ export default function Navbar() {
             </div>
             <div className="flex flex-col leading-none">
               <span className="text-xs font-mono font-black tracking-widest text-[#FFE600] uppercase">
-                // CHAPTER SELECT
+                {"// CHAPTER SELECT"}
               </span>
               <span className="text-[9px] font-mono text-neutral-400 font-bold uppercase mt-0.5">
                 PORTFOLIO &apos;26 DIRECTORY
@@ -343,7 +348,7 @@ export default function Navbar() {
           <a
             href="https://www.linkedin.com/in/guhanmurugaiyan"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="comic-card p-2.5 rounded-xl bg-[#14141E] border-[2.5px] border-black shadow-[3px_3px_0px_#000000] flex items-center justify-between hover:border-[#00F0FF] group"
           >
             <div className="flex items-center gap-2.5 min-w-0">

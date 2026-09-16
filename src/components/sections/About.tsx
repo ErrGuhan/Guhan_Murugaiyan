@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { FileText, Mail, ShieldCheck, Sparkles } from "lucide-react";
+import { FileText, Mail, Sparkles } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -164,7 +164,7 @@ export default function About() {
                   <a
                     href="https://github.com/ErrGuhan"
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="comic-btn p-2 rounded-lg bg-white text-black hover:bg-[#FFE600] transition-colors"
                     title="GitHub Profile"
                   >
@@ -173,7 +173,7 @@ export default function About() {
                   <a
                     href="/resume.pdf"
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="comic-btn p-2 rounded-lg bg-white text-black hover:bg-[#00F0FF] transition-colors"
                     title="Download Resume"
                   >
@@ -196,7 +196,7 @@ export default function About() {
             {/* Comic Speech/Narrative Dialogue Box */}
             <div className="comic-card p-6 sm:p-8 rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000] relative">
               <span className="about-text-reveal text-xs font-mono text-[#FFE600] tracking-widest uppercase mb-3 block font-black">
-                // MANIFESTO &amp; CREED
+                {"// MANIFESTO & CREED"}
               </span>
 
               {/* Large headline with comic font styling */}

@@ -66,8 +66,10 @@ export default function MagneticButton({
   );
 
   if (href) {
+    const computedRel =
+      rel || (target === "_blank" ? "noopener noreferrer" : undefined);
     return (
-      <a href={href} target={target} rel={rel} onClick={onClick}>
+      <a href={href} target={target} rel={computedRel} onClick={onClick}>
         {content}
       </a>
     );

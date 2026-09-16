@@ -1,5 +1,19 @@
 import type { NextConfig } from "next";
 
+const cspHeader = `
+  default-src 'self';
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com;
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' blob: data: https:;
+  font-src 'self' data: https://fonts.gstatic.com;
+  connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com;
+  object-src 'none';
+  base-uri 'self';
+  form-action 'self';
+  frame-ancestors 'none';
+  upgrade-insecure-requests;
+`.replace(/\s{2,}/g, " ").trim();
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
@@ -14,6 +28,10 @@ const nextConfig: NextConfig = {
       {
         source: "/:path*",
         headers: [
+          {
+            key: "Content-Security-Policy",
+            value: cspHeader,
+          },
           {
             key: "X-DNS-Prefetch-Control",
             value: "on",
@@ -42,6 +60,15 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/images/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/expertise/:path*",
         headers: [
           {
             key: "Cache-Control",

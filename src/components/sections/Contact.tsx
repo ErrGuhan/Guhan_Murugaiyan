@@ -15,6 +15,7 @@ const contactSchema = z.object({
   name: z.string().min(2, "Name must have at least 2 characters"),
   email: z.string().email("Please provide a valid email address"),
   message: z.string().min(10, "Message must be at least 10 characters"),
+  botCheck: z.string().optional(),
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
@@ -23,6 +24,7 @@ export default function Contact() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [copied, setCopied] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const {
     register,
@@ -62,11 +64,29 @@ export default function Contact() {
   );
 
   const onSubmit = async (data: ContactFormData) => {
-    void data;
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setSubmitted(true);
-    reset();
-    setTimeout(() => setSubmitted(false), 4000);
+    setSubmitError(null);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const resData = await response.json();
+      if (!response.ok || !resData.success) {
+        throw new Error(resData.error || "Failed to dispatch transmission.");
+      }
+
+      setSubmitted(true);
+      reset();
+      setTimeout(() => setSubmitted(false), 5000);
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error
+          ? err.message
+          : "Transmission failed. Please dispatch via direct email.";
+      setSubmitError(message);
+    }
   };
 
   const copyEmail = () => {
@@ -86,7 +106,7 @@ export default function Contact() {
         <div className="mb-14 md:mb-18">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-lg border-[3px] border-black bg-[#FFE600] text-black shadow-[3px_3px_0px_#000000] text-xs font-mono tracking-widest uppercase mb-4 font-black">
             <Sparkles className="w-3.5 h-3.5 fill-black" />
-            <span>COMMUNICATION HUB // DISPATCH TERMINAL</span>
+            <span>{"COMMUNICATION HUB // DISPATCH TERMINAL"}</span>
           </div>
 
           <h2 className="font-display text-[clamp(2.5rem,7.5vw,4.8rem)] font-black tracking-tight uppercase leading-[1.05] max-w-3xl text-white -webkit-text-stroke-[2px_#000] drop-shadow-[5px_5px_0px_#000000]">
@@ -143,7 +163,7 @@ export default function Contact() {
             <a
               href="https://www.linkedin.com/in/guhanmurugaiyan"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="contact-card-reveal comic-card w-full p-5 sm:p-6 rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000] hover:shadow-[7px_7px_0px_#000000] flex items-center justify-between group"
             >
               <div className="flex items-center gap-4 min-w-0">
@@ -193,9 +213,19 @@ export default function Contact() {
           {/* Right Column: Contact Form with 3px black borders & 4px offset shadows */}
           <div className="contact-form-reveal lg:col-span-7 rounded-3xl bg-[#13131A] border-[3px] border-black p-6 sm:p-10 shadow-[6px_6px_0px_#000000]">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              {/* Anti-spam honeypot field - hidden from humans */}
+              <div className="hidden" aria-hidden="true">
+                <input
+                  {...register("botCheck")}
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
+
               <div>
                 <label className="block text-xs font-mono font-black tracking-wider uppercase text-[#FFE600] mb-2">
-                  // YOUR NAME / ALIAS
+                  {"// YOUR NAME / ALIAS"}
                 </label>
                 <input
                   {...register("name")}
@@ -211,7 +241,7 @@ export default function Contact() {
 
               <div>
                 <label className="block text-xs font-mono font-black tracking-wider uppercase text-[#00F0FF] mb-2">
-                  // YOUR EMAIL ADDRESS
+                  {"// YOUR EMAIL ADDRESS"}
                 </label>
                 <input
                   {...register("email")}
@@ -228,7 +258,7 @@ export default function Contact() {
 
               <div>
                 <label className="block text-xs font-mono font-black tracking-wider uppercase text-[#FFE600] mb-2">
-                  // TRANSMISSION MESSAGE
+                  {"// TRANSMISSION MESSAGE"}
                 </label>
                 <textarea
                   {...register("message")}
@@ -242,6 +272,18 @@ export default function Contact() {
                   </p>
                 )}
               </div>
+
+              {submitError && (
+                <div className="p-3.5 rounded-xl bg-[#FF2A55]/10 border-[2px] border-[#FF2A55] text-white font-mono text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <span>⚠️ {submitError}</span>
+                  <a
+                    href="mailto:mguhan6383@gmail.com?subject=Transmission%20via%20Portfolio"
+                    className="comic-btn px-2.5 py-1 rounded bg-[#FFE600] text-black font-black uppercase text-[10px] w-fit"
+                  >
+                    Open in Mail App ↗
+                  </a>
+                </div>
+              )}
 
               {/* Tactile Comic Submit Button */}
               <button

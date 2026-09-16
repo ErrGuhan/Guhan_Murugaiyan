@@ -48,12 +48,34 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
     gsap.ticker.add(tickerCallback);
     gsap.ticker.lagSmoothing(0);
 
+    // Smoothly scroll to in-page anchor targets
+    const handleAnchorClick = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement | null)?.closest("a");
+      if (!target) return;
+
+      const href = target.getAttribute("href");
+      if (href && href.startsWith("#") && href.length > 1) {
+        const element = document.querySelector(href);
+        if (element) {
+          e.preventDefault();
+          lenis.scrollTo(element as HTMLElement, {
+            offset: -65,
+            duration: 1.2,
+            easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          });
+        }
+      }
+    };
+
+    document.addEventListener("click", handleAnchorClick);
+
     // Initial refresh to ensure accurate trigger offsets
     requestAnimationFrame(() => {
       ScrollTrigger.refresh();
     });
 
     return () => {
+      document.removeEventListener("click", handleAnchorClick);
       gsap.ticker.remove(tickerCallback);
       lenis.destroy();
       lenisRef.current = null;

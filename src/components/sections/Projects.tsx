@@ -9,7 +9,6 @@ import {
   Sparkles,
   Terminal,
 } from "lucide-react";
-import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { REAL_PROJECTS } from "@/lib/project-data";

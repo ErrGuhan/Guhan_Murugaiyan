@@ -25,12 +25,9 @@ export default function CustomCursor() {
     };
 
     if (checkIsTouchOrMobile()) {
-      setIsEnabled(false);
-      setIsVisible(false);
       return;
     }
 
-    setIsEnabled(true);
     const cursor = cursorRef.current;
     if (!cursor) return;
 
@@ -45,6 +42,7 @@ export default function CustomCursor() {
         return;
       }
 
+      setIsEnabled(true);
       if (!document.body.classList.contains("custom-cursor-active")) {
         document.body.classList.add("custom-cursor-active");
       }
