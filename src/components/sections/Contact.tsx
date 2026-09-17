@@ -8,6 +8,7 @@ import { ArrowUpRight, Check, Copy, Mail, MapPin, Send, Sparkles } from "lucide-
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -406,11 +407,12 @@ export default function Contact() {
               <button
                 type="submit"
                 disabled={isSubmitting || submitted}
-                className={`comic-btn w-full py-4 rounded-xl text-xs font-mono font-black tracking-widest uppercase flex items-center justify-center gap-2 text-black ${
+                className={cn(
+                  "comic-btn w-full py-4 rounded-xl text-xs font-mono font-black tracking-widest uppercase flex items-center justify-center gap-2 text-black",
                   submitted
                     ? "bg-[#00E676] shadow-[4px_4px_0px_#000000]"
                     : "bg-[#FFE600] hover:bg-[#00F0FF]"
-                }`}
+                )}
               >
                 {submitted ? (
                   <span className="flex items-center gap-2">

@@ -2,71 +2,63 @@
 
 import { useEffect, useRef, useState } from "react";
 import { playWhoosh } from "@/lib/sound-effects";
+import { cn } from "@/lib/utils";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { useThrottledScroll } from "@/hooks/useThrottledScroll";
 
 export default function SpeedLinesOverlay() {
   const [isActive, setIsActive] = useState(false);
+  const prefersReducedMotion = usePrefersReducedMotion();
   const lastScrollY = useRef(0);
   const lastTime = useRef(0);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastSoundTime = useRef(0);
 
   useEffect(() => {
-    // Check prefers-reduced-motion
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return;
+    if (typeof window !== "undefined") {
+      lastScrollY.current = window.scrollY;
+      lastTime.current = performance.now();
     }
-
-    lastScrollY.current = window.scrollY;
-    lastTime.current = performance.now();
-
-    let ticking = false;
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const currentScrollY = window.scrollY;
-          const currentTime = performance.now();
-          const timeDelta = Math.max(1, currentTime - lastTime.current);
-          const scrollDelta = Math.abs(currentScrollY - lastScrollY.current);
-          const velocity = (scrollDelta / timeDelta) * 16; // Normalized to ~60fps frame
-
-          lastScrollY.current = currentScrollY;
-          lastTime.current = currentTime;
-
-          // Trigger speed streaks on high velocity (> 38px/frame equivalent)
-          if (velocity > 38) {
-            setIsActive(true);
-
-            // Sound trigger debounced to at most once per 1.5s
-            if (currentTime - lastSoundTime.current > 1500) {
-              playWhoosh();
-              lastSoundTime.current = currentTime;
-            }
-
-            if (timeoutRef.current) clearTimeout(timeoutRef.current);
-            timeoutRef.current = setTimeout(() => {
-              setIsActive(false);
-            }, 220);
-          }
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
     return () => {
-      window.removeEventListener("scroll", handleScroll);
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, []);
 
+  useThrottledScroll((currentScrollY) => {
+    if (prefersReducedMotion) return;
+
+    const currentTime = performance.now();
+    const timeDelta = Math.max(1, currentTime - lastTime.current);
+    const scrollDelta = Math.abs(currentScrollY - lastScrollY.current);
+    const velocity = (scrollDelta / timeDelta) * 16; // Normalized to ~60fps frame
+
+    lastScrollY.current = currentScrollY;
+    lastTime.current = currentTime;
+
+    // Trigger speed streaks on high velocity (> 38px/frame equivalent)
+    if (velocity > 38) {
+      setIsActive(true);
+
+      // Sound trigger debounced to at most once per 1.5s
+      if (currentTime - lastSoundTime.current > 1500) {
+        playWhoosh();
+        lastSoundTime.current = currentTime;
+      }
+
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => {
+        setIsActive(false);
+      }, 220);
+    }
+  });
+
   return (
     <div
       aria-hidden="true"
-      className={`fixed inset-0 pointer-events-none z-40 transition-opacity duration-150 ${
+      className={cn(
+        "fixed inset-0 pointer-events-none z-40 transition-opacity duration-150",
         isActive ? "opacity-90" : "opacity-0"
-      }`}
+      )}
     >
       {/* Comic Motion Speed Streaks (SVG) */}
       <svg

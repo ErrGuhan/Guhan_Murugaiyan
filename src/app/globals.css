@@ -116,21 +116,6 @@
   text-shadow: 7px 7px 0px #000000;
 }
 
-/* Anime Preloader Keyframes & Dynamic Effects */
-@keyframes speedlinePulse {
-  0%, 100% {
-    opacity: 0.15;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.3;
-    transform: scale(1.05);
-  }
-}
-
-.animate-speedline-pulse {
-  animation: speedlinePulse 3s ease-in-out infinite;
-}
 
 /* Halftone Screentone Dot Patterns */
 .bg-halftone-light {

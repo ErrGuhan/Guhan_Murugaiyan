@@ -2,6 +2,7 @@
 
 import { useRef, ReactNode, MouseEvent } from "react";
 import { gsap } from "gsap";
+import { cn } from "@/lib/utils";
 
 interface MagneticButtonProps {
   children: ReactNode;
@@ -59,7 +60,7 @@ export default function MagneticButton({
       ref={buttonRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={`inline-block transition-transform duration-100 ${className}`}
+      className={cn("inline-block transition-transform duration-100", className)}
     >
       {children}
     </div>

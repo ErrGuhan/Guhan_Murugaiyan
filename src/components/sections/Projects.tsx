@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
+import { useGSAP } from "@gsap/react";
 import {
   ArrowUpRight,
   ChevronLeft,
@@ -15,6 +16,8 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { REAL_PROJECTS } from "@/lib/project-data";
 import { playCardFlip, playHoverTick } from "@/lib/sound-effects";
+import { cn } from "@/lib/utils";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -40,7 +43,7 @@ export default function Projects() {
   const [flippedCardIds, setFlippedCardIds] = useState<Record<string, boolean>>({});
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   const isDragging = useRef(false);
   const startX = useRef(0);
@@ -68,95 +71,98 @@ export default function Projects() {
   useEffect(() => {
     const checkState = () => {
       setIsMobile(window.innerWidth < 768);
-      setPrefersReducedMotion(
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      );
     };
     checkState();
     window.addEventListener("resize", checkState);
     return () => window.removeEventListener("resize", checkState);
   }, []);
 
-  useEffect(() => {
-    if (isMobile || prefersReducedMotion) {
-      if (pinnedWrapperRef.current) {
-        pinnedWrapperRef.current.style.height = "auto";
-      }
-      if (trackRef.current) {
-        gsap.set(trackRef.current, { clearProps: "all" });
-      }
-      return;
-    }
-
-    const wrapper = pinnedWrapperRef.current;
-    const stickyInner = stickyInnerRef.current;
-    const track = trackRef.current;
-    if (!wrapper || !stickyInner || !track) return;
-    if (totalProjects <= 1) return;
-
-    let st: ScrollTrigger | null = null;
-    let travelDistance = 0;
-
-    const calculateAndBind = () => {
-      if (st) {
-        st.kill();
-        st = null;
-      }
-
-      const maxScroll = track.scrollWidth - stickyInner.clientWidth;
-      travelDistance = Math.max(0, maxScroll);
-
-      if (travelDistance <= 0) {
-        wrapper.style.height = "100vh";
-        gsap.set(track, { x: 0 });
+  useGSAP(
+    () => {
+      if (isMobile || prefersReducedMotion) {
+        if (pinnedWrapperRef.current) {
+          pinnedWrapperRef.current.style.height = "auto";
+        }
+        if (trackRef.current) {
+          gsap.set(trackRef.current, { clearProps: "all" });
+        }
         return;
       }
 
-      wrapper.style.height = `${window.innerHeight + travelDistance}px`;
-      gsap.set(track, { x: 0 });
+      const wrapper = pinnedWrapperRef.current;
+      const stickyInner = stickyInnerRef.current;
+      const track = trackRef.current;
+      if (!wrapper || !stickyInner || !track) return;
+      if (totalProjects <= 1) return;
 
-      st = ScrollTrigger.create({
-        trigger: wrapper,
-        start: "top top",
-        end: "bottom bottom",
-        scrub: true,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          const currentX = -travelDistance * self.progress;
-          gsap.set(track, { x: currentX });
+      let st: ScrollTrigger | null = null;
+      let travelDistance = 0;
 
-          const rawIdx = Math.round(self.progress * (totalProjects - 1));
-          const boundedIdx = Math.min(totalProjects - 1, Math.max(0, rawIdx));
-          setActiveIndex(boundedIdx);
-        },
+      const calculateAndBind = () => {
+        if (st) {
+          st.kill();
+          st = null;
+        }
+
+        const maxScroll = track.scrollWidth - stickyInner.clientWidth;
+        travelDistance = Math.max(0, maxScroll);
+
+        if (travelDistance <= 0) {
+          wrapper.style.height = "100vh";
+          gsap.set(track, { x: 0 });
+          return;
+        }
+
+        wrapper.style.height = `${window.innerHeight + travelDistance}px`;
+        gsap.set(track, { x: 0 });
+
+        st = ScrollTrigger.create({
+          trigger: wrapper,
+          start: "top top",
+          end: "bottom bottom",
+          scrub: true,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            const currentX = -travelDistance * self.progress;
+            gsap.set(track, { x: currentX });
+
+            const rawIdx = Math.round(self.progress * (totalProjects - 1));
+            const boundedIdx = Math.min(totalProjects - 1, Math.max(0, rawIdx));
+            setActiveIndex(boundedIdx);
+          },
+        });
+
+        ScrollTrigger.refresh();
+      };
+
+      calculateAndBind();
+      const timer = setTimeout(calculateAndBind, 120);
+
+      const ro = new ResizeObserver(() => {
+        calculateAndBind();
       });
+      ro.observe(track);
+      ro.observe(stickyInner);
 
-      ScrollTrigger.refresh();
-    };
+      const handleWindowResize = () => {
+        calculateAndBind();
+      };
+      window.addEventListener("resize", handleWindowResize);
 
-    calculateAndBind();
-    const timer = setTimeout(calculateAndBind, 120);
-
-    const ro = new ResizeObserver(() => {
-      calculateAndBind();
-    });
-    ro.observe(track);
-    ro.observe(stickyInner);
-
-    const handleWindowResize = () => {
-      calculateAndBind();
-    };
-    window.addEventListener("resize", handleWindowResize);
-
-    return () => {
-      clearTimeout(timer);
-      ro.disconnect();
-      window.removeEventListener("resize", handleWindowResize);
-      if (st) st.kill();
-      if (wrapper) wrapper.style.height = "";
-      if (track) gsap.set(track, { clearProps: "x" });
-    };
-  }, [isMobile, prefersReducedMotion, totalProjects]);
+      return () => {
+        clearTimeout(timer);
+        ro.disconnect();
+        window.removeEventListener("resize", handleWindowResize);
+        if (st) st.kill();
+        if (wrapper) wrapper.style.height = "";
+        if (track) gsap.set(track, { clearProps: "x" });
+      };
+    },
+    {
+      scope: pinnedWrapperRef,
+      dependencies: [isMobile, prefersReducedMotion, totalProjects],
+    }
+  );
 
   useEffect(() => {
     if (!isMobile) return;
@@ -287,7 +293,7 @@ export default function Projects() {
       {/* Part B: Project Scroll Driver & Pinned Gallery Viewport */}
       <div
         ref={pinnedWrapperRef}
-        className={`relative w-full ${isStackedMode ? "h-auto" : ""}`}
+        className={cn("relative w-full", isStackedMode && "h-auto")}
         style={isStackedMode ? { height: "auto" } : undefined}
       >
         <div
@@ -303,9 +309,10 @@ export default function Projects() {
             onKeyDown={handleKeyDown}
             tabIndex={0}
             aria-label="Selected Case Studies Gallery"
-            className={`relative w-full flex flex-col justify-between outline-none ${
-              isStackedMode ? "" : "h-full px-4 sm:px-8 lg:px-12"
-            }`}
+            className={cn(
+              "relative w-full flex flex-col justify-between outline-none",
+              !isStackedMode && "h-full px-4 sm:px-8 lg:px-12"
+            )}
           >
             {/* Header & Gallery Navigation Controls */}
             <div className="max-w-7xl mx-auto w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 pb-3 sm:pb-4 border-b-[3px] border-black flex-shrink-0">
@@ -336,11 +343,12 @@ export default function Projects() {
                         scrollToIndex(i);
                       }}
                       aria-label={`Go to project ${i + 1}`}
-                      className={`h-3 rounded-md border-[2px] border-black transition-all ${
+                      className={cn(
+                        "h-3 rounded-md border-[2px] border-black transition-all",
                         activeIndex === i
                           ? "w-8 bg-[#FFE600] shadow-[2px_2px_0px_#000000]"
                           : "w-3 bg-neutral-600 hover:bg-white"
-                      }`}
+                      )}
                     />
                   ))}
                 </div>
@@ -415,9 +423,10 @@ export default function Projects() {
                       }
                     >
                       <div
-                        className={`relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] ${
-                          isFlipped ? "[transform:rotateY(180deg)]" : ""
-                        }`}
+                        className={cn(
+                          "relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d]",
+                          isFlipped && "[transform:rotateY(180deg)]"
+                        )}
                       >
                         {/* FRONT FACE: Visual Preview & Live Launch */}
                         <div className="relative rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000] hover:shadow-[7px_7px_0px_#000000] p-4 sm:p-5 lg:p-6 flex flex-col justify-between group select-text h-full [backface-visibility:hidden]">
@@ -571,7 +580,10 @@ export default function Projects() {
                               </div>
                               <div className="p-2 rounded-lg bg-[#13131A] border-[1.5px] border-black">
                                 <span className="text-neutral-500 block uppercase font-bold">STATUS</span>
-                                <span className={`font-black text-[9px] tracking-wide ${project.statusBadge === "SHIPPED" ? "text-[#00E676]" : "text-[#FFE600]"}`}>
+                                <span className={cn(
+                                  "font-black text-[9px] tracking-wide",
+                                  project.statusBadge === "SHIPPED" ? "text-[#00E676]" : "text-[#FFE600]"
+                                )}>
                                   {project.statusBadge === "SHIPPED" ? "⚡ SHIPPED" : "🔧 IN PROGRESS"}
                                 </span>
                               </div>

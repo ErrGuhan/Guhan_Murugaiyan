@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import Lenis from "lenis";
+import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,16 +15,13 @@ interface SmoothScrollProps {
 
 export default function SmoothScroll({ children }: SmoothScrollProps) {
   const lenisRef = useRef<Lenis | null>(null);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
-  useEffect(() => {
-    // Check if user prefers reduced motion
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
-    if (prefersReducedMotion) {
-      return;
-    }
+  useGSAP(
+    () => {
+      if (prefersReducedMotion) {
+        return;
+      }
 
     const lenis = new Lenis({
       duration: 1.2,
@@ -81,7 +80,7 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
       lenisRef.current = null;
       (window as unknown as { __lenis: Lenis | null }).__lenis = null;
     };
-  }, []);
+  }, { dependencies: [prefersReducedMotion] });
 
   return <>{children}</>;
 }

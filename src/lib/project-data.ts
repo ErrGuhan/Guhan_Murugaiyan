@@ -154,7 +154,6 @@ public class AccountService {
     }
   }
 }`,
-    // TODO: Confirm /public/images/transferhub-preview.jpg has been supplied
     image: "/images/transferhub-preview.jpg",
     imageAlt: "TransferHub banking website interface preview with account balance and transfer flows",
     liveUrl: "https://transfer-hub-neon.vercel.app",

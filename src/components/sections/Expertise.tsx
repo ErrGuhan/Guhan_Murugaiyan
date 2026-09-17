@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { ArrowUpRight, Cpu, Layers, BarChart3, ShieldCheck, Zap } from "lucide-react";
 import { useGSAP } from "@gsap/react";
+import { cn } from "@/lib/utils";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -33,7 +34,7 @@ export default function Expertise() {
       title: "Agentic AI & Multi-Agent Swarms",
       desc: "Architecting autonomous cooperative agent networks, LLM tool calling, memory persistence, and multi-stage task decomposition pipelines.",
       tags: ["Multi-Agent Swarm", "LLM Orchestration", "Python", "Autonomous Tools"],
-      image: "/expertise/agentic-ai.png",
+      image: "/expertise/agentic-ai.webp",
       imageAlt: "Architectural blueprint representing autonomous agent networks, tool-calling graphs, and multi-agent memory swarms",
       icon: Cpu,
     },
@@ -43,7 +44,7 @@ export default function Expertise() {
       title: "Java Enterprise & Systems Development",
       desc: "Building resilient object-oriented backends, concurrent transaction execution engines, clean service architectures, and Spring Boot APIs.",
       tags: ["Core Java 21", "Spring Boot", "Concurrency", "OOP Architecture"],
-      image: "/expertise/java-enterprise.png",
+      image: "/expertise/java-enterprise.webp",
       imageAlt: "Java enterprise backend architecture diagram highlighting Spring Boot service layers and concurrent execution",
       icon: Layers,
     },
@@ -53,7 +54,7 @@ export default function Expertise() {
       title: "Data Analytics & Insights Engineering",
       desc: "Applied analytics workflows developed at NoviTech R&D, turning raw enterprise streams into automated anomaly alerts and executive metrics.",
       tags: ["Data Pipelines", "Statistical Modeling", "ETL Automation", "Pandas"],
-      image: "/expertise/data-analytics.png",
+      image: "/expertise/data-analytics.webp",
       imageAlt: "Enterprise data analytics dashboard preview showing pipeline telemetry and statistical anomaly graphs",
       icon: BarChart3,
     },
@@ -63,7 +64,7 @@ export default function Expertise() {
       title: "Leadership & Analytical Rigor",
       desc: "NSS community leadership paired with analytical accounting and financial integrity at Jana Fibre Glass, ensuring disciplined execution.",
       tags: ["NSS Representative", "Accounting Precision", "Executive Comms"],
-      image: "/expertise/leadership-rigor.png",
+      image: "/expertise/leadership-rigor.webp",
       imageAlt: "Analytical workflow diagram depicting community coordination, financial rigor, and executive communications",
       icon: ShieldCheck,
     },
@@ -273,11 +274,12 @@ export default function Expertise() {
                   onClick={() =>
                     setActiveMobileIdx(isMobileActive ? null : idx)
                   }
-                  className={`expertise-row comic-card group relative p-6 sm:p-7 rounded-2xl border-[3px] border-black shadow-[4px_4px_0px_#000000] transition-all cursor-pointer bg-[#13131A] ${
+                  className={cn(
+                    "expertise-row comic-card group relative p-6 sm:p-7 rounded-2xl border-[3px] border-black shadow-[4px_4px_0px_#000000] transition-all cursor-pointer bg-[#13131A]",
                     isMobileActive || hoveredSlug === item.slug
                       ? "bg-[#1C1C26] shadow-[6px_6px_0px_#000000] -translate-x-1 -translate-y-1"
                       : "hover:bg-[#1A1A24]"
-                  }`}
+                  )}
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-start gap-4 sm:gap-6">
@@ -351,9 +353,10 @@ export default function Expertise() {
       {/* Floating Desktop Cursor-Following Preview Panel */}
       <div
         ref={previewPanelRef}
-        className={`fixed top-0 left-0 pointer-events-none z-40 hidden md:block w-72 aspect-video rounded-xl overflow-hidden border-[3px] border-black shadow-[6px_6px_0px_#000000] bg-black transition-[opacity,transform] duration-200 ${
+        className={cn(
+          "fixed top-0 left-0 pointer-events-none z-40 hidden md:block w-72 aspect-video rounded-xl overflow-hidden border-[3px] border-black shadow-[6px_6px_0px_#000000] bg-black transition-[opacity,transform] duration-200",
           hoveredSlug ? "opacity-100 scale-100" : "opacity-0 scale-95"
-        }`}
+        )}
       >
         {activeHoverItem && (
           <div className="relative w-full h-full">

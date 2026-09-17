@@ -22,6 +22,8 @@ import {
   playHoverTick,
   playSuccessChime,
 } from "@/lib/sound-effects";
+import { cn } from "@/lib/utils";
+import { useThrottledScroll } from "@/hooks/useThrottledScroll";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -46,29 +48,17 @@ export default function Navbar() {
       setAudioEnabled(isSoundEnabled());
     }, 0);
 
-    let ticking = false;
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const scrollY = window.scrollY;
-          setIsScrolled(scrollY > 20);
-          const threshold = window.innerHeight * 0.85;
-          setIsDarkSection(scrollY > threshold);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-
     return () => {
       clearTimeout(initTimer);
-      window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("sound-state-changed", handleSoundChange);
     };
   }, []);
+
+  useThrottledScroll((scrollY) => {
+    setIsScrolled(scrollY > 20);
+    const threshold = window.innerHeight * 0.85;
+    setIsDarkSection(scrollY > threshold);
+  }, true);
 
   // Lock body scroll, focus trap, and keyboard navigation when mobile menu is open
   useEffect(() => {
@@ -193,13 +183,14 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 w-full z-50 px-4 sm:px-8 md:px-12 flex items-center justify-between transition-all duration-300 ${
+        className={cn(
+          "fixed top-0 left-0 w-full z-50 px-4 sm:px-8 md:px-12 flex items-center justify-between transition-all duration-300",
           isDarkSection
             ? "bg-[#0B0B0F]/95 backdrop-blur-md border-b-[3px] border-black text-white py-3 shadow-[0_4px_0px_#000000]"
             : isScrolled
             ? "bg-[#FFFDF7]/95 backdrop-blur-md border-b-[3px] border-black text-black py-3 shadow-[0_4px_0px_#000000]"
             : "bg-transparent text-black py-5"
-        }`}
+        )}
       >
         {/* Left: Title / Logo */}
         <div className="flex items-center gap-3">
@@ -228,11 +219,12 @@ export default function Navbar() {
               key={link.label}
               href={link.href}
               onMouseEnter={playHoverTick}
-              className={`comic-btn px-3.5 py-1.5 rounded-lg text-xs font-mono font-black tracking-wider uppercase transition-all flex items-center ${
+              className={cn(
+                "comic-btn px-3.5 py-1.5 rounded-lg text-xs font-mono font-black tracking-wider uppercase transition-all flex items-center",
                 isDarkSection
                   ? "bg-[#1A1A24] text-white hover:bg-[#FFE600] hover:text-black"
                   : "bg-[#FFFDF7] text-black hover:bg-[#FFE600] hover:text-black"
-              }`}
+              )}
             >
               <span>{link.label}</span>
             </a>
@@ -329,9 +321,10 @@ export default function Navbar() {
                     fill="transparent"
                   />
                   <text
-                    className={`text-[9px] font-mono font-black tracking-[0.22em] uppercase ${
+                    className={cn(
+                      "text-[9px] font-mono font-black tracking-[0.22em] uppercase",
                       isDarkSection ? "fill-[#FFE600]" : "fill-black"
-                    }`}
+                    )}
                   >
                     <textPath href="#navCirclePath" startOffset="0%">
                       LET&apos;S WORK • LET&apos;S TALK • MISSION •
@@ -368,11 +361,12 @@ export default function Navbar() {
         role="dialog"
         aria-modal="true"
         aria-label="Navigation Menu"
-        className={`fixed inset-0 bg-[#0B0B0F] text-white z-[99990] flex flex-col justify-between p-5 sm:p-8 md:p-12 overflow-y-auto no-scrollbar transition-all duration-300 bg-halftone-dark select-none ${
+        className={cn(
+          "fixed inset-0 bg-[#0B0B0F] text-white z-[99990] flex flex-col justify-between p-5 sm:p-8 md:p-12 overflow-y-auto no-scrollbar transition-all duration-300 bg-halftone-dark select-none",
           isMenuOpen
             ? "opacity-100 pointer-events-auto translate-y-0"
             : "opacity-0 pointer-events-none -translate-y-full"
-        }`}
+        )}
       >
         {/* Overlay Top Header */}
         <div className="flex items-center justify-between border-b-[3px] border-black pb-4 max-w-md w-full mx-auto">

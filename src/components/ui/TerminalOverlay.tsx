@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { X, Terminal } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface TerminalLine {
   type: "input" | "output" | "error" | "system";
@@ -314,15 +315,13 @@ export default function TerminalOverlay({ isOpen, onClose }: TerminalOverlayProp
         {lines.map((line, i) => (
           <pre
             key={i}
-            className={`font-mono text-[11px] sm:text-xs leading-relaxed whitespace-pre-wrap break-words ${
-              line.type === "input"
-                ? "text-[#FFE600] font-bold"
-                : line.type === "error"
-                ? "text-[#FF2A55] font-bold"
-                : line.type === "system"
-                ? "text-[#00F0FF]"
-                : "text-[#00E676]"
-            }`}
+            className={cn(
+              "font-mono text-[11px] sm:text-xs leading-relaxed whitespace-pre-wrap break-words",
+              line.type === "input" && "text-[#FFE600] font-bold",
+              line.type === "error" && "text-[#FF2A55] font-bold",
+              line.type === "system" && "text-[#00F0FF]",
+              (!line.type || line.type === "output") && "text-[#00E676]"
+            )}
           >
             {line.content}
           </pre>

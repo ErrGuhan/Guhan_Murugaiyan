@@ -1,8 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ArrowUpRight, MoveHorizontal } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 interface SparkParticle {
   x: number;
@@ -18,6 +21,7 @@ interface SparkParticle {
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isViewMode, setIsViewMode] = useState<boolean>(false);
@@ -26,8 +30,9 @@ export default function CustomCursor() {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isEnabled, setIsEnabled] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+  useGSAP(
+    () => {
+      if (typeof window === "undefined") return;
 
     const checkIsTouchOrMobile = () => {
       const isTouch =
@@ -36,7 +41,6 @@ export default function CustomCursor() {
         window.matchMedia("(pointer: coarse)").matches ||
         window.matchMedia("(hover: none)").matches;
       const isMobileWidth = window.innerWidth < 1024;
-      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       return isTouch || isMobileWidth || prefersReducedMotion;
     };
 
@@ -204,7 +208,7 @@ export default function CustomCursor() {
       document.removeEventListener("mouseleave", onMouseLeave);
       window.removeEventListener("resize", onResize);
     };
-  }, []);
+  }, { scope: cursorRef, dependencies: [prefersReducedMotion] });
 
   return (
     <>
@@ -219,9 +223,9 @@ export default function CustomCursor() {
       <div
         ref={cursorRef}
         aria-hidden="true"
-        className={`custom-cursor-element hidden lg:flex fixed top-0 left-0 pointer-events-none z-[999999] items-center justify-center rounded-full transition-[width,height,background-color,border-color,opacity,transform] duration-200 ease-out -translate-x-1/2 -translate-y-1/2 select-none ${
-          isEnabled && isVisible ? "opacity-100" : "opacity-0 !hidden"
-        } ${
+        className={cn(
+          "custom-cursor-element hidden lg:flex fixed top-0 left-0 pointer-events-none z-[999999] items-center justify-center rounded-full transition-[width,height,background-color,border-color,opacity,transform] duration-200 ease-out -translate-x-1/2 -translate-y-1/2 select-none",
+          isEnabled && isVisible ? "opacity-100" : "opacity-0 !hidden",
           isDragMode
             ? "w-20 h-10 rounded-xl bg-[#FFE600] border-[2.5px] border-black text-black font-mono font-black text-[11px] shadow-[3px_3px_0px_#000000] gap-1.5"
             : isExternalMode
@@ -231,7 +235,7 @@ export default function CustomCursor() {
             : isHovered
             ? "w-12 h-12 bg-[#FFE600]/30 border-[2px] border-[#FFE600] backdrop-blur-[1px] scale-110 shadow-[2px_2px_0px_#000000]"
             : "w-3.5 h-3.5 bg-[#FFE600] border-[1.5px] border-black shadow-[1.5px_1.5px_0px_#000000]"
-        }`}
+        )}
       >
         {isDragMode && (
           <>

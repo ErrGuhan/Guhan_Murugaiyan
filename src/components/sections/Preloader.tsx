@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
+import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Sparkles } from "lucide-react";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,10 +14,8 @@ interface PreloaderProps {
 }
 
 export default function Preloader({ onComplete }: PreloaderProps) {
-  const [isDone, setIsDone] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  });
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const [isDone, setIsDone] = useState(false);
   const [progress, setProgress] = useState(0);
 
   // Structural & Animation Refs
@@ -161,100 +161,100 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     }
   }, [onComplete]);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+  useGSAP(
+    () => {
+      if (prefersReducedMotion) {
+        onComplete?.();
+        return;
+      }
 
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
+      const progressObj = { val: 0 };
 
-    if (prefersReducedMotion) {
-      onComplete?.();
-      return;
-    }
+      // Master Entrance & Progression Timeline (Total ~1.3s before slash)
+      const tl = gsap.timeline({
+        onComplete: () => {
+          triggerKatanaSlash();
+        },
+      });
+      mainTimelineRef.current = tl;
 
-    const progressObj = { val: 0 };
+      // Initial shockwave burst
+      if (shockwaveRef.current) {
+        tl.fromTo(
+          shockwaveRef.current,
+          { scale: 0.2, opacity: 0.8 },
+          { scale: 2.8, opacity: 0, duration: 0.7, ease: "power2.out" },
+          0
+        );
+      }
 
-    // Master Entrance & Progression Timeline (Total ~1.3s before slash)
-    const tl = gsap.timeline({
-      onComplete: () => {
-        triggerKatanaSlash();
-      },
-    });
-    mainTimelineRef.current = tl;
+      // Entrance animation of central composition
+      if (centerContentRef.current) {
+        const badge = centerContentRef.current.querySelector(".p-badge");
+        const title = centerContentRef.current.querySelector(".p-title");
+        const sub = centerContentRef.current.querySelector(".p-sub");
 
-    // Initial shockwave burst
-    if (shockwaveRef.current) {
-      tl.fromTo(
-        shockwaveRef.current,
-        { scale: 0.2, opacity: 0.8 },
-        { scale: 2.8, opacity: 0, duration: 0.7, ease: "power2.out" },
+        if (badge) {
+          tl.fromTo(
+            badge,
+            { y: -20, opacity: 0, scale: 0.9 },
+            { y: 0, opacity: 1, scale: 1, duration: 0.45, ease: "back.out(1.8)" },
+            0.05
+          );
+        }
+
+        if (title) {
+          tl.fromTo(
+            title,
+            { scale: 1.15, opacity: 0, y: 15 },
+            { scale: 1, opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
+            0.1
+          );
+        }
+
+        if (sub) {
+          tl.fromTo(
+            sub,
+            { y: 15, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" },
+            0.25
+          );
+        }
+      }
+
+      // Smooth counter progression (0 -> 100% across 1.1s)
+      tl.to(
+        progressObj,
+        {
+          val: 100,
+          duration: 1.1,
+          ease: "power2.inOut",
+          onUpdate: () => setProgress(Math.round(progressObj.val)),
+        },
         0
       );
+
+      // Brief pause at 100% before triggering slash
+      tl.to({}, { duration: 0.15 }, 1.1);
+
+      // Safety fallback timer (2.5s max)
+      const safetyTimer = setTimeout(() => {
+        triggerKatanaSlash();
+      }, 2500);
+
+      return () => {
+        clearTimeout(safetyTimer);
+        if (tl) tl.kill();
+        if (slashTimelineRef.current) slashTimelineRef.current.kill();
+      };
+    },
+    {
+      scope: containerRef,
+      dependencies: [onComplete, triggerKatanaSlash, prefersReducedMotion],
     }
+  );
 
-    // Entrance animation of central composition
-    if (centerContentRef.current) {
-      const badge = centerContentRef.current.querySelector(".p-badge");
-      const title = centerContentRef.current.querySelector(".p-title");
-      const sub = centerContentRef.current.querySelector(".p-sub");
-
-      if (badge) {
-        tl.fromTo(
-          badge,
-          { y: -20, opacity: 0, scale: 0.9 },
-          { y: 0, opacity: 1, scale: 1, duration: 0.45, ease: "back.out(1.8)" },
-          0.05
-        );
-      }
-
-      if (title) {
-        tl.fromTo(
-          title,
-          { scale: 1.15, opacity: 0, y: 15 },
-          { scale: 1, opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
-          0.1
-        );
-      }
-
-      if (sub) {
-        tl.fromTo(
-          sub,
-          { y: 15, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" },
-          0.25
-        );
-      }
-    }
-
-    // Smooth counter progression (0 -> 100% across 1.1s)
-    tl.to(
-      progressObj,
-      {
-        val: 100,
-        duration: 1.1,
-        ease: "power2.inOut",
-        onUpdate: () => setProgress(Math.round(progressObj.val)),
-      },
-      0
-    );
-
-    // Brief pause at 100% before triggering slash
-    tl.to({}, { duration: 0.15 }, 1.1);
-
-    // Safety fallback timer (2.5s max)
-    const safetyTimer = setTimeout(() => {
-      triggerKatanaSlash();
-    }, 2500);
-
-    return () => {
-      clearTimeout(safetyTimer);
-      if (tl) tl.kill();
-      if (slashTimelineRef.current) slashTimelineRef.current.kill();
-    };
-  }, [onComplete, triggerKatanaSlash]);
-
-  if (isDone) return null;
+  if (isDone || prefersReducedMotion) return null;
 
   return (
     <div

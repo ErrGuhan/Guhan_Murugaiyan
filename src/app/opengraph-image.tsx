@@ -105,7 +105,7 @@ export default async function Image() {
               textTransform: "uppercase",
             }}
           >
-            AI Developer &amp; Creative Architect
+            AI Developer & Creative Architect
           </div>
 
           <div
