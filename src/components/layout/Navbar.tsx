@@ -471,7 +471,16 @@ export default function Navbar() {
           {/* Quick Copy Email Card */}
           <div
             onClick={copyEmail}
-            className="comic-card p-2.5 rounded-xl bg-[#14141E] border-[2.5px] border-black shadow-[3px_3px_0px_#000000] flex items-center justify-between cursor-pointer hover:border-[#FFE600] group"
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                copyEmail(e as unknown as React.MouseEvent);
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            aria-label="Copy email address mguhan6383@gmail.com"
+            className="comic-card p-2.5 rounded-xl bg-[#14141E] border-[2.5px] border-black shadow-[3px_3px_0px_#000000] flex items-center justify-between cursor-pointer hover:border-[#FFE600] group outline-none focus-visible:ring-2 focus-visible:ring-[#FFE600]"
           >
             <div className="flex items-center gap-2.5 min-w-0">
               <div className="w-7 h-7 rounded-lg bg-[#FFE600] text-black border-[1.5px] border-black flex items-center justify-center flex-shrink-0">
@@ -519,10 +528,12 @@ export default function Navbar() {
       </div>
 
       {/* Interactive Terminal Overlay */}
-      <TerminalOverlay
-        isOpen={isTerminalOpen}
-        onClose={() => setIsTerminalOpen(false)}
-      />
+      {isTerminalOpen && (
+        <TerminalOverlay
+          isOpen={isTerminalOpen}
+          onClose={() => setIsTerminalOpen(false)}
+        />
+      )}
     </>
   );
 }

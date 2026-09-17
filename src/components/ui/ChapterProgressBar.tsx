@@ -1,17 +1,16 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+
+const emptySubscribe = () => () => {};
 
 export default function ChapterProgressBar() {
   const [progress, setProgress] = useState(0);
-  const [mounted, setMounted] = useState(false);
-  const prefersReducedMotion = useRef(false);
+  const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
-    setMounted(true);
-    prefersReducedMotion.current = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
 
     const updateProgress = (scrollY: number) => {
       const docHeight =
@@ -92,7 +91,7 @@ export default function ChapterProgressBar() {
         style={{
           width: `${progress}%`,
           // Skip transition animation if reduced motion
-          transition: prefersReducedMotion.current ? "none" : undefined,
+          transition: prefersReducedMotion ? "none" : undefined,
         }}
       />
     </div>

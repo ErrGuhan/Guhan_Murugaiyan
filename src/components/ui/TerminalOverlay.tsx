@@ -79,24 +79,37 @@ const COMMANDS: Record<string, () => string[]> = {
     "",
     '  Or scroll to #contact to send a message directly.',
   ],
-  "sudo hire-me": () => [
-    "",
-    "  [sudo] password for root: ••••••••••••",
-    "  Authenticating...",
-    "  ✓ Access granted. Initiating HIRE protocol.",
-    "",
-    "  ██╗  ██╗██╗██████╗ ███████╗██████╗     ██╗",
-    "  ██║  ██║██║██╔══██╗██╔════╝██╔══██╗    ██║",
-    "  ███████║██║██████╔╝█████╗  ██║  ██║    ██║",
-    "  ██╔══██║██║██╔══██╗██╔══╝  ██║  ██║    ╚═╝",
-    "  ██║  ██║██║██║  ██║███████╗██████╔╝    ██╗",
-    "  ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚══════╝╚═════╝     ╚═╝",
-    "",
-    "  Sending offer letter to mguhan6383@gmail.com...",
-    "  +1000 XP · ACHIEVEMENT UNLOCKED: HIRED",
-    "",
-    '  (Just kidding — but seriously, reach out! → #contact)',
-  ],
+  "sudo hire-me": () => {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("achievement-unlocked", {
+          detail: {
+            title: "HIRE PROTOCOL ENGAGED",
+            desc: "Offer letter pipeline initiated. Reached out to Guhan!",
+            xp: "+1,000 XP",
+          },
+        })
+      );
+    }
+    return [
+      "",
+      "  [sudo] password for root: ••••••••••••",
+      "  Authenticating...",
+      "  ✓ Access granted. Initiating HIRE protocol.",
+      "",
+      "  ██╗  ██╗██╗██████╗ ███████╗██████╗     ██╗",
+      "  ██║  ██║██║██╔══██╗██╔════╝██╔══██╗    ██║",
+      "  ███████║██║██████╔╝█████╗  ██║  ██║    ██║",
+      "  ██╔══██║██║██╔══██╗██╔══╝  ██║  ██║    ╚═╝",
+      "  ██║  ██║██║██║  ██║███████╗██████╔╝    ██╗",
+      "  ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚══════╝╚═════╝     ╚═╝",
+      "",
+      "  Sending offer letter to mguhan6383@gmail.com...",
+      "  +1000 XP · ACHIEVEMENT UNLOCKED: HIRED",
+      "",
+      '  (Just kidding — but seriously, reach out! → #contact)',
+    ];
+  },
   help: () => [
     "┌─ AVAILABLE COMMANDS ──────────────────────┐",
     "│                                           │",
@@ -120,57 +133,48 @@ interface TerminalOverlayProps {
   onClose: () => void;
 }
 
+// Boot sequence lines
+const BOOT_LINES: TerminalLine[] = [
+  { type: "system", content: ASCII_BANNER },
+  { type: "system", content: "" },
+  { type: "system", content: "  GUHAN MURUGAIYAN PORTFOLIO v2026 — INTERACTIVE TERMINAL" },
+  { type: "system", content: '  Type "help" for available commands. Press ESC or type "exit" to close.' },
+  { type: "system", content: "" },
+];
+
 export default function TerminalOverlay({ isOpen, onClose }: TerminalOverlayProps) {
-  const [lines, setLines] = useState<TerminalLine[]>([]);
+  const [lines, setLines] = useState<TerminalLine[]>(BOOT_LINES);
   const [inputValue, setInputValue] = useState("");
   const [history, setHistory] = useState<string[]>([]);
-  const [historyIndex, setHistoryIndex] = useState(-1);
-  const [isMounted, setIsMounted] = useState(false);
+  const historyIndexRef = useRef(-1);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const outputRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
 
-  // Boot sequence lines
-  const bootLines: TerminalLine[] = [
-    { type: "system", content: ASCII_BANNER },
-    { type: "system", content: "" },
-    { type: "system", content: "  GUHAN MURUGAIYAN PORTFOLIO v2026 — INTERACTIVE TERMINAL" },
-    { type: "system", content: '  Type "help" for available commands. Press ESC or type "exit" to close.' },
-    { type: "system", content: "" },
-  ];
-
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
+    if (!isOpen) return;
 
-  useEffect(() => {
-    if (isOpen) {
-      // Save previous focus
-      previousFocusRef.current = document.activeElement as HTMLElement;
-      // Initialize with boot lines
-      setLines(bootLines);
-      setInputValue("");
-      setHistory([]);
-      setHistoryIndex(-1);
+    // Save previous focus
+    previousFocusRef.current = document.activeElement as HTMLElement;
 
-      // Stop Lenis scroll
-      const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
-      lenis?.stop();
+    // Stop Lenis scroll
+    const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
+    lenis?.stop();
 
-      // Focus input
-      requestAnimationFrame(() => {
-        inputRef.current?.focus();
-      });
-    } else {
+    // Focus input
+    requestAnimationFrame(() => {
+      inputRef.current?.focus();
+    });
+
+    return () => {
       // Restore Lenis
       const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
       lenis?.start();
       // Restore focus
       previousFocusRef.current?.focus();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    };
   }, [isOpen]);
 
   // Scroll to bottom on new lines
@@ -206,7 +210,7 @@ export default function TerminalOverlay({ isOpen, onClose }: TerminalOverlayProp
 
     // Add to history
     setHistory((prev) => [raw.trim(), ...prev].slice(0, 50));
-    setHistoryIndex(-1);
+    historyIndexRef.current = -1;
 
     // Echo input
     setLines((prev) => [...prev, { type: "input", content: `$ ${raw.trim()}` }]);
@@ -246,22 +250,18 @@ export default function TerminalOverlay({ isOpen, onClose }: TerminalOverlayProp
       setInputValue("");
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      setHistoryIndex((prev) => {
-        const next = Math.min(prev + 1, history.length - 1);
-        setInputValue(history[next] ?? "");
-        return next;
-      });
+      if (history.length === 0) return;
+      const next = Math.min(historyIndexRef.current + 1, history.length - 1);
+      historyIndexRef.current = next;
+      setInputValue(history[next] ?? "");
     } else if (e.key === "ArrowDown") {
       e.preventDefault();
-      setHistoryIndex((prev) => {
-        const next = Math.max(prev - 1, -1);
-        setInputValue(next === -1 ? "" : history[next] ?? "");
-        return next;
-      });
+      const next = Math.max(historyIndexRef.current - 1, -1);
+      historyIndexRef.current = next;
+      setInputValue(next === -1 ? "" : history[next] ?? "");
     }
   };
 
-  if (!isMounted) return null;
   if (!isOpen) return null;
 
   return (

@@ -233,7 +233,16 @@ export default function Contact() {
             {/* Copy Email Card */}
             <div
               onClick={copyEmail}
-              className="contact-card-reveal comic-card w-full p-5 sm:p-6 rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000] hover:shadow-[7px_7px_0px_#000000] cursor-pointer group flex items-center justify-between"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  copyEmail();
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              aria-label="Copy email address mguhan6383@gmail.com"
+              className="contact-card-reveal comic-card w-full p-5 sm:p-6 rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000] hover:shadow-[7px_7px_0px_#000000] cursor-pointer group flex items-center justify-between outline-none focus-visible:ring-2 focus-visible:ring-[#FFE600]"
             >
               <div className="flex items-center gap-4 min-w-0">
                 <div className="w-12 h-12 rounded-xl bg-[#FFE600] text-black border-[2.5px] border-black shadow-[2.5px_2.5px_0px_#000000] flex items-center justify-center group-hover:scale-105 transition-transform flex-shrink-0">
@@ -249,7 +258,8 @@ export default function Contact() {
                 </div>
               </div>
 
-              <div
+              <button
+                type="button"
                 onClick={(e) => {
                   e.stopPropagation();
                   copyEmail();
@@ -263,7 +273,7 @@ export default function Contact() {
                 ) : (
                   <Copy className="w-4 h-4 stroke-[2.5]" />
                 )}
-              </div>
+              </button>
             </div>
 
             {/* LinkedIn Card */}
@@ -319,7 +329,7 @@ export default function Contact() {
 
           {/* Right Column: Contact Form with 3px black borders & 4px offset shadows */}
           <div className="contact-form-reveal lg:col-span-7 rounded-3xl bg-[#13131A] border-[3px] border-black p-6 sm:p-10 shadow-[6px_6px_0px_#000000]">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={(e) => { void handleSubmit(onSubmit)(e); }} className="space-y-6">
               {/* Anti-spam honeypot field - hidden from humans */}
               <div className="hidden" aria-hidden="true">
                 <input
