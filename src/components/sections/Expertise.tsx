@@ -185,10 +185,7 @@ export default function Expertise() {
           <div className="flex items-center justify-between w-full mb-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#00F0FF] text-black border-[3px] border-black shadow-[3px_3px_0px_#000000] rounded-lg text-xs font-mono font-black tracking-widest uppercase">
               <Zap className="w-3.5 h-3.5 fill-black" />
-              <span>— 03 · TECHNICAL SKILLS &amp; ARSENAL</span>
-            </div>
-            <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 bg-[#FFE600] text-black border-[2.5px] border-black shadow-[3px_3px_0px_#000000] rounded-lg text-xs font-mono font-black tracking-wider uppercase -rotate-2">
-              <span>⚡ ARSENAL UNLOCKED!</span>
+              <span>— 03 · TECHNICAL EXPERTISE</span>
             </div>
           </div>
 
@@ -201,7 +198,7 @@ export default function Expertise() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-          {/* Left Column: Overview & Floating Tech Stack Matrix */}
+          {/* Left Column: Overview & Tech Stack Matrix */}
           <div className="lg:col-span-5 flex flex-col justify-between space-y-8">
             <div className="comic-card p-6 rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000]">
               <h3 className="font-syne text-2xl sm:text-3xl font-black tracking-tight leading-snug text-white">
@@ -218,7 +215,7 @@ export default function Expertise() {
             <div className="comic-card relative w-full h-72 rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000] overflow-hidden p-4">
               <div className="flex items-center justify-between border-b-[2px] border-black pb-2 mb-2">
                 <span className="text-[11px] font-mono font-black tracking-widest uppercase text-[#FFE600]">
-                  TECHNICAL MATRIX // CORE STACK
+                  CORE TECH STACK
                 </span>
                 <span className="w-2.5 h-2.5 rounded-full bg-[#00E676] border border-black animate-pulse" />
               </div>

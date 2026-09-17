@@ -74,7 +74,7 @@ export default function Contact() {
 
       const resData = await response.json();
       if (!response.ok || !resData.success) {
-        throw new Error(resData.error || "Failed to dispatch transmission.");
+        throw new Error(resData.error || "Failed to send message.");
       }
 
       setSubmitted(true);
@@ -84,7 +84,7 @@ export default function Contact() {
       const message =
         err instanceof Error
           ? err.message
-          : "Transmission failed. Please dispatch via direct email.";
+          : "Failed to send. Please reach out via direct email.";
       setSubmitError(message);
     }
   };
@@ -107,10 +107,7 @@ export default function Contact() {
           <div className="flex items-center justify-between w-full mb-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-lg border-[3px] border-black bg-[#FFE600] text-black shadow-[3px_3px_0px_#000000] text-xs font-mono tracking-widest uppercase font-black">
               <Sparkles className="w-3.5 h-3.5 fill-black" />
-              <span>{"COMMUNICATION HUB // DISPATCH TERMINAL"}</span>
-            </div>
-            <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 bg-[#00E676] text-black border-[2.5px] border-black shadow-[3px_3px_0px_#000000] rounded-lg text-xs font-mono font-black tracking-wider uppercase rotate-2 animate-pulse">
-              <span>📡 OPEN FREQUENCY!</span>
+              <span>{"— 05 · CONTACT &amp; INQUIRIES"}</span>
             </div>
           </div>
 
@@ -120,8 +117,8 @@ export default function Contact() {
           </h2>
 
           <p className="mt-6 text-neutral-300 text-sm sm:text-base max-w-xl font-normal leading-relaxed">
-            Have a project in mind, an internship opening in AI or Data Engineering,
-            or simply want to talk about autonomous multi-agent systems? Connect directly.
+            Have a project in mind, an opportunity in AI or Backend Engineering,
+            or want to connect directly? Send a note below or reach out via email.
           </p>
         </div>
 
@@ -139,7 +136,7 @@ export default function Contact() {
                 </div>
                 <div className="min-w-0">
                   <span className="text-[11px] font-mono text-[#FFE600] uppercase tracking-widest block font-black">
-                    EMAIL DISPATCH
+                    EMAIL
                   </span>
                   <span className="font-mono text-sm sm:text-base text-white font-bold truncate block">
                     mguhan6383@gmail.com
@@ -179,7 +176,7 @@ export default function Contact() {
                 </div>
                 <div className="min-w-0">
                   <span className="text-[11px] font-mono text-[#00F0FF] uppercase tracking-widest block font-black">
-                    LINKEDIN CHANNEL
+                    LINKEDIN
                   </span>
                   <span className="font-syne font-bold text-sm sm:text-base text-white truncate block">
                     LinkedIn / guhanmurugaiyan
@@ -200,7 +197,7 @@ export default function Contact() {
                 </div>
                 <div className="min-w-0">
                   <span className="text-[11px] font-mono text-[#FF2A55] uppercase tracking-widest block font-black">
-                    HOME COORDINATES
+                    LOCATION
                   </span>
                   <span className="font-syne font-bold text-sm sm:text-base text-white truncate block">
                     Vanur, Tamil Nadu, India
@@ -230,7 +227,7 @@ export default function Contact() {
 
               <div>
                 <label className="block text-xs font-mono font-black tracking-wider uppercase text-[#FFE600] mb-2">
-                  {"// YOUR NAME / ALIAS"}
+                  {"// YOUR NAME"}
                 </label>
                 <input
                   {...register("name")}
@@ -246,7 +243,7 @@ export default function Contact() {
 
               <div>
                 <label className="block text-xs font-mono font-black tracking-wider uppercase text-[#00F0FF] mb-2">
-                  {"// YOUR EMAIL ADDRESS"}
+                  {"// YOUR EMAIL"}
                 </label>
                 <input
                   {...register("email")}
@@ -263,12 +260,12 @@ export default function Contact() {
 
               <div>
                 <label className="block text-xs font-mono font-black tracking-wider uppercase text-[#FFE600] mb-2">
-                  {"// TRANSMISSION MESSAGE"}
+                  {"// YOUR MESSAGE"}
                 </label>
                 <textarea
                   {...register("message")}
                   rows={5}
-                  placeholder="Describe your mission, internship opening, or architectural query..."
+                  placeholder="Describe your project, role, or inquiry..."
                   className="w-full px-4 py-3.5 rounded-xl bg-[#08080C] border-[3px] border-black shadow-[3px_3px_0px_#000000] text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#FFE600] focus:shadow-[5px_5px_0px_#FFE600] transition-all font-mono text-sm resize-none"
                 />
                 {errors.message && (
@@ -282,7 +279,7 @@ export default function Contact() {
                 <div className="p-3.5 rounded-xl bg-[#FF2A55]/10 border-[2px] border-[#FF2A55] text-white font-mono text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <span>⚠️ {submitError}</span>
                   <a
-                    href="mailto:mguhan6383@gmail.com?subject=Transmission%20via%20Portfolio"
+                    href="mailto:mguhan6383@gmail.com?subject=Portfolio%20Inquiry"
                     className="comic-btn px-2.5 py-1 rounded bg-[#FFE600] text-black font-black uppercase text-[10px] w-fit"
                   >
                     Open in Mail App ↗
@@ -302,13 +299,13 @@ export default function Contact() {
               >
                 {submitted ? (
                   <span className="flex items-center gap-2">
-                    <Check className="w-4 h-4 stroke-[3]" /> TRANSMISSION SENT!
+                    <Check className="w-4 h-4 stroke-[3]" /> MESSAGE SENT!
                   </span>
                 ) : isSubmitting ? (
-                  <span>TRANSMITTING DATA...</span>
+                  <span>SENDING MESSAGE...</span>
                 ) : (
                   <span className="flex items-center gap-2">
-                    SEND TRANSMISSION <Send className="w-4 h-4 stroke-[2.5]" />
+                    SEND MESSAGE <Send className="w-4 h-4 stroke-[2.5]" />
                   </span>
                 )}
               </button>

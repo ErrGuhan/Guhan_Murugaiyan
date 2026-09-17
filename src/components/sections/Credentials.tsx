@@ -62,11 +62,11 @@ export default function Credentials() {
         <div className="mb-14 md:mb-18">
           <div className="cred-reveal inline-flex items-center gap-2 px-3.5 py-1 rounded-lg border-[3px] border-black bg-[#FFE600] text-black shadow-[3px_3px_0px_#000000] text-xs font-mono tracking-widest uppercase mb-4 font-black">
             <Sparkles className="w-3.5 h-3.5 fill-black" />
-            {"// 04 · CAREER ROADMAP & CERTIFICATIONS"}
+            {"// 04 · EXPERIENCE &amp; CERTIFICATIONS"}
           </div>
 
           <h2 className="cred-reveal font-display text-4xl sm:text-6xl md:text-7xl font-black tracking-tight uppercase text-white -webkit-text-stroke-[2.5px_#000] drop-shadow-[5px_5px_0px_#000000]">
-            CREDENTIALS <span className="text-[#FFE600]">&amp; PATH</span>
+            EXPERIENCE <span className="text-[#FFE600]">&amp; CREDENTIALS</span>
           </h2>
         </div>
 

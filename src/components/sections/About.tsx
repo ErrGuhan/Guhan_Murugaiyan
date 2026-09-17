@@ -90,12 +90,12 @@ export default function About() {
   );
 
   const facts = [
-    { label: "BASE LOCATION", value: "India (Tamil Nadu)", icon: "📍" },
-    { label: "SPECIALTY", value: "AI & Autonomous Systems", icon: "⚡" },
-    { label: "PRIMARY CLASS", value: "AI Developer / Engineer", icon: "⚔️" },
-    { label: "PASSIVE TRAIT", value: "Always Leveling Up", icon: "🔥" },
-    { label: "ACADEMY", value: "B.Tech CSE (2024–2028)", icon: "🎓" },
-    { label: "GUILD ROLE", value: "NSS Representative", icon: "🛡️" },
+    { label: "LOCATION", value: "India (Tamil Nadu)", icon: "📍" },
+    { label: "CORE FOCUS", value: "Agentic AI & Backend", icon: "⚡" },
+    { label: "PRIMARY ROLE", value: "AI & Full-Stack Engineer", icon: "💻" },
+    { label: "APPROACH", value: "Production-Grade Craft", icon: "🔥" },
+    { label: "EDUCATION", value: "B.Tech CSE (2024–2028)", icon: "🎓" },
+    { label: "LEADERSHIP", value: "NSS Representative", icon: "🛡️" },
   ];
 
   return (
@@ -105,15 +105,12 @@ export default function About() {
       className="relative min-h-screen py-24 md:py-36 px-6 md:px-12 bg-[#0B0B0F] text-white overflow-hidden border-t-[3px] border-black bg-halftone-dark scroll-mt-20"
     >
       <div className="max-w-5xl mx-auto w-full">
-        {/* Section Heading & Manga Eyebrow */}
+        {/* Section Heading */}
         <div className="mb-14 md:mb-18 flex flex-col items-start">
           <div className="flex items-center justify-between w-full mb-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#FFE600] text-black border-[3px] border-black shadow-[3px_3px_0px_#000000] rounded-lg text-xs font-mono font-black tracking-widest uppercase">
               <Sparkles className="w-3.5 h-3.5 fill-black" />
-              <span>— 02 · CHARACTER PROFILE &amp; ORIGIN</span>
-            </div>
-            <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 bg-[#FF2A55] text-white border-[2.5px] border-black shadow-[3px_3px_0px_#000000] rounded-lg text-xs font-mono font-black tracking-wider uppercase rotate-2 animate-pulse">
-              <span>💥 LEVEL UP!</span>
+              <span>— 02 · PROFILE &amp; BACKGROUND</span>
             </div>
           </div>
 
@@ -132,7 +129,7 @@ export default function About() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-          {/* Left Column: Manga Character Card with 3px border and 4px shadow */}
+          {/* Left Column: Profile Card with 3px border and 4px shadow */}
           <div className="lg:col-span-5 flex flex-col items-center lg:items-start">
             <div
               className="about-photo-card comic-card relative w-full max-w-sm sm:max-w-md aspect-[4/5] rounded-2xl overflow-hidden border-[3px] border-black shadow-[4px_4px_0px_#000000] group bg-[#17171C]"
@@ -152,13 +149,13 @@ export default function About() {
                 sizes="(max-width: 768px) 100vw, 450px"
               />
 
-              {/* Manga Name Badge Top-Left with 3px border */}
+              {/* Profile Name Badge Top-Left with 3px border */}
               <div className="absolute top-4 left-4 z-20 bg-[#FFE600] text-black px-3 py-1.5 rounded-lg border-[2.5px] border-black shadow-[3px_3px_0px_#000000] -rotate-2">
                 <span className="text-[11px] font-mono tracking-wider uppercase font-black block">
                   GUHAN MURUGAIYAN
                 </span>
                 <span className="text-[9px] font-mono tracking-widest text-neutral-800 uppercase block font-bold">
-                  CREATIVE ARCHITECT // LVL 99
+                  AI &amp; SYSTEMS ENGINEER
                 </span>
               </div>
 
@@ -203,7 +200,7 @@ export default function About() {
             {/* Comic Speech/Narrative Dialogue Box */}
             <div className="comic-card p-6 sm:p-8 rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000] relative">
               <span className="about-text-reveal text-xs font-mono text-[#FFE600] tracking-widest uppercase mb-3 block font-black">
-                {"// MANIFESTO & CREED"}
+                {"// BACKGROUND & PHILOSOPHY"}
               </span>
 
               {/* Large headline with comic font styling */}

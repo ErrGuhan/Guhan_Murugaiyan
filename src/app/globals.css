@@ -97,7 +97,7 @@
 .font-mono {
   font-family: var(--font-mono), monospace;
 }
-/* Authentic Manga / Anime Sliced Glitch Distortion */
+/* Clean Bold Neo-Brutalist Title Typography */
 .comic-glitch-text {
   position: relative;
   display: inline-block;
@@ -106,120 +106,14 @@
   text-transform: uppercase;
   letter-spacing: -0.03em;
   -webkit-text-stroke: 3px #000000;
-  text-shadow: 4px 4px 0px #000000;
+  text-shadow: 5px 5px 0px #000000;
+  transition: transform 0.2s ease, text-shadow 0.2s ease;
   will-change: transform;
 }
 
-.comic-glitch-text::before,
-.comic-glitch-text::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.comic-glitch-text::before {
-  left: 3px;
-  color: #00F0FF;
-  -webkit-text-stroke: 2px #000000;
-  text-shadow: -2px 0px 0px #00F0FF;
-  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-  animation: glitchSliceTop 2.5s infinite linear alternate-reverse;
-  opacity: 0.9;
-}
-
-.comic-glitch-text::after {
-  left: -3px;
-  color: #FF2A55;
-  -webkit-text-stroke: 2px #000000;
-  text-shadow: 2px 0px 0px #FF2A55;
-  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
-  animation: glitchSliceBottom 2.1s infinite linear alternate-reverse;
-  opacity: 0.9;
-}
-
 .comic-glitch-text:hover {
-  animation: animeDistortJitter 0.25s ease-in-out infinite;
-}
-
-@keyframes glitchSliceTop {
-  0%, 100% {
-    clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%);
-    transform: translate(0, 0);
-  }
-  15% {
-    clip-path: polygon(0 10%, 100% 10%, 100% 50%, 0 50%);
-    transform: translate(-3px, 1px);
-  }
-  30% {
-    clip-path: polygon(0 5%, 100% 5%, 100% 35%, 0 35%);
-    transform: translate(4px, -1px);
-  }
-  45% {
-    clip-path: polygon(0 20%, 100% 20%, 100% 60%, 0 60%);
-    transform: translate(-2px, 0);
-  }
-  60% {
-    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-    transform: translate(3px, 1px);
-  }
-  75% {
-    clip-path: polygon(0 15%, 100% 15%, 100% 35%, 0 35%);
-    transform: translate(-4px, -1px);
-  }
-  90% {
-    clip-path: polygon(0 25%, 100% 25%, 100% 55%, 0 55%);
-    transform: translate(2px, 0);
-  }
-}
-
-@keyframes glitchSliceBottom {
-  0%, 100% {
-    clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
-    transform: translate(0, 0);
-  }
-  15% {
-    clip-path: polygon(0 45%, 100% 45%, 100% 85%, 0 85%);
-    transform: translate(3px, -1px);
-  }
-  30% {
-    clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
-    transform: translate(-4px, 1px);
-  }
-  45% {
-    clip-path: polygon(0 55%, 100% 55%, 100% 90%, 0 90%);
-    transform: translate(2px, 0);
-  }
-  60% {
-    clip-path: polygon(0 70%, 100% 70%, 100% 95%, 0 95%);
-    transform: translate(-3px, -1px);
-  }
-  75% {
-    clip-path: polygon(0 50%, 100% 50%, 100% 80%, 0 80%);
-    transform: translate(4px, 1px);
-  }
-  90% {
-    clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
-    transform: translate(-2px, 0);
-  }
-}
-
-@keyframes animeDistortJitter {
-  0%, 100% {
-    transform: translate(0, 0) skewX(0deg);
-  }
-  25% {
-    transform: translate(-3px, 2px) skewX(-4deg);
-  }
-  50% {
-    transform: translate(3px, -2px) skewX(4deg);
-  }
-  75% {
-    transform: translate(-2px, -1px) skewX(-2deg);
-  }
+  transform: translate(-2px, -2px);
+  text-shadow: 7px 7px 0px #000000;
 }
 
 /* Anime Preloader Keyframes & Dynamic Effects */

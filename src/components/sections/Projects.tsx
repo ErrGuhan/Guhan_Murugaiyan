@@ -263,7 +263,7 @@ export default function Projects() {
         <div className="relative z-10 max-w-5xl mx-auto px-6 py-10 sm:py-14 flex flex-col items-center text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-white text-black border-[3px] border-black shadow-[3px_3px_0px_#000000] rounded-lg text-xs font-mono font-black tracking-widest uppercase mb-3 -rotate-1">
             <Sparkles className="w-3.5 h-3.5 text-[#FFE600] fill-[#FFE600]" />
-            <span>{"ARC CASE STUDIES // FEATURED WORK"}</span>
+            <span>{"FEATURED PROJECTS // CASE STUDIES"}</span>
           </div>
 
           <h2
@@ -313,11 +313,11 @@ export default function Projects() {
                 <div className="flex flex-wrap items-center gap-2 mb-1">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg border-[2.5px] border-black bg-[#FFE600] text-black shadow-[2.5px_2.5px_0px_#000000] text-[11px] font-mono tracking-widest uppercase font-black">
                     <Sparkles className="w-3.5 h-3.5 fill-black" />
-                    {`// 05 — MISSION ARC (0${activeIndex + 1} / 0${totalProjects})`}
+                    {`// 01 — FEATURED WORK (0${activeIndex + 1} / 0${totalProjects})`}
                   </div>
                   <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border-[2px] border-black bg-[#13131A] text-[#00F0FF] shadow-[2px_2px_0px_#000000] text-[10px] font-mono font-black tracking-wider uppercase">
                     <Activity className="w-3 h-3 text-[#00E676] animate-pulse" />
-                    <span>5 ARCS SHIPPED · 100% VERIFIED BUILDS</span>
+                    <span>5 PRODUCTION CASE STUDIES · LIVE DEMOS</span>
                   </div>
                 </div>
                 <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tight text-white -webkit-text-stroke-[1.5px_#000] drop-shadow-[3px_3px_0px_#000000]">

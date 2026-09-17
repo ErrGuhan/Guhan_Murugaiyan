@@ -25,7 +25,6 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDarkSection, setIsDarkSection] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [audioEnabled, setAudioEnabled] = useState(false);
 
   const hamburgerButtonRef = useRef<HTMLButtonElement>(null);
@@ -52,14 +51,6 @@ export default function Navbar() {
           setIsScrolled(scrollY > 20);
           const threshold = window.innerHeight * 0.85;
           setIsDarkSection(scrollY > threshold);
-
-          const totalHeight =
-            document.documentElement.scrollHeight - window.innerHeight;
-          const progress =
-            totalHeight > 0
-              ? Math.min(100, Math.max(0, Math.round((scrollY / totalHeight) * 100)))
-              : 0;
-          setScrollProgress(progress);
           ticking = false;
         });
         ticking = true;
@@ -152,34 +143,34 @@ export default function Navbar() {
     {
       num: "01",
       label: "WORK",
-      subtitle: "FEATURED CASE STUDIES",
+      subtitle: "FEATURED PROJECTS & CASE STUDIES",
       href: "#work",
-      tag: "ARC 01",
+      tag: "PROJECTS",
       accent: "#FFE600",
       icon: Briefcase,
     },
     {
       num: "02",
       label: "ABOUT",
-      subtitle: "CHARACTER ORIGIN & CREED",
+      subtitle: "BACKGROUND, PHILOSOPHY & SKILLS",
       href: "#about",
-      tag: "PROFILE",
+      tag: "ABOUT",
       accent: "#00F0FF",
       icon: User,
     },
     {
       num: "03",
       label: "EXPERTISE",
-      subtitle: "TECHNICAL SKILLS & ARSENAL",
+      subtitle: "TECH STACK & CORE CAPABILITIES",
       href: "#expertise",
-      tag: "SKILLS",
+      tag: "STACK",
       accent: "#FFE600",
       icon: Zap,
     },
     {
       num: "04",
       label: "CREDENTIALS",
-      subtitle: "EXPERIENCE & ROADMAP",
+      subtitle: "EXPERIENCE & EDUCATION",
       href: "#credentials",
       tag: "CAREER",
       accent: "#00F0FF",
@@ -188,9 +179,9 @@ export default function Navbar() {
     {
       num: "05",
       label: "CONTACT",
-      subtitle: "DISPATCH TERMINAL",
+      subtitle: "GET IN TOUCH & INQUIRIES",
       href: "#contact",
-      tag: "COMM",
+      tag: "CONTACT",
       accent: "#FFE600",
       icon: Mail,
     },
@@ -207,7 +198,7 @@ export default function Navbar() {
             : "bg-transparent text-black py-5"
         }`}
       >
-        {/* Left: Manga Title / Logo */}
+        {/* Left: Title / Logo */}
         <div className="flex items-center gap-3">
           <a
             href="#hero"
@@ -221,7 +212,7 @@ export default function Navbar() {
                 PORTFOLIO <span className="text-[#FFE600] drop-shadow-[1px_1px_0px_#000] font-black">⚡</span>
               </span>
               <span className="text-[9px] font-mono tracking-widest text-neutral-500 uppercase mt-0.5">
-                {"ARC '26 // DEV"}
+                PORTFOLIO &apos;26
               </span>
             </div>
           </a>
@@ -234,14 +225,13 @@ export default function Navbar() {
               key={link.label}
               href={link.href}
               onMouseEnter={playHoverTick}
-              className={`comic-btn px-3 py-1.5 rounded-lg text-xs font-mono font-black tracking-wider uppercase transition-all flex items-center gap-1 ${
+              className={`comic-btn px-3.5 py-1.5 rounded-lg text-xs font-mono font-black tracking-wider uppercase transition-all flex items-center ${
                 isDarkSection
                   ? "bg-[#1A1A24] text-white hover:bg-[#FFE600] hover:text-black"
                   : "bg-[#FFFDF7] text-black hover:bg-[#FFE600] hover:text-black"
               }`}
             >
               <span>{link.label}</span>
-              <span className="hidden xl:inline text-[9px] opacity-70 font-semibold">{link.tag}</span>
             </a>
           ))}
 
@@ -266,23 +256,15 @@ export default function Navbar() {
               }
             }}
             onMouseEnter={playHoverTick}
-            className="comic-btn ml-0.5 px-3 py-1.5 rounded-lg bg-[#FFE600] text-black font-mono font-black text-xs tracking-wider uppercase flex items-center gap-1 hover:bg-[#00F0FF]"
+            className="comic-btn ml-0.5 px-3.5 py-1.5 rounded-lg bg-[#FFE600] text-black font-mono font-black text-xs tracking-wider uppercase flex items-center gap-1 hover:bg-[#00F0FF]"
           >
             <Download className="w-3.5 h-3.5 stroke-[2.5]" />
             <span>RESUME</span>
           </a>
         </nav>
 
-        {/* Right: HUD PWR meter, Audio Toggle, Rotating Dial & Mobile Hamburger */}
+        {/* Right: Audio Toggle, Rotating Dial & Mobile Hamburger */}
         <div className="flex items-center gap-2 sm:gap-2.5">
-          {/* Live Scroll PWR Gauge */}
-          <div
-            title={`Mission Arc Scroll Progress: ${scrollProgress}%`}
-            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-black text-[#FFE600] border-[2px] border-black shadow-[2px_2px_0px_#000000] text-[10px] font-mono font-black select-none"
-          >
-            <Zap className="w-3 h-3 fill-[#FFE600]" />
-            <span>PWR: {scrollProgress}%</span>
-          </div>
 
           {/* Procedural Audio FX Toggle Button */}
           <button
@@ -385,7 +367,7 @@ export default function Navbar() {
             </div>
             <div className="flex flex-col leading-none">
               <span className="text-xs font-mono font-black tracking-widest text-[#FFE600] uppercase">
-                {"// CHAPTER SELECT"}
+                {"// NAVIGATION"}
               </span>
               <span className="text-[9px] font-mono text-neutral-400 font-bold uppercase mt-0.5">
                 PORTFOLIO &apos;26 DIRECTORY
