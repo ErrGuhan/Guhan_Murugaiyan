@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -22,9 +22,112 @@ type ContactFormData = z.infer<typeof contactSchema>;
 
 export default function Contact() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [copied, setCopied] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [msgFocused, setMsgFocused] = useState(false);
+  const [typewriterPlaceholder, setTypewriterPlaceholder] = useState("");
+
+  // Typewriter cycling placeholder messages
+  const placeholderMessages = [
+    "Hi Guhan! I'd love to discuss an AI project...",
+    "I'm hiring for a backend engineering role at...",
+    "Let's build something awesome together!",
+    "Got a cool idea and want to collaborate?",
+  ];
+
+  // Canvas confetti burst (yellow/black palette, no dependency)
+  const triggerConfetti = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    canvas.style.display = "block";
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+
+    const particles: {
+      x: number; y: number; vx: number; vy: number;
+      size: number; color: string; rotation: number; rotSpeed: number;
+    }[] = [];
+
+    const colors = ["#FFE600", "#000000", "#00F0FF", "#00E676", "#FF2A55"];
+    for (let i = 0; i < 80; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height * 0.4,
+        vx: (Math.random() - 0.5) * 6,
+        vy: Math.random() * 4 + 2,
+        size: Math.random() * 8 + 4,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rotation: Math.random() * Math.PI * 2,
+        rotSpeed: (Math.random() - 0.5) * 0.3,
+      });
+    }
+
+    let frame = 0;
+    const maxFrames = 90;
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const p of particles) {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = Math.max(0, 1 - frame / maxFrames);
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+        ctx.restore();
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.15; // gravity
+        p.rotation += p.rotSpeed;
+      }
+      frame++;
+      if (frame < maxFrames) {
+        requestAnimationFrame(animate);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (canvas) canvas.style.display = "none";
+      }
+    };
+    requestAnimationFrame(animate);
+  }, []);
+
+  // Typewriter effect — only runs when textarea is empty and unfocused
+  useEffect(() => {
+    if (msgFocused) return;
+    let msgIdx = 0;
+    let charIdx = 0;
+    let isDeleting = false;
+    let timer: ReturnType<typeof setTimeout>;
+
+    const tick = () => {
+      const current = placeholderMessages[msgIdx];
+      if (!isDeleting) {
+        setTypewriterPlaceholder(current.slice(0, charIdx + 1));
+        charIdx++;
+        if (charIdx === current.length) {
+          isDeleting = true;
+          timer = setTimeout(tick, 1800); // pause at full message
+          return;
+        }
+      } else {
+        setTypewriterPlaceholder(current.slice(0, charIdx - 1));
+        charIdx--;
+        if (charIdx === 0) {
+          isDeleting = false;
+          msgIdx = (msgIdx + 1) % placeholderMessages.length;
+        }
+      }
+      timer = setTimeout(tick, isDeleting ? 40 : 70);
+    };
+
+    timer = setTimeout(tick, 600);
+    return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [msgFocused]);
 
   const {
     register,
@@ -79,6 +182,7 @@ export default function Contact() {
 
       setSubmitted(true);
       reset();
+      triggerConfetti();
       setTimeout(() => setSubmitted(false), 5000);
     } catch (err: unknown) {
       const message =
@@ -107,7 +211,7 @@ export default function Contact() {
           <div className="flex items-center justify-between w-full mb-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-lg border-[3px] border-black bg-[#FFE600] text-black shadow-[3px_3px_0px_#000000] text-xs font-mono tracking-widest uppercase font-black">
               <Sparkles className="w-3.5 h-3.5 fill-black" />
-              <span>{"— 05 · CONTACT &amp; INQUIRIES"}</span>
+              <span>{"— 05 · CONTACT & INQUIRIES"}</span>
             </div>
           </div>
 
@@ -262,12 +366,23 @@ export default function Contact() {
                 <label className="block text-xs font-mono font-black tracking-wider uppercase text-[#FFE600] mb-2">
                   {"// YOUR MESSAGE"}
                 </label>
-                <textarea
-                  {...register("message")}
-                  rows={5}
-                  placeholder="Describe your project, role, or inquiry..."
-                  className="w-full px-4 py-3.5 rounded-xl bg-[#08080C] border-[3px] border-black shadow-[3px_3px_0px_#000000] text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#FFE600] focus:shadow-[5px_5px_0px_#FFE600] transition-all font-mono text-sm resize-none"
-                />
+                {/* Confetti canvas — hidden until success */}
+                <div className="relative">
+                  <canvas
+                    ref={canvasRef}
+                    aria-hidden="true"
+                    className="absolute inset-0 w-full h-full pointer-events-none z-10 rounded-xl"
+                    style={{ display: "none" }}
+                  />
+                  <textarea
+                    {...register("message")}
+                    rows={5}
+                    placeholder={msgFocused ? "Describe your project, role, or inquiry..." : typewriterPlaceholder || "Describe your project, role, or inquiry..."}
+                    onFocus={() => setMsgFocused(true)}
+                    onBlur={() => setMsgFocused(false)}
+                    className="w-full px-4 py-3.5 rounded-xl bg-[#08080C] border-[3px] border-black shadow-[3px_3px_0px_#000000] text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#FFE600] focus:shadow-[5px_5px_0px_#FFE600] transition-all font-mono text-sm resize-none"
+                  />
+                </div>
                 {errors.message && (
                   <p className="mt-1.5 text-xs text-[#FF2A55] font-mono font-bold">
                     ⚠️ {errors.message.message}

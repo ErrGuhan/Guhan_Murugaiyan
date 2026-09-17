@@ -366,7 +366,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
 
         <div className="p-sub inline-flex items-center gap-2 font-mono text-xs sm:text-sm text-neutral-300 font-bold tracking-widest mt-4 uppercase">
           <span className="inline-block w-2.5 h-0.5 bg-[#FFE600]" />
-          <span>AI DEVELOPER &amp; SYSTEMS ENGINEER</span>
+          <span>AI DEVELOPER & SYSTEMS ENGINEER</span>
           <span className="inline-block w-2.5 h-0.5 bg-[#FFE600]" />
         </div>
       </div>

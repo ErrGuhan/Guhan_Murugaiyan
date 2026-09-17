@@ -14,6 +14,10 @@ export interface Project {
   liveUrl: string;
   githubUrl: string;
   year: string;
+  /** Difficulty rating 1–5 stars */
+  difficulty: 1 | 2 | 3 | 4 | 5;
+  /** Status badge shown on card back face */
+  statusBadge: "SHIPPED" | "IN PROGRESS";
 }
 
 export const REAL_PROJECTS: Project[] = [
@@ -24,6 +28,8 @@ export const REAL_PROJECTS: Project[] = [
     category: "WEB · STUDENT MARKETPLACE",
     status: "LIVE DEMO ↗",
     isLive: true,
+    difficulty: 3,
+    statusBadge: "SHIPPED",
     description: "A student marketplace web app built with Next.js and Supabase, with an admin-verification workflow for confirming product originality before listings go live.",
     tags: ["Next.js", "Supabase", "TypeScript", "PostgreSQL"],
     filename: "supabase-queries.ts",
@@ -69,6 +75,8 @@ export async function getVerifiedProducts() {
     category: "WEB · PRODUCTIVITY",
     status: "LIVE DEMO ↗",
     isLive: true,
+    difficulty: 3,
+    statusBadge: "SHIPPED",
     description: "A personal productivity tracker built with Next.js, for organizing day-to-day goals and tracking habit streaks with precision metrics.",
     tags: ["Next.js", "TypeScript", "Tailwind", "Supabase"],
     filename: "HabitTrackerWidget.tsx",
@@ -108,6 +116,8 @@ export default function HabitTrackerWidget() {
     category: "JAVA · BANKING UI",
     status: "LIVE DEMO ↗",
     isLive: true,
+    difficulty: 4,
+    statusBadge: "SHIPPED",
     description: "A banking website interface built in Java, focused on core transfer and account-management flows.",
     tags: ["Java 21", "Spring Boot", "Clean Architecture"],
     filename: "AccountService.java",
@@ -144,8 +154,8 @@ public class AccountService {
     }
   }
 }`,
-    // TODO: Supply /public/images/transferhub-preview.jpg with a real screenshot of the banking UI
-    image: "/images/project-watches.jpg",
+    // TODO: Confirm /public/images/transferhub-preview.jpg has been supplied
+    image: "/images/transferhub-preview.jpg",
     imageAlt: "TransferHub banking website interface preview with account balance and transfer flows",
     liveUrl: "https://transfer-hub-neon.vercel.app",
     githubUrl: "https://github.com/ErrGuhan/TransferHub",
@@ -158,6 +168,8 @@ public class AccountService {
     category: "WEB · 3D CONFIGURATOR",
     status: "LIVE DEMO ↗",
     isLive: true,
+    difficulty: 4,
+    statusBadge: "SHIPPED",
     description: "A commercial business platform and interactive 3D parametric product configurator for Jana Fibre Glass, featuring real-time Three.js door modeling and architectural manufacturing specs.",
     tags: ["React 19", "Three.js", "Vite", "Tailwind v4"],
     filename: "ParametricDoor.tsx",
@@ -208,6 +220,8 @@ export function ParametricDoor({
     category: "WEB · CLIENT SITE",
     status: "LIVE DEMO ↗",
     isLive: true,
+    difficulty: 3,
+    statusBadge: "SHIPPED",
     description: "A luxury event styling and stage decor showcase built with Next.js and Prisma, featuring bespoke celebration portfolios, category curation, and client booking workflows.",
     tags: ["Next.js", "Prisma", "TypeScript", "Tailwind CSS"],
     filename: "app/page.tsx",
@@ -245,14 +259,4 @@ export default async function HomePage() {
     year: "2026",
   },
 ];
-
-// Dev-only check to warn about placeholder project preview image
-if (process.env.NODE_ENV !== "production") {
-  const transferHub = REAL_PROJECTS.find((p) => p.id === "transfer-hub");
-  if (transferHub && transferHub.image.includes("project-watches")) {
-    console.warn(
-      "[PROJECT PREVIEW WARNING] TransferHub is currently using temporary fallback image '/images/project-watches.jpg'. Please supply a real screenshot at '/public/images/transferhub-preview.jpg'."
-    );
-  }
-}
 

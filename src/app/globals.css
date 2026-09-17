@@ -68,7 +68,7 @@
 }
 
 .comic-btn:active {
-  transform: translate(2px, 2px) !important;
+  transform: translate(2px, 2px) scale(0.95) !important;
   box-shadow: 0px 0px 0px #000000 !important;
 }
 
@@ -310,3 +310,52 @@ html.battle-mode body::before {
 }
 
 
+/* Terminal blinking cursor */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Chapter XP Progress Bar */
+.xp-bar-track {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #000000;
+  z-index: 9999;
+  overflow: hidden;
+  /* pixel corner clipping for comic feel */
+  clip-path: inset(0 0 0 0);
+}
+
+.xp-bar-fill {
+  height: 100%;
+  background: #FFE600;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 6px rgba(255, 230, 0, 0.8);
+}
+
+/* Halftone photo overlay for About profile image */
+.halftone-photo-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 11;
+  pointer-events: none;
+  /* Ben-Day dot pattern using radial-gradient */
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 230, 0, 0.22) 1.5px,
+    transparent 1.5px
+  );
+  background-size: 7px 7px;
+  mix-blend-mode: multiply;
+  /* Toggle off by adding class .halftone-off */
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.halftone-photo-overlay.halftone-off {
+  opacity: 0;
+}

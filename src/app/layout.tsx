@@ -13,6 +13,7 @@ import CustomCursor from "@/components/layout/CustomCursor";
 import SpeedLinesOverlay from "@/components/layout/SpeedLinesOverlay";
 import AchievementToast from "@/components/ui/AchievementToast";
 import BattleModeManager from "@/components/layout/BattleModeManager";
+import ChapterProgressBar from "@/components/ui/ChapterProgressBar";
 
 const anton = Anton({
   variable: "--font-anton",
@@ -166,6 +167,9 @@ export default function RootLayout({
           Skip to content //
         </a>
 
+
+        {/* Chapter XP scroll progress bar */}
+        <ChapterProgressBar />
 
         {/* Custom magnetic cursor */}
         <CustomCursor />

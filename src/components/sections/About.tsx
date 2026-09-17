@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FileText, Mail, Sparkles } from "lucide-react";
+import GitHubActivityWidget from "@/components/ui/GitHubActivityWidget";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -110,7 +111,7 @@ export default function About() {
           <div className="flex items-center justify-between w-full mb-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#FFE600] text-black border-[3px] border-black shadow-[3px_3px_0px_#000000] rounded-lg text-xs font-mono font-black tracking-widest uppercase">
               <Sparkles className="w-3.5 h-3.5 fill-black" />
-              <span>— 02 · PROFILE &amp; BACKGROUND</span>
+              <span>— 02 · PROFILE & BACKGROUND</span>
             </div>
           </div>
 
@@ -149,13 +150,19 @@ export default function About() {
                 sizes="(max-width: 768px) 100vw, 450px"
               />
 
+              {/* Ben-Day Halftone Dot Overlay — tunable via .halftone-off class */}
+              <div
+                className="halftone-photo-overlay"
+                aria-hidden="true"
+              />
+
               {/* Profile Name Badge Top-Left with 3px border */}
               <div className="absolute top-4 left-4 z-20 bg-[#FFE600] text-black px-3 py-1.5 rounded-lg border-[2.5px] border-black shadow-[3px_3px_0px_#000000] -rotate-2">
                 <span className="text-[11px] font-mono tracking-wider uppercase font-black block">
                   GUHAN MURUGAIYAN
                 </span>
                 <span className="text-[9px] font-mono tracking-widest text-neutral-800 uppercase block font-bold">
-                  AI &amp; SYSTEMS ENGINEER
+                  AI & SYSTEMS ENGINEER
                 </span>
               </div>
 
@@ -253,6 +260,9 @@ export default function About() {
                 </div>
               ))}
             </div>
+
+            {/* GitHub Live Activity Widget */}
+            <GitHubActivityWidget />
           </div>
         </div>
       </div>

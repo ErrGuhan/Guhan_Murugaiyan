@@ -16,17 +16,32 @@ export default function Hero() {
   // Mouse Parallax for Halftone Sunburst/Background
   useEffect(() => {
     const isTouch = window.matchMedia("(pointer: coarse)").matches;
-    if (isTouch) return;
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (isTouch || prefersReducedMotion) return;
 
     const bg = parallaxBgRef.current;
-    if (!bg) return;
+    const container = containerRef.current;
+    if (!bg || !container) return;
 
     const setX = gsap.quickTo(bg, "x", { duration: 0.5, ease: "power2.out" });
     const setY = gsap.quickTo(bg, "y", { duration: 0.5, ease: "power2.out" });
 
     const handleMouseMove = (e: MouseEvent) => {
-      const normX = (e.clientX / window.innerWidth - 0.5) * 28;
-      const normY = (e.clientY / window.innerHeight - 0.5) * 28;
+      const rect = container.getBoundingClientRect();
+      // Only react when cursor is within the hero section
+      if (
+        e.clientX < rect.left ||
+        e.clientX > rect.right ||
+        e.clientY < rect.top ||
+        e.clientY > rect.bottom
+      ) {
+        return;
+      }
+      const normX = ((e.clientX - rect.left) / rect.width - 0.5) * 28;
+      const normY = ((e.clientY - rect.top) / rect.height - 0.5) * 28;
       setX(normX);
       setY(normY);
     };
@@ -135,7 +150,7 @@ export default function Hero() {
             PORTFOLIO &apos;26
           </span>
           <span className="text-neutral-800 font-bold">
-            AI &amp; FULL-STACK ENGINEER
+            AI & FULL-STACK ENGINEER
           </span>
         </div>
 
@@ -143,7 +158,7 @@ export default function Hero() {
         <div className="comic-card flex items-center gap-2 bg-[#FFE600] text-black px-3.5 py-1.5 rounded-xl border-[3px] border-black shadow-[4px_4px_0px_#000000]">
           <span className="w-2.5 h-2.5 rounded-full bg-[#00E676] border-[1.5px] border-black animate-pulse" />
           <span className="font-mono font-black text-xs tracking-wider">
-            AVAILABLE FOR INTERNSHIPS &amp; ROLES
+            AVAILABLE FOR INTERNSHIPS & ROLES
           </span>
         </div>
       </div>
@@ -154,7 +169,7 @@ export default function Hero() {
         <div className="hero-stagger mb-3 sm:mb-4 inline-flex items-center gap-2 px-4 py-1.5 bg-white border-[3px] border-black shadow-[3px_3px_0px_#000000] rounded-lg -rotate-1">
           <Sparkles className="w-4 h-4 text-[#FFE600] fill-[#FFE600]" />
           <span className="font-mono font-black text-xs sm:text-sm tracking-widest text-black uppercase">
-            AI DEVELOPER &amp; SYSTEMS ENGINEER
+            AI DEVELOPER & SYSTEMS ENGINEER
           </span>
         </div>
 
@@ -181,7 +196,7 @@ export default function Hero() {
 
         {/* Narrative Pitch Card */}
         <div className="hero-stagger my-4 sm:my-5 max-w-2xl px-5 py-3 bg-white border-[3px] border-black shadow-[4px_4px_0px_#000000] rounded-xl text-xs sm:text-sm font-mono text-neutral-800 leading-relaxed">
-          <span className="text-black font-black uppercase">B.Tech CSE &apos;28</span> · Architecting Autonomous Multi-Agent Swarms, Resilient Java Backends &amp; High-Performance Motion Experiences.
+          <span className="text-black font-black uppercase">B.Tech CSE &apos;28</span> · Architecting Autonomous Multi-Agent Swarms, Resilient Java Backends & High-Performance Motion Experiences.
         </div>
 
         {/* Action Workflow CTAs */}
@@ -223,16 +238,16 @@ export default function Hero() {
             ⚡ AGENTIC AI
           </span>
           <span className="px-3 py-1 rounded-lg bg-white border-[2px] border-black shadow-[2px_2px_0px_#000000] text-black">
-            ☕ JAVA 21 &amp; SPRING BOOT
+            ☕ JAVA 21 & SPRING BOOT
           </span>
           <span className="px-3 py-1 rounded-lg bg-white border-[2px] border-black shadow-[2px_2px_0px_#000000] text-black">
-            ⚛️ NEXT.JS &amp; REACT
+            ⚛️ NEXT.JS & REACT
           </span>
           <span className="px-3 py-1 rounded-lg bg-white border-[2px] border-black shadow-[2px_2px_0px_#000000] text-black">
             ⚙️ SYSTEM ARCHITECTURE
           </span>
           <span className="px-3 py-1 rounded-lg bg-white border-[2px] border-black shadow-[2px_2px_0px_#000000] text-black">
-            🗄️ POSTGRESQL &amp; SUPABASE
+            🗄️ POSTGRESQL & SUPABASE
           </span>
         </div>
       </div>

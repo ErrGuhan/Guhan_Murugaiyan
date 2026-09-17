@@ -62,11 +62,11 @@ export default function Credentials() {
         <div className="mb-14 md:mb-18">
           <div className="cred-reveal inline-flex items-center gap-2 px-3.5 py-1 rounded-lg border-[3px] border-black bg-[#FFE600] text-black shadow-[3px_3px_0px_#000000] text-xs font-mono tracking-widest uppercase mb-4 font-black">
             <Sparkles className="w-3.5 h-3.5 fill-black" />
-            {"// 04 · EXPERIENCE &amp; CERTIFICATIONS"}
+            {"// 04 · EXPERIENCE & CERTIFICATIONS"}
           </div>
 
           <h2 className="cred-reveal font-display text-4xl sm:text-6xl md:text-7xl font-black tracking-tight uppercase text-white -webkit-text-stroke-[2.5px_#000] drop-shadow-[5px_5px_0px_#000000]">
-            EXPERIENCE <span className="text-[#FFE600]">&amp; CREDENTIALS</span>
+            EXPERIENCE <span className="text-[#FFE600]">& CREDENTIALS</span>
           </h2>
         </div>
 
@@ -112,7 +112,7 @@ export default function Credentials() {
                   Data Analyst
                 </h4>
                 <p className="text-xs font-mono font-bold text-[#00F0FF]">
-                  NoviTech R&amp;D Pvt Ltd · Chennai
+                  NoviTech R&D Pvt Ltd · Chennai
                 </p>
                 <p className="text-sm text-neutral-300 mt-3 leading-relaxed">
                   Immersed in practical analytics workflows, turning raw enterprise streams into meaningful statistical metrics and automated anomaly detection pipelines.
@@ -151,10 +151,10 @@ export default function Credentials() {
                   Nov 2024 – Nov 2028
                 </span>
                 <h4 className="font-syne font-black text-lg text-white mt-2">
-                  B.Tech in Computer Science &amp; Engineering
+                  B.Tech in Computer Science & Engineering
                 </h4>
                 <p className="text-xs font-mono font-bold text-[#00F0FF]">
-                  Sri Venkateshwaraa College of Engg &amp; Tech (SVCET)
+                  Sri Venkateshwaraa College of Engg & Tech (SVCET)
                 </p>
                 <p className="text-sm text-neutral-300 mt-3 leading-relaxed">
                   Core focus on Autonomous Agents, Concurrent Java Enterprise Architectures, and Distributed Data Infrastructure.

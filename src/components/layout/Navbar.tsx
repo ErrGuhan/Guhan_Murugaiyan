@@ -13,7 +13,9 @@ import {
   Mail,
   Volume2,
   VolumeX,
+  Terminal,
 } from "lucide-react";
+import TerminalOverlay from "@/components/ui/TerminalOverlay";
 import {
   isSoundEnabled,
   toggleSound,
@@ -26,6 +28,7 @@ export default function Navbar() {
   const [isDarkSection, setIsDarkSection] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [audioEnabled, setAudioEnabled] = useState(false);
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
 
   const hamburgerButtonRef = useRef<HTMLButtonElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -286,6 +289,18 @@ export default function Navbar() {
             </span>
           </button>
 
+          {/* Interactive Terminal Toggle */}
+          <button
+            onClick={() => setIsTerminalOpen(true)}
+            title="Open interactive terminal"
+            aria-label="Open interactive developer terminal"
+            aria-expanded={isTerminalOpen}
+            className="comic-btn px-2.5 py-1.5 rounded-lg border-[2px] border-black bg-white text-black hover:bg-[#FFE600] flex items-center gap-1.5 text-xs font-mono font-black cursor-pointer shadow-[2px_2px_0px_#000000]"
+          >
+            <Terminal className="w-3.5 h-3.5 stroke-[2.5] text-black" />
+            <span className="hidden sm:inline text-[9px] font-black">TERMINAL</span>
+          </button>
+
           {/* Rotating Circular Manga Badge with 3-Tap Easter Egg (shown only on 2xl screens to avoid clutter) */}
           <div
             className="hidden 2xl:block"
@@ -508,6 +523,12 @@ export default function Navbar() {
           </a>
         </div>
       </div>
+
+      {/* Interactive Terminal Overlay */}
+      <TerminalOverlay
+        isOpen={isTerminalOpen}
+        onClose={() => setIsTerminalOpen(false)}
+      />
     </>
   );
 }

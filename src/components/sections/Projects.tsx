@@ -571,8 +571,25 @@ export default function Projects() {
                               </div>
                               <div className="p-2 rounded-lg bg-[#13131A] border-[1.5px] border-black">
                                 <span className="text-neutral-500 block uppercase font-bold">STATUS</span>
-                                <span className="text-[#00E676] font-black">100% VERIFIED</span>
+                                <span className={`font-black text-[9px] tracking-wide ${project.statusBadge === "SHIPPED" ? "text-[#00E676]" : "text-[#FFE600]"}`}>
+                                  {project.statusBadge === "SHIPPED" ? "⚡ SHIPPED" : "🔧 IN PROGRESS"}
+                                </span>
                               </div>
+                            </div>
+
+                            {/* Difficulty star rating */}
+                            <div className="flex items-center gap-2 mt-2 font-mono text-[10px]">
+                              <span className="text-neutral-500 uppercase font-bold tracking-wider">DIFFICULTY:</span>
+                              <span className="tracking-wide" aria-label={`Difficulty: ${project.difficulty} out of 5 stars`}>
+                                {Array.from({ length: 5 }).map((_, i) => (
+                                  <span
+                                    key={i}
+                                    className={i < project.difficulty ? "text-[#FFE600]" : "text-neutral-700"}
+                                  >
+                                    ★
+                                  </span>
+                                ))}
+                              </span>
                             </div>
                           </div>
 
