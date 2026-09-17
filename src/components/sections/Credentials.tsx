@@ -106,7 +106,7 @@ export default function Credentials() {
             <div className="space-y-4">
               <div className="comic-card p-6 rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000]">
                 <span className="inline-block px-2.5 py-0.5 rounded-md bg-[#FFE600] text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] text-xs font-mono font-black uppercase">
-                  July 2026 – Present
+                  July 2026 – 2026
                 </span>
                 <h4 className="font-syne font-black text-lg text-white mt-2">
                   Data Analyst
