@@ -11,7 +11,6 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const headlineRef = useRef<HTMLHeadingElement>(null);
   const parallaxBgRef = useRef<HTMLDivElement>(null);
 
   // Mouse Parallax for Halftone Sunburst/Background
@@ -160,7 +159,6 @@ export default function Hero() {
         </div>
 
         <h1
-          ref={headlineRef}
           className="font-display font-black uppercase flex flex-col items-center text-black w-full cursor-default my-1 sm:my-2"
           data-cursor="pointer"
         >

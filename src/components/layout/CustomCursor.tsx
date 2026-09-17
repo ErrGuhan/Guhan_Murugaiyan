@@ -105,7 +105,7 @@ export default function CustomCursor() {
       const extEl = target.closest("[data-cursor='external']") || target.closest("a[target='_blank']");
       const viewEl = target.closest("[data-cursor='view']");
       const interactiveEl = target.closest(
-        "a, button, [role='button'], input, textarea, .comic-btn, .comic-card, .circle-hover-parent, [data-cursor='pointer']"
+        "a, button, [role='button'], input, textarea, .comic-btn, .comic-card, [data-cursor='pointer']"
       );
 
       if (dragEl) {

@@ -86,7 +86,7 @@ export function playHoverTick(): void {
 /**
  * Filtered whoosh for comic page/section wipes
  */
-export function playPageWhoosh(): void {
+export function playWhoosh(): void {
   if (!soundEnabled) return;
   const ctx = getAudioContext();
   if (!ctx) return;
@@ -201,8 +201,4 @@ export function playBattleSiren(): void {
     osc.stop(startTime + 0.065);
   });
 }
-
-// Convenient aliases for whoosh and fanfare
-export const playWhoosh = playPageWhoosh;
-export const playFanfare = playSuccessChime;
 

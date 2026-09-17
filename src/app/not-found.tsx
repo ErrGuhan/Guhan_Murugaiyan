@@ -4,8 +4,6 @@ import { ArrowLeft, Compass, ShieldAlert, Sparkles } from "lucide-react";
 export default function NotFound() {
   return (
     <main className="relative min-h-screen flex items-center justify-center p-6 sm:p-12 bg-[#0B0B0F] text-white bg-halftone-dark overflow-hidden select-none">
-      {/* Film grain overlay */}
-      <div className="grain-overlay" aria-hidden="true" />
 
       {/* Comic Anomaly Card */}
       <div className="relative z-10 w-full max-w-xl comic-card rounded-3xl bg-[#13131A] border-[3px] border-black shadow-[8px_8px_0px_#000000] p-6 sm:p-10 flex flex-col items-center text-center">

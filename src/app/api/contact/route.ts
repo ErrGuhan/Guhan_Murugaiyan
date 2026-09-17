@@ -28,8 +28,60 @@ function sanitizeInput(text: string): string {
     .replace(/[\u0000-\u0008\u000B-\u000C\u000E-\u001F\u007F]/g, ""); // Strip control characters
 }
 
+// In-memory sliding window rate limiter: max 5 dispatches per 10 minutes per IP
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const MAX_REQUESTS_PER_WINDOW = 5;
+const ipRequestHistory = new Map<string, number[]>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const windowStart = now - RATE_LIMIT_WINDOW_MS;
+  const timestamps = (ipRequestHistory.get(ip) || []).filter((ts) => ts > windowStart);
+
+  if (timestamps.length >= MAX_REQUESTS_PER_WINDOW) {
+    ipRequestHistory.set(ip, timestamps);
+    return true;
+  }
+
+  timestamps.push(now);
+  ipRequestHistory.set(ip, timestamps);
+
+  // Evict stale records periodically to avoid memory growth
+  if (ipRequestHistory.size > 1000) {
+    for (const [key, history] of ipRequestHistory.entries()) {
+      const active = history.filter((ts) => ts > windowStart);
+      if (active.length === 0) {
+        ipRequestHistory.delete(key);
+      } else {
+        ipRequestHistory.set(key, active);
+      }
+    }
+  }
+
+  return false;
+}
+
 export async function POST(req: NextRequest) {
   try {
+    // 0. Rate limiting check by client IP
+    const forwardedFor = req.headers.get("x-forwarded-for");
+    const clientIp = forwardedFor
+      ? forwardedFor.split(",")[0].trim()
+      : req.headers.get("x-real-ip") || "anonymous";
+
+    if (isRateLimited(clientIp)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Rate limit exceeded. Please wait a few minutes before transmitting again.",
+        },
+        {
+          status: 429,
+          headers: { "Retry-After": "600" },
+        }
+      );
+    }
+
     // 1. Parse and validate payload
     let body;
     try {

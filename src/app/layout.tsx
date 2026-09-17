@@ -167,8 +167,6 @@ export default function RootLayout({
           Skip to content //
         </a>
 
-        {/* Film grain texture */}
-        <div className="grain-overlay" aria-hidden="true" />
 
         {/* Custom magnetic cursor */}
         <CustomCursor />

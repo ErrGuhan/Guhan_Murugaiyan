@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { Trophy, X, Zap } from "lucide-react";
-import { playFanfare } from "@/lib/sound-effects";
+import { playSuccessChime } from "@/lib/sound-effects";
 
 interface AchievementDetail {
   title: string;
@@ -19,7 +19,7 @@ export default function AchievementToast() {
       const customEvent = e as CustomEvent<AchievementDetail>;
       if (!customEvent.detail) return;
 
-      playFanfare();
+      playSuccessChime();
       setAchievement(customEvent.detail);
 
       if (timeoutRef.current) clearTimeout(timeoutRef.current);

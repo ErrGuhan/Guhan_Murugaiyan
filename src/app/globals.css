@@ -53,49 +53,6 @@
     color: var(--comic-black);
   }
 }
-
-/* 3px Solid Black Borders */
-.border-3 {
-  border-width: 3px !important;
-}
-
-.comic-border {
-  border: 3px solid #000000 !important;
-}
-
-/* Comic-Book Hard Offset Shadows (4px 4px 0px Black) */
-.comic-shadow {
-  box-shadow: 4px 4px 0px #000000 !important;
-}
-
-.comic-shadow-sm {
-  box-shadow: 2px 2px 0px #000000 !important;
-}
-
-.comic-shadow-lg {
-  box-shadow: 6px 6px 0px #000000 !important;
-}
-
-.comic-shadow-xl {
-  box-shadow: 8px 8px 0px #000000 !important;
-}
-
-.comic-shadow-yellow {
-  box-shadow: 4px 4px 0px #FFE600 !important;
-}
-
-.comic-shadow-cyan {
-  box-shadow: 4px 4px 0px #00F0FF !important;
-}
-
-.comic-shadow-crimson {
-  box-shadow: 4px 4px 0px #FF2A55 !important;
-}
-
-.comic-shadow-white {
-  box-shadow: 4px 4px 0px #FFFFFF !important;
-}
-
 /* Interactive Comic Button: tactile 3px border, 4px shadow, spring click */
 .comic-btn {
   border: 3px solid #000000 !important;
@@ -140,71 +97,6 @@
 .font-mono {
   font-family: var(--font-mono), monospace;
 }
-
-/* Heavy Distorted Text Presets */
-.comic-text-heavy {
-  font-weight: 900;
-  text-transform: uppercase;
-  -webkit-text-stroke: 2px #000000;
-  text-shadow: 4px 4px 0px #000000;
-}
-
-.comic-text-yellow {
-  color: #FFE600;
-  -webkit-text-stroke: 2px #000000;
-  text-shadow: 4px 4px 0px #000000;
-}
-
-.comic-text-white {
-  color: #FFFFFF;
-  -webkit-text-stroke: 2.5px #000000;
-  text-shadow: 4px 4px 0px #000000, 6px 6px 0px rgba(0, 0, 0, 0.25);
-}
-
-.comic-text-cyan {
-  color: #00F0FF;
-  -webkit-text-stroke: 2px #000000;
-  text-shadow: 4px 4px 0px #000000;
-}
-
-.comic-text-crimson {
-  color: #FF2A55;
-  -webkit-text-stroke: 2px #000000;
-  text-shadow: 4px 4px 0px #000000;
-}
-
-.comic-text-dark {
-  color: #000000;
-  text-shadow: 2px 2px 0px #FFE600;
-}
-
-/* Manga Glitch & Shiver Animation */
-@keyframes mangaGlitch {
-  0%, 100% {
-    transform: translate(0, 0);
-  }
-  20% {
-    transform: translate(-3px, 2px);
-  }
-  40% {
-    transform: translate(-2px, -2px);
-  }
-  60% {
-    transform: translate(3px, 1px);
-  }
-  80% {
-    transform: translate(2px, -2px);
-  }
-}
-
-.animate-manga-glitch {
-  animation: mangaGlitch 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
-}
-
-.hover-manga-glitch:hover {
-  animation: mangaGlitch 0.3s ease infinite;
-}
-
 /* Authentic Manga / Anime Sliced Glitch Distortion */
 .comic-glitch-text {
   position: relative;
@@ -359,17 +251,6 @@
 .animate-eq-2 { animation: eqBarAnim 0.4s ease-in-out infinite alternate 0.15s; }
 .animate-eq-3 { animation: eqBarAnim 0.7s ease-in-out infinite alternate 0.3s; }
 .animate-eq-4 { animation: eqBarAnim 0.5s ease-in-out infinite alternate 0.2s; }
-
-.bg-hazard-stripes {
-  background: repeating-linear-gradient(
-    -45deg,
-    #FFE600,
-    #FFE600 12px,
-    #000000 12px,
-    #000000 24px
-  );
-}
-
 /* Halftone Screentone Dot Patterns */
 .bg-halftone-light {
   background-image: radial-gradient(rgba(0, 0, 0, 0.18) 1.5px, transparent 1.5px);
@@ -379,43 +260,6 @@
 .bg-halftone-dark {
   background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1.5px, transparent 1.5px);
   background-size: 8px 8px;
-}
-
-.bg-halftone-yellow {
-  background-image: radial-gradient(#000000 1.5px, transparent 1.5px);
-  background-size: 7px 7px;
-}
-
-/* Manga Speed Lines Accent */
-.bg-manga-lines {
-  background: repeating-linear-gradient(
-    -45deg,
-    transparent,
-    transparent 8px,
-    rgba(0, 0, 0, 0.05) 8px,
-    rgba(0, 0, 0, 0.05) 10px
-  );
-}
-
-.bg-manga-lines-dark {
-  background: repeating-linear-gradient(
-    -45deg,
-    transparent,
-    transparent 8px,
-    rgba(255, 255, 255, 0.05) 8px,
-    rgba(255, 255, 255, 0.05) 10px
-  );
-}
-
-/* Manga Caution / Hazard Striping */
-.bg-hazard-stripes {
-  background: repeating-linear-gradient(
-    -45deg,
-    #FFE600,
-    #FFE600 12px,
-    #000000 12px,
-    #000000 24px
-  );
 }
 
 /* Rotating Badge */
@@ -467,34 +311,6 @@
 .animate-marquee-right:hover {
   animation-play-state: paused;
 }
-
-/* Expanding Circle Behind Text Micro-Interaction */
-.circle-hover-parent {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-  transition: color 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
-}
-
-.circle-hover-parent::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 140%;
-  aspect-ratio: 1 / 1;
-  background-color: var(--circle-bg, #000000);
-  border-radius: 9999px;
-  transform: translate(-50%, -50%) scale(0);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: -1;
-  pointer-events: none;
-}
-
-.circle-hover-parent:hover::before {
-  transform: translate(-50%, -50%) scale(1);
-}
-
 /* Lenis smooth scrolling rules */
 html.lenis, html.lenis body {
   height: auto;
@@ -563,8 +379,7 @@ html.lenis, html.lenis body {
 
   .animate-marquee-left,
   .animate-marquee-right,
-  .spin-slow,
-  .animate-manga-glitch {
+  .spin-slow {
     animation: none !important;
   }
 }
