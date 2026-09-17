@@ -107,9 +107,14 @@ export default function About() {
       <div className="max-w-5xl mx-auto w-full">
         {/* Section Heading & Manga Eyebrow */}
         <div className="mb-14 md:mb-18 flex flex-col items-start">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#FFE600] text-black border-[3px] border-black shadow-[3px_3px_0px_#000000] rounded-lg text-xs font-mono font-black tracking-widest uppercase mb-3">
-            <Sparkles className="w-3.5 h-3.5 fill-black" />
-            <span>— 02 · CHARACTER PROFILE &amp; ORIGIN</span>
+          <div className="flex items-center justify-between w-full mb-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#FFE600] text-black border-[3px] border-black shadow-[3px_3px_0px_#000000] rounded-lg text-xs font-mono font-black tracking-widest uppercase">
+              <Sparkles className="w-3.5 h-3.5 fill-black" />
+              <span>— 02 · CHARACTER PROFILE &amp; ORIGIN</span>
+            </div>
+            <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 bg-[#FF2A55] text-white border-[2.5px] border-black shadow-[3px_3px_0px_#000000] rounded-lg text-xs font-mono font-black tracking-wider uppercase rotate-2 animate-pulse">
+              <span>💥 LEVEL UP!</span>
+            </div>
           </div>
 
           <h2

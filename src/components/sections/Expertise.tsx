@@ -182,9 +182,14 @@ export default function Expertise() {
       <div className="max-w-5xl mx-auto w-full">
         {/* Section Header */}
         <div className="mb-14 md:mb-18">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#00F0FF] text-black border-[3px] border-black shadow-[3px_3px_0px_#000000] rounded-lg text-xs font-mono font-black tracking-widest uppercase mb-3">
-            <Zap className="w-3.5 h-3.5 fill-black" />
-            <span>— 03 · TECHNICAL SKILLS &amp; ARSENAL</span>
+          <div className="flex items-center justify-between w-full mb-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#00F0FF] text-black border-[3px] border-black shadow-[3px_3px_0px_#000000] rounded-lg text-xs font-mono font-black tracking-widest uppercase">
+              <Zap className="w-3.5 h-3.5 fill-black" />
+              <span>— 03 · TECHNICAL SKILLS &amp; ARSENAL</span>
+            </div>
+            <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 bg-[#FFE600] text-black border-[2.5px] border-black shadow-[3px_3px_0px_#000000] rounded-lg text-xs font-mono font-black tracking-wider uppercase -rotate-2">
+              <span>⚡ ARSENAL UNLOCKED!</span>
+            </div>
           </div>
 
           <h2

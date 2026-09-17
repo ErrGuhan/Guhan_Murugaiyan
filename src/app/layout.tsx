@@ -10,6 +10,10 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import SmoothScroll from "@/components/layout/SmoothScroll";
 import CustomCursor from "@/components/layout/CustomCursor";
+import ChapterTracker from "@/components/layout/ChapterTracker";
+import SpeedLinesOverlay from "@/components/layout/SpeedLinesOverlay";
+import AchievementToast from "@/components/ui/AchievementToast";
+import BattleModeManager from "@/components/layout/BattleModeManager";
 
 const anton = Anton({
   variable: "--font-anton",
@@ -167,6 +171,18 @@ export default function RootLayout({
 
         {/* Custom magnetic cursor */}
         <CustomCursor />
+
+        {/* Speed lines motion overlay on fast scroll */}
+        <SpeedLinesOverlay />
+
+        {/* Vertical comic chapter HUD rail (01-06) */}
+        <ChapterTracker />
+
+        {/* Gamified Achievement Toast Banner */}
+        <AchievementToast />
+
+        {/* Konami Code & Battle Mode Manager */}
+        <BattleModeManager />
 
         {/* Smooth scroll wrapper */}
         <SmoothScroll>{children}</SmoothScroll>

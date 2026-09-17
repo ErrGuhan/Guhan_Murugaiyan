@@ -8,10 +8,13 @@ import {
   ChevronRight,
   Sparkles,
   Terminal,
+  RotateCw,
+  Activity,
 } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { REAL_PROJECTS } from "@/lib/project-data";
+import { playCardFlip, playHoverTick } from "@/lib/sound-effects";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -34,6 +37,7 @@ export default function Projects() {
   const gallerySectionRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
+  const [flippedCardIds, setFlippedCardIds] = useState<Record<string, boolean>>({});
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
@@ -41,6 +45,12 @@ export default function Projects() {
   const isDragging = useRef(false);
   const startX = useRef(0);
   const scrollStart = useRef(0);
+
+  const toggleFlip = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    playCardFlip();
+    setFlippedCardIds((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   const techMarquee = [
     "JAVA 21", "SPRING BOOT", "REACT 19", "NEXT.JS 16", "THREE.JS 3D",
@@ -250,7 +260,7 @@ export default function Projects() {
         <div className="relative z-10 max-w-5xl mx-auto px-6 py-10 sm:py-14 flex flex-col items-center text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-white text-black border-[3px] border-black shadow-[3px_3px_0px_#000000] rounded-lg text-xs font-mono font-black tracking-widest uppercase mb-3 -rotate-1">
             <Sparkles className="w-3.5 h-3.5 text-[#FFE600] fill-[#FFE600]" />
-            <span>ARC CASE STUDIES // FEATURED WORK</span>
+            <span>{"ARC CASE STUDIES // FEATURED WORK"}</span>
           </div>
 
           <h2
@@ -297,9 +307,15 @@ export default function Projects() {
             {/* Header & Gallery Navigation Controls */}
             <div className="max-w-7xl mx-auto w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 pb-3 sm:pb-4 border-b-[3px] border-black flex-shrink-0">
               <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg border-[2.5px] border-black bg-[#FFE600] text-black shadow-[2.5px_2.5px_0px_#000000] text-[11px] font-mono tracking-widest uppercase mb-1 font-black">
-                  <Sparkles className="w-3.5 h-3.5 fill-black" />
-                  {`// 05 — MISSION ARC (0${activeIndex + 1} / 0${totalProjects})`}
+                <div className="flex flex-wrap items-center gap-2 mb-1">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg border-[2.5px] border-black bg-[#FFE600] text-black shadow-[2.5px_2.5px_0px_#000000] text-[11px] font-mono tracking-widest uppercase font-black">
+                    <Sparkles className="w-3.5 h-3.5 fill-black" />
+                    {`// 05 — MISSION ARC (0${activeIndex + 1} / 0${totalProjects})`}
+                  </div>
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border-[2px] border-black bg-[#13131A] text-[#00F0FF] shadow-[2px_2px_0px_#000000] text-[10px] font-mono font-black tracking-wider uppercase">
+                    <Activity className="w-3 h-3 text-[#00E676] animate-pulse" />
+                    <span>5 ARCS SHIPPED · 100% VERIFIED BUILDS</span>
+                  </div>
                 </div>
                 <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tight text-white -webkit-text-stroke-[1.5px_#000] drop-shadow-[3px_3px_0px_#000000]">
                   SELECTED CASE STUDIES
@@ -312,7 +328,10 @@ export default function Projects() {
                   {REAL_PROJECTS.map((p, i) => (
                     <button
                       key={`dot-${p.id}`}
-                      onClick={() => scrollToIndex(i)}
+                      onClick={() => {
+                        playHoverTick();
+                        scrollToIndex(i);
+                      }}
                       aria-label={`Go to project ${i + 1}`}
                       className={`h-3 rounded-md border-[2px] border-black transition-all ${
                         activeIndex === i
@@ -326,7 +345,10 @@ export default function Projects() {
                 {/* Left / Right arrows with 3px black borders & 3px shadows */}
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={() => scrollToIndex(activeIndex - 1)}
+                    onClick={() => {
+                      playHoverTick();
+                      scrollToIndex(activeIndex - 1);
+                    }}
                     disabled={activeIndex === 0}
                     aria-label="Previous project"
                     className="comic-btn w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white text-black border-[2.5px] border-black shadow-[3px_3px_0px_#000000] disabled:opacity-30 disabled:pointer-events-none hover:bg-[#FFE600] flex items-center justify-center cursor-pointer"
@@ -334,7 +356,10 @@ export default function Projects() {
                     <ChevronLeft className="w-5 h-5 stroke-[3]" />
                   </button>
                   <button
-                    onClick={() => scrollToIndex(activeIndex + 1)}
+                    onClick={() => {
+                      playHoverTick();
+                      scrollToIndex(activeIndex + 1);
+                    }}
                     disabled={activeIndex === totalProjects - 1}
                     aria-label="Next project"
                     className="comic-btn w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white text-black border-[2.5px] border-black shadow-[3px_3px_0px_#000000] disabled:opacity-30 disabled:pointer-events-none hover:bg-[#FFE600] flex items-center justify-center cursor-pointer"
@@ -345,8 +370,11 @@ export default function Projects() {
               </div>
             </div>
 
-            {/* Cards Track Container */}
-            <div className={isStackedMode ? "w-full my-6" : "relative w-full overflow-hidden flex-1 flex items-center my-1"}>
+            {/* Cards Track Container with data-cursor="drag" */}
+            <div
+              data-cursor="drag"
+              className={isStackedMode ? "w-full my-6" : "relative w-full overflow-hidden flex-1 flex items-center my-1"}
+            >
               <div
                 ref={trackRef}
                 onMouseDown={handleMouseDown}
@@ -368,133 +396,225 @@ export default function Projects() {
                       }
                 }
               >
-                {REAL_PROJECTS.map((project, idx) => (
-                  <div
-                    key={project.id}
-                    className="project-card comic-card relative rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000] hover:shadow-[7px_7px_0px_#000000] p-4 sm:p-5 lg:p-6 flex flex-col justify-between group select-text flex-shrink-0"
-                    style={
-                      isStackedMode
-                        ? { width: "100%", maxWidth: "560px" }
-                        : {
-                            width: "clamp(320px, 64vw, 760px)",
-                            maxHeight: "min(620px, 74vh)",
-                          }
-                    }
-                  >
-                    {/* Top Case Bar */}
-                    <div className="flex items-center justify-between pb-3 border-b-[2px] border-black flex-shrink-0">
-                      <div className="flex items-center gap-2.5">
-                        <span className="px-2 py-0.5 rounded-md bg-[#FFE600] text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] font-mono font-black text-xs">
-                          ARC {project.num}
-                        </span>
-                        <span className="text-xs font-mono tracking-wider text-neutral-300 uppercase font-black">
-                          / {project.category}
-                        </span>
-                        <span className="hidden sm:inline-block text-[11px] font-mono text-[#FFE600] font-bold">
-                          [0{idx + 1} / 0{totalProjects}]
-                        </span>
-                      </div>
-
-                      {/* Comic Status Tag */}
-                      <span className="px-2.5 py-0.5 rounded-md bg-[#00E676] text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] text-[10px] font-mono font-black tracking-wider uppercase">
-                        RELEASED ⚡
-                      </span>
-                    </div>
-
-                    {/* Project Preview Image with 3px border & 3px shadow */}
+                {REAL_PROJECTS.map((project, idx) => {
+                  const isFlipped = !!flippedCardIds[project.id];
+                  return (
                     <div
-                      className="relative w-full my-2.5 sm:my-3 rounded-xl overflow-hidden border-[3px] border-black shadow-[3px_3px_0px_#000000] bg-[#161616] group/frame cursor-pointer flex-shrink-0"
-                      style={{ aspectRatio: "21/8", maxHeight: "180px" }}
-                      data-cursor="view"
+                      key={project.id}
+                      className="project-card flex-shrink-0 [perspective:1200px]"
+                      style={
+                        isStackedMode
+                          ? { width: "100%", maxWidth: "580px" }
+                          : {
+                              width: "clamp(340px, 66vw, 780px)",
+                              maxHeight: "min(640px, 76vh)",
+                            }
+                      }
                     >
-                      <Image
-                        src={project.image}
-                        alt={project.imageAlt}
-                        fill
-                        placeholder="blur"
-                        blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMSAxMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzEzMTMxQSIvPjwvc3ZnPg=="
-                        className="object-cover object-center opacity-85 contrast-125 transition-transform duration-500 ease-out group-hover/frame:scale-[1.03]"
-                        sizes="(max-width: 1024px) 100vw, 760px"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3 sm:p-4">
-                        <span className="text-[10px] font-mono text-[#FFE600] tracking-widest uppercase mb-0.5 font-black">
-                          ARCHITECT: GUHAN MURUGAIYAN
-                        </span>
-                        <h4 className="font-syne text-lg sm:text-xl lg:text-2xl font-black uppercase text-white drop-shadow-[2px_2px_0px_#000000]">
-                          {project.title}
-                        </h4>
-                      </div>
-                    </div>
+                      <div
+                        className={`relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] ${
+                          isFlipped ? "[transform:rotateY(180deg)]" : ""
+                        }`}
+                      >
+                        {/* FRONT FACE: Visual Preview & Live Launch */}
+                        <div className="relative rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000] hover:shadow-[7px_7px_0px_#000000] p-4 sm:p-5 lg:p-6 flex flex-col justify-between group select-text h-full [backface-visibility:hidden]">
+                          {/* Top Case Bar */}
+                          <div className="flex items-center justify-between pb-3 border-b-[2px] border-black flex-shrink-0 gap-2">
+                            <div className="flex items-center gap-2">
+                              <span className="px-2 py-0.5 rounded-md bg-[#FFE600] text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] font-mono font-black text-xs">
+                                ARC {project.num}
+                              </span>
+                              <span className="text-xs font-mono tracking-wider text-neutral-300 uppercase font-black">
+                                / {project.category}
+                              </span>
+                              <span className="hidden sm:inline-block text-[11px] font-mono text-[#FFE600] font-bold">
+                                [0{idx + 1} / 0{totalProjects}]
+                              </span>
+                            </div>
 
-                    {/* Content & Code Grid */}
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 my-1 sm:my-2 items-start flex-1 min-h-0">
-                      <div className="lg:col-span-6 space-y-2">
-                        <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed line-clamp-2 sm:line-clamp-3">
-                          {project.description}
-                        </p>
-                        <div className="flex flex-wrap gap-1.5 pt-1">
-                          {project.tags.map((tag) => (
-                            <span
-                              key={tag}
-                              className="text-[10px] sm:text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-md bg-[#1C1C26] border-[1.5px] border-black shadow-[1.5px_1.5px_0px_#000000] text-white"
-                            >
-                              {tag}
+                            <div className="flex items-center gap-2">
+                              <button
+                                type="button"
+                                onClick={(e) => toggleFlip(project.id, e)}
+                                data-cursor="pointer"
+                                className="comic-btn px-2.5 py-1 rounded-md bg-[#00F0FF] text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] text-[10px] font-mono font-black tracking-wider uppercase flex items-center gap-1 hover:bg-[#FFE600] cursor-pointer"
+                                title="Flip to inspect code architecture"
+                              >
+                                <RotateCw className="w-3 h-3 stroke-[2.5]" />
+                                <span>CODE</span>
+                              </button>
+                              <span className="px-2 py-0.5 rounded-md bg-[#00E676] text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] text-[10px] font-mono font-black tracking-wider uppercase">
+                                RELEASED ⚡
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Project Preview Image */}
+                          <div
+                            className="relative w-full my-2.5 sm:my-3 rounded-xl overflow-hidden border-[3px] border-black shadow-[3px_3px_0px_#000000] bg-[#161616] group/frame cursor-pointer flex-shrink-0"
+                            style={{ aspectRatio: "21/8", maxHeight: "180px" }}
+                            data-cursor="view"
+                          >
+                            <Image
+                              src={project.image}
+                              alt={project.imageAlt}
+                              fill
+                              placeholder="blur"
+                              blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMSAxMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzEzMTMxQSIvPjwvc3ZnPg=="
+                              className="object-cover object-center opacity-85 contrast-125 transition-transform duration-500 ease-out group-hover/frame:scale-[1.03]"
+                              sizes="(max-width: 1024px) 100vw, 760px"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3 sm:p-4">
+                              <span className="text-[10px] font-mono text-[#FFE600] tracking-widest uppercase mb-0.5 font-black">
+                                ARCHITECT: GUHAN MURUGAIYAN
+                              </span>
+                              <h4 className="font-syne text-lg sm:text-xl lg:text-2xl font-black uppercase text-white drop-shadow-[2px_2px_0px_#000000]">
+                                {project.title}
+                              </h4>
+                            </div>
+                          </div>
+
+                          {/* Content Grid */}
+                          <div className="my-1 sm:my-2 flex-1 min-h-0 space-y-2">
+                            <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed line-clamp-3">
+                              {project.description}
+                            </p>
+                            <div className="flex flex-wrap gap-1.5 pt-1">
+                              {project.tags.map((tag) => (
+                                <span
+                                  key={tag}
+                                  className="text-[10px] sm:text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-md bg-[#1C1C26] border-[1.5px] border-black shadow-[1.5px_1.5px_0px_#000000] text-white"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Action Links Footer */}
+                          <div className="pt-2.5 sm:pt-3 border-t-[2px] border-black flex flex-wrap items-center justify-between gap-2.5 mt-auto flex-shrink-0">
+                            <span className="text-[11px] font-mono font-bold text-neutral-400">
+                              VERIFIED REPO SOURCE
                             </span>
-                          ))}
+                            <div className="flex items-center gap-2">
+                              <a
+                                href={project.githubUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="comic-btn px-3 py-1.5 rounded-lg bg-white text-black text-[11px] font-mono font-black tracking-wider uppercase flex items-center gap-1.5 hover:bg-[#00F0FF]"
+                              >
+                                <GithubIcon className="w-3.5 h-3.5" /> REPO
+                              </a>
+                              <a
+                                href={project.liveUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="comic-btn px-3.5 py-1.5 rounded-lg bg-[#FFE600] text-black text-[11px] font-mono font-black tracking-wider uppercase hover:bg-[#00E676] flex items-center gap-1.5"
+                              >
+                                LIVE DEMO <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* BACK FACE: Architecture Terminal & Code Blueprint */}
+                        <div className="absolute inset-0 rounded-2xl bg-[#08080E] border-[3px] border-black shadow-[4px_4px_0px_#000000] hover:shadow-[7px_7px_0px_#000000] p-4 sm:p-5 lg:p-6 flex flex-col justify-between select-text [transform:rotateY(180deg)] [backface-visibility:hidden]">
+                          {/* Terminal Header */}
+                          <div className="flex items-center justify-between pb-2.5 border-b-[2px] border-black flex-shrink-0 gap-2 bg-[#13131A] -mx-4 -mt-4 sm:-mx-5 sm:-mt-5 lg:-mx-6 lg:-mt-6 p-3 rounded-t-2xl">
+                            <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-1.5">
+                                <div className="w-2.5 h-2.5 rounded-full bg-[#FF2A55] border border-black" />
+                                <div className="w-2.5 h-2.5 rounded-full bg-[#FFE600] border border-black" />
+                                <div className="w-2.5 h-2.5 rounded-full bg-[#00E676] border border-black" />
+                              </div>
+                              <span className="font-mono text-xs font-black text-[#FFE600] tracking-wider uppercase">
+                                {`ARC ${project.num} // ARCHITECTURE`}
+                              </span>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                              <div className="hidden sm:flex items-center gap-1 text-[10px] font-mono text-neutral-400 font-bold">
+                                <Terminal className="w-3 h-3 text-[#00F0FF]" />
+                                <span>{project.filename}</span>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={(e) => toggleFlip(project.id, e)}
+                                data-cursor="pointer"
+                                className="comic-btn px-2.5 py-1 rounded-md bg-[#FFE600] text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] text-[10px] font-mono font-black tracking-wider uppercase flex items-center gap-1 hover:bg-[#00F0FF] cursor-pointer"
+                                title="Flip back to preview"
+                              >
+                                <RotateCw className="w-3 h-3 stroke-[2.5]" />
+                                <span>PREVIEW</span>
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Code Terminal View */}
+                          <div className="my-3 flex-1 min-h-0 flex flex-col justify-between">
+                            <pre className="p-3 sm:p-4 text-[10px] sm:text-[11px] leading-relaxed text-neutral-200 overflow-x-auto overflow-y-auto max-h-[220px] sm:max-h-[260px] bg-black/90 rounded-xl border-[2px] border-black font-mono selection:bg-[#FFE600] selection:text-black">
+                              <code>{project.codeSnippet}</code>
+                            </pre>
+
+                            {/* Architecture Spec Grid */}
+                            <div className="grid grid-cols-3 gap-2 mt-3 font-mono text-[10px]">
+                              <div className="p-2 rounded-lg bg-[#13131A] border-[1.5px] border-black">
+                                <span className="text-neutral-500 block uppercase font-bold">ARC YEAR</span>
+                                <span className="text-[#FFE600] font-black">{project.year}</span>
+                              </div>
+                              <div className="p-2 rounded-lg bg-[#13131A] border-[1.5px] border-black">
+                                <span className="text-neutral-500 block uppercase font-bold">CORE RUNTIME</span>
+                                <span className="text-[#00F0FF] font-black truncate block">{project.tags[0] ?? "TypeScript"}</span>
+                              </div>
+                              <div className="p-2 rounded-lg bg-[#13131A] border-[1.5px] border-black">
+                                <span className="text-neutral-500 block uppercase font-bold">STATUS</span>
+                                <span className="text-[#00E676] font-black">100% VERIFIED</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Terminal Footer Actions */}
+                          <div className="pt-2.5 sm:pt-3 border-t-[2px] border-black flex flex-wrap items-center justify-between gap-2 mt-auto flex-shrink-0">
+                            <span className="text-[10px] font-mono font-bold text-neutral-400">
+                              {"// VERIFIED COMPONENT SCHEMA"}
+                            </span>
+                            <div className="flex items-center gap-2">
+                              <a
+                                href={project.githubUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="comic-btn px-3 py-1.5 rounded-lg bg-white text-black text-[11px] font-mono font-black tracking-wider uppercase flex items-center gap-1.5 hover:bg-[#00F0FF]"
+                              >
+                                <GithubIcon className="w-3.5 h-3.5" /> REPO SOURCE
+                              </a>
+                              <a
+                                href={project.liveUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="comic-btn px-3.5 py-1.5 rounded-lg bg-[#FFE600] text-black text-[11px] font-mono font-black tracking-wider uppercase hover:bg-[#00E676] flex items-center gap-1.5"
+                              >
+                                LAUNCH <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
+                              </a>
+                            </div>
+                          </div>
                         </div>
                       </div>
-
-                      {/* Comic Terminal Code Box */}
-                      <div className="lg:col-span-6 rounded-xl bg-[#08080C] border-[2.5px] border-black shadow-[3px_3px_0px_#000000] overflow-hidden font-mono text-xs">
-                        <div className="px-3 py-1.5 border-b-[2px] border-black flex items-center justify-between bg-[#13131A]">
-                          <div className="flex items-center gap-1.5">
-                            <div className="w-2.5 h-2.5 rounded-full bg-[#FF2A55] border border-black" />
-                            <div className="w-2.5 h-2.5 rounded-full bg-[#FFE600] border border-black" />
-                            <div className="w-2.5 h-2.5 rounded-full bg-[#00E676] border border-black" />
-                          </div>
-                          <div className="flex items-center gap-1.5 text-[10px] text-[#FFE600] font-black">
-                            <Terminal className="w-3 h-3 stroke-[2.5]" />
-                            <span>{project.filename}</span>
-                          </div>
-                        </div>
-                        <pre className="p-2 sm:p-2.5 text-[10px] sm:text-[11px] leading-relaxed text-neutral-300 overflow-x-auto max-h-20 sm:max-h-24 selection:bg-[#FFE600] selection:text-black">
-                          <code>{project.codeSnippet}</code>
-                        </pre>
-                      </div>
                     </div>
-
-                    {/* Action Links Footer */}
-                    <div className="pt-2.5 sm:pt-3 border-t-[2px] border-black flex flex-wrap items-center justify-between gap-2.5 mt-auto flex-shrink-0">
-                      <span className="text-[11px] font-mono font-bold text-neutral-400">
-                        VERIFIED REPO SOURCE
-                      </span>
-                      <div className="flex items-center gap-2">
-                        <a
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="comic-btn px-3 py-1.5 rounded-lg bg-white text-black text-[11px] font-mono font-black tracking-wider uppercase flex items-center gap-1.5 hover:bg-[#00F0FF]"
-                        >
-                          <GithubIcon className="w-3.5 h-3.5" /> REPO
-                        </a>
-                        <a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="comic-btn px-3.5 py-1.5 rounded-lg bg-[#FFE600] text-black text-[11px] font-mono font-black tracking-wider uppercase hover:bg-[#00E676] flex items-center gap-1.5"
-                        >
-                          LIVE DEMO <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
-            {/* Bottom Scroll Prompt */}
-            <div className="flex-shrink-0 flex items-center justify-center gap-3 text-[11px] font-mono font-bold text-neutral-400 tracking-widest uppercase select-none">
-              <span>{isStackedMode ? "↓ SCROLL DOWN FOR NEXT MISSION ARC ↓" : "← SCROLL VERTICALLY TO NAVIGATE CASE STUDIES →"}</span>
+            {/* Bottom Drag Notch & Navigation Prompt */}
+            <div className="flex-shrink-0 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-[11px] font-mono font-bold text-neutral-400 tracking-widest uppercase select-none mt-2">
+              <span className="inline-flex items-center gap-2 px-3 py-1 bg-[#13131A] border-[2px] border-black shadow-[2px_2px_0px_#000000] rounded-md text-white">
+                <span className="text-[#FFE600] animate-pulse">◀◀</span>
+                {isStackedMode ? "SWIPE OR SCROLL MISSION MATRIX" : "DRAG OR SCROLL ARC MATRIX"}
+                <span className="text-[#00F0FF] animate-pulse">▶▶</span>
+              </span>
+              <span className="text-[10px] text-neutral-500 font-mono">
+                {"// TIP: CLICK [CODE] TO FLIP CARDS"}
+              </span>
             </div>
           </div>
         </div>
@@ -502,3 +622,4 @@ export default function Projects() {
     </section>
   );
 }
+

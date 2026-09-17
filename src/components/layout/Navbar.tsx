@@ -11,26 +11,62 @@ import {
   Zap,
   Award,
   Mail,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
+import {
+  isSoundEnabled,
+  toggleSound,
+  playHoverTick,
+  playSuccessChime,
+} from "@/lib/sound-effects";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDarkSection, setIsDarkSection] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [audioEnabled, setAudioEnabled] = useState(false);
+
   const hamburgerButtonRef = useRef<HTMLButtonElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const dialTapCount = useRef(0);
+  const dialTapTimer = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    const handleSoundChange = (e: Event) => {
+      const detail = (e as CustomEvent<{ enabled: boolean }>).detail;
+      if (detail) setAudioEnabled(detail.enabled);
+    };
+    window.addEventListener("sound-state-changed", handleSoundChange);
+
+    const initTimer = setTimeout(() => {
+      setAudioEnabled(isSoundEnabled());
+    }, 0);
+
     const handleScroll = () => {
       const scrollY = window.scrollY;
       setIsScrolled(scrollY > 20);
       const threshold = window.innerHeight * 0.85;
       setIsDarkSection(scrollY > threshold);
+
+      const totalHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const progress =
+        totalHeight > 0
+          ? Math.min(100, Math.max(0, Math.round((scrollY / totalHeight) * 100)))
+          : 0;
+      setScrollProgress(progress);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    return () => {
+      clearTimeout(initTimer);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("sound-state-changed", handleSoundChange);
+    };
   }, []);
 
   // Lock body scroll, focus trap, and keyboard navigation when mobile menu is open
@@ -190,6 +226,7 @@ export default function Navbar() {
             <a
               key={link.label}
               href={link.href}
+              onMouseEnter={playHoverTick}
               className={`comic-btn px-3.5 py-1.5 rounded-lg text-xs font-mono font-black tracking-wider uppercase transition-all flex items-center gap-1.5 ${
                 isDarkSection
                   ? "bg-[#1A1A24] text-white hover:bg-[#FFE600] hover:text-black"
@@ -201,12 +238,27 @@ export default function Navbar() {
             </a>
           ))}
 
-          {/* Resume CTA */}
+          {/* Resume CTA with Achievement Trigger */}
           <a
             href="/resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
             title="Download Guhan's Resume (PDF)"
+            onClick={() => {
+              playSuccessChime();
+              if (typeof window !== "undefined") {
+                window.dispatchEvent(
+                  new CustomEvent("achievement-unlocked", {
+                    detail: {
+                      title: "ACHIEVEMENT UNLOCKED!",
+                      description: "RESUME DOWNLOADED [+500 XP]",
+                      badge: "⚡ MISSION ASSET",
+                    },
+                  })
+                );
+              }
+            }}
+            onMouseEnter={playHoverTick}
             className="comic-btn ml-1 px-3.5 py-1.5 rounded-lg bg-[#FFE600] text-black font-mono font-black text-xs tracking-wider uppercase flex items-center gap-1.5 hover:bg-[#00F0FF]"
           >
             <Download className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -214,10 +266,53 @@ export default function Navbar() {
           </a>
         </nav>
 
-        {/* Right: Manga Rotating Dial & Mobile Hamburger */}
-        <div className="flex items-center gap-3 sm:gap-5">
-          {/* Rotating Circular Manga Badge */}
-          <div className="hidden lg:block">
+        {/* Right: HUD PWR meter, Audio Toggle, Rotating Dial & Mobile Hamburger */}
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          {/* Live Scroll PWR Gauge */}
+          <div
+            title={`Mission Arc Scroll Progress: ${scrollProgress}%`}
+            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black text-[#FFE600] border-[2px] border-black shadow-[2px_2px_0px_#000000] text-[10px] font-mono font-black select-none"
+          >
+            <Zap className="w-3 h-3 fill-[#FFE600]" />
+            <span>PWR: {scrollProgress}%</span>
+          </div>
+
+          {/* Procedural Audio FX Toggle Button */}
+          <button
+            onClick={() => {
+              const next = toggleSound();
+              setAudioEnabled(next);
+            }}
+            title={audioEnabled ? "Sound FX: ON (Click to Mute)" : "Sound FX: MUTED (Click to Enable Arcade Sounds)"}
+            aria-label={audioEnabled ? "Mute audio sound effects" : "Enable arcade audio sound effects"}
+            className="comic-btn px-2.5 py-1.5 rounded-lg border-[2px] border-black bg-white text-black hover:bg-[#FFE600] flex items-center gap-1.5 text-xs font-mono font-black cursor-pointer"
+          >
+            {audioEnabled ? (
+              <Volume2 className="w-3.5 h-3.5 stroke-[2.5] text-black" />
+            ) : (
+              <VolumeX className="w-3.5 h-3.5 stroke-[2.5] text-neutral-500" />
+            )}
+            <span className="hidden lg:inline text-[9px] font-black">
+              {audioEnabled ? "AUDIO ON" : "MUTE"}
+            </span>
+          </button>
+
+          {/* Rotating Circular Manga Badge with 3-Tap Easter Egg */}
+          <div
+            className="hidden lg:block"
+            onClick={() => {
+              dialTapCount.current += 1;
+              if (dialTapTimer.current) clearTimeout(dialTapTimer.current);
+              if (dialTapCount.current >= 3) {
+                dialTapCount.current = 0;
+                window.dispatchEvent(new CustomEvent("trigger-battle-mode"));
+              } else {
+                dialTapTimer.current = setTimeout(() => {
+                  dialTapCount.current = 0;
+                }, 1000);
+              }
+            }}
+          >
             <MagneticButton href="#contact" strength={0.25}>
               <div className="relative w-14 h-14 flex items-center justify-center group cursor-pointer">
                 <svg

@@ -104,9 +104,14 @@ export default function Contact() {
       <div className="max-w-5xl mx-auto w-full">
         {/* Section Header */}
         <div className="mb-14 md:mb-18">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-lg border-[3px] border-black bg-[#FFE600] text-black shadow-[3px_3px_0px_#000000] text-xs font-mono tracking-widest uppercase mb-4 font-black">
-            <Sparkles className="w-3.5 h-3.5 fill-black" />
-            <span>{"COMMUNICATION HUB // DISPATCH TERMINAL"}</span>
+          <div className="flex items-center justify-between w-full mb-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-lg border-[3px] border-black bg-[#FFE600] text-black shadow-[3px_3px_0px_#000000] text-xs font-mono tracking-widest uppercase font-black">
+              <Sparkles className="w-3.5 h-3.5 fill-black" />
+              <span>{"COMMUNICATION HUB // DISPATCH TERMINAL"}</span>
+            </div>
+            <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 bg-[#00E676] text-black border-[2.5px] border-black shadow-[3px_3px_0px_#000000] rounded-lg text-xs font-mono font-black tracking-wider uppercase rotate-2 animate-pulse">
+              <span>📡 OPEN FREQUENCY!</span>
+            </div>
           </div>
 
           <h2 className="font-display text-[clamp(2.5rem,7.5vw,4.8rem)] font-black tracking-tight uppercase leading-[1.05] max-w-3xl text-white -webkit-text-stroke-[2px_#000] drop-shadow-[5px_5px_0px_#000000]">

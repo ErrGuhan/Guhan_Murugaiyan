@@ -586,3 +586,31 @@ textarea:focus-visible,
   box-shadow: 0 0 0 4px #000000 !important;
 }
 
+/* Battle Mode Overdrive Styles */
+html.battle-mode {
+  --comic-yellow: #FF0055 !important;
+  --comic-cyan: #FF2A55 !important;
+  --gold: #FF0055 !important;
+  filter: contrast(1.15) saturate(1.3);
+}
+
+html.battle-mode body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 45;
+  box-shadow: inset 0 0 80px rgba(255, 42, 85, 0.4);
+  animation: battleVignettePulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes battleVignettePulse {
+  0% {
+    box-shadow: inset 0 0 50px rgba(255, 42, 85, 0.25);
+  }
+  100% {
+    box-shadow: inset 0 0 100px rgba(255, 42, 85, 0.55);
+  }
+}
+
+
