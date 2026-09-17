@@ -211,7 +211,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       if (title) {
         tl.fromTo(
           title,
-          { scale: 1.25, opacity: 0, y: 15 },
+          { scale: 1.15, opacity: 0, y: 15 },
           { scale: 1, opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
           0.1
         );
@@ -352,16 +352,16 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       >
         <div className="p-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-[#FFE600] text-black border-[3px] border-black shadow-[4px_4px_0px_#000000] text-xs font-mono font-black tracking-widest uppercase mb-4 -rotate-1">
           <Sparkles className="w-4 h-4 fill-black" />
-          <span>PORTFOLIO &apos;26</span>
+          <span>GUHAN MURUGAIYAN</span>
         </div>
 
         <h1
-          className="p-title font-display font-black uppercase text-[clamp(2.5rem,8.5vw,6.5rem)] text-white tracking-tight leading-[0.92] drop-shadow-[6px_6px_0px_#000000]"
+          className="p-title font-display font-black uppercase text-[clamp(2.2rem,7.2vw,5.4rem)] text-white tracking-tight leading-[0.94] drop-shadow-[6px_6px_0px_#000000]"
           style={{
             WebkitTextStroke: "2.5px #000000",
           }}
         >
-          GUHAN <span className="text-[#FFE600]">MURUGAIYAN</span>
+          WELCOME TO <span className="text-[#FFE600]">MY PORTFOLIO</span>
         </h1>
 
         <div className="p-sub inline-flex items-center gap-2 font-mono text-xs sm:text-sm text-neutral-300 font-bold tracking-widest mt-4 uppercase">
