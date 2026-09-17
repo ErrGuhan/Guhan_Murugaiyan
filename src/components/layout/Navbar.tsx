@@ -221,20 +221,20 @@ export default function Navbar() {
         </div>
 
         {/* Center: Comic Capsule Nav Links */}
-        <nav className="hidden md:flex items-center gap-2 lg:gap-3 bg-black/5 dark:bg-white/5 p-1.5 rounded-xl border-[3px] border-black shadow-[4px_4px_0px_#000000] backdrop-blur-md">
+        <nav className="hidden md:flex items-center gap-1.5 lg:gap-2 bg-black/5 dark:bg-white/5 p-1.5 rounded-xl border-[3px] border-black shadow-[4px_4px_0px_#000000] backdrop-blur-md">
           {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
               onMouseEnter={playHoverTick}
-              className={`comic-btn px-3.5 py-1.5 rounded-lg text-xs font-mono font-black tracking-wider uppercase transition-all flex items-center gap-1.5 ${
+              className={`comic-btn px-3 py-1.5 rounded-lg text-xs font-mono font-black tracking-wider uppercase transition-all flex items-center gap-1 ${
                 isDarkSection
                   ? "bg-[#1A1A24] text-white hover:bg-[#FFE600] hover:text-black"
                   : "bg-[#FFFDF7] text-black hover:bg-[#FFE600] hover:text-black"
               }`}
             >
               <span>{link.label}</span>
-              <span className="text-[9px] opacity-70 font-semibold">{link.tag}</span>
+              <span className="hidden xl:inline text-[9px] opacity-70 font-semibold">{link.tag}</span>
             </a>
           ))}
 
@@ -250,16 +250,16 @@ export default function Navbar() {
                 window.dispatchEvent(
                   new CustomEvent("achievement-unlocked", {
                     detail: {
-                      title: "ACHIEVEMENT UNLOCKED!",
-                      description: "RESUME DOWNLOADED [+500 XP]",
-                      badge: "⚡ MISSION ASSET",
+                      title: "INTEL ACQUIRED",
+                      desc: "Guhan's Dossier (Resume) downloaded to your local drive.",
+                      xp: "+500 XP",
                     },
                   })
                 );
               }
             }}
             onMouseEnter={playHoverTick}
-            className="comic-btn ml-1 px-3.5 py-1.5 rounded-lg bg-[#FFE600] text-black font-mono font-black text-xs tracking-wider uppercase flex items-center gap-1.5 hover:bg-[#00F0FF]"
+            className="comic-btn ml-0.5 px-3 py-1.5 rounded-lg bg-[#FFE600] text-black font-mono font-black text-xs tracking-wider uppercase flex items-center gap-1 hover:bg-[#00F0FF]"
           >
             <Download className="w-3.5 h-3.5 stroke-[2.5]" />
             <span>RESUME</span>
@@ -267,11 +267,11 @@ export default function Navbar() {
         </nav>
 
         {/* Right: HUD PWR meter, Audio Toggle, Rotating Dial & Mobile Hamburger */}
-        <div className="flex items-center gap-2.5 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-2.5">
           {/* Live Scroll PWR Gauge */}
           <div
             title={`Mission Arc Scroll Progress: ${scrollProgress}%`}
-            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black text-[#FFE600] border-[2px] border-black shadow-[2px_2px_0px_#000000] text-[10px] font-mono font-black select-none"
+            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-black text-[#FFE600] border-[2px] border-black shadow-[2px_2px_0px_#000000] text-[10px] font-mono font-black select-none"
           >
             <Zap className="w-3 h-3 fill-[#FFE600]" />
             <span>PWR: {scrollProgress}%</span>
@@ -285,21 +285,21 @@ export default function Navbar() {
             }}
             title={audioEnabled ? "Sound FX: ON (Click to Mute)" : "Sound FX: MUTED (Click to Enable Arcade Sounds)"}
             aria-label={audioEnabled ? "Mute audio sound effects" : "Enable arcade audio sound effects"}
-            className="comic-btn px-2.5 py-1.5 rounded-lg border-[2px] border-black bg-white text-black hover:bg-[#FFE600] flex items-center gap-1.5 text-xs font-mono font-black cursor-pointer"
+            className="comic-btn px-2.5 py-1.5 rounded-lg border-[2px] border-black bg-white text-black hover:bg-[#FFE600] flex items-center gap-1.5 text-xs font-mono font-black cursor-pointer shadow-[2px_2px_0px_#000000]"
           >
             {audioEnabled ? (
               <Volume2 className="w-3.5 h-3.5 stroke-[2.5] text-black" />
             ) : (
               <VolumeX className="w-3.5 h-3.5 stroke-[2.5] text-neutral-500" />
             )}
-            <span className="hidden lg:inline text-[9px] font-black">
+            <span className="hidden sm:inline text-[9px] font-black">
               {audioEnabled ? "AUDIO ON" : "MUTE"}
             </span>
           </button>
 
-          {/* Rotating Circular Manga Badge with 3-Tap Easter Egg */}
+          {/* Rotating Circular Manga Badge with 3-Tap Easter Egg (shown only on 2xl screens to avoid clutter) */}
           <div
-            className="hidden lg:block"
+            className="hidden 2xl:block"
             onClick={() => {
               dialTapCount.current += 1;
               if (dialTapTimer.current) clearTimeout(dialTapTimer.current);

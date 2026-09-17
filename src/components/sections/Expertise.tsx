@@ -177,7 +177,7 @@ export default function Expertise() {
     <section
       id="expertise"
       ref={containerRef}
-      className="relative min-h-screen py-24 md:py-36 px-6 md:px-12 bg-[#0B0B0F] text-white border-t-[3px] border-black overflow-hidden bg-halftone-dark"
+      className="relative min-h-screen py-24 md:py-36 px-6 md:px-12 bg-[#0B0B0F] text-white border-t-[3px] border-black overflow-hidden bg-halftone-dark scroll-mt-20"
     >
       <div className="max-w-5xl mx-auto w-full">
         {/* Section Header */}

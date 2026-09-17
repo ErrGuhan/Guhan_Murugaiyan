@@ -102,7 +102,7 @@ export default function About() {
     <section
       id="about"
       ref={containerRef}
-      className="relative min-h-screen py-24 md:py-36 px-6 md:px-12 bg-[#0B0B0F] text-white overflow-hidden border-t-[3px] border-black bg-halftone-dark"
+      className="relative min-h-screen py-24 md:py-36 px-6 md:px-12 bg-[#0B0B0F] text-white overflow-hidden border-t-[3px] border-black bg-halftone-dark scroll-mt-20"
     >
       <div className="max-w-5xl mx-auto w-full">
         {/* Section Heading & Manga Eyebrow */}

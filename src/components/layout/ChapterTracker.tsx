@@ -45,7 +45,7 @@ export default function ChapterTracker() {
   return (
     <aside
       aria-label="Chapter Progress Tracker"
-      className="hidden xl:flex fixed right-5 top-1/2 -translate-y-1/2 z-40 flex-col items-end gap-2.5 select-none"
+      className="hidden 2xl:flex fixed right-4 top-1/2 -translate-y-1/2 z-40 flex-col items-end gap-2 select-none"
     >
       <div className="text-[9px] font-mono font-black text-neutral-400 tracking-widest uppercase mb-1 pr-1 rotate-90 origin-bottom-right">
         {"// MISSION RADAR"}

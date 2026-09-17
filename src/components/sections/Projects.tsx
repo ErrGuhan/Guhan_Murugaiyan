@@ -241,7 +241,10 @@ export default function Projects() {
   const isStackedMode = isMobile || prefersReducedMotion;
 
   return (
-    <section id="work" className="relative w-full bg-[#0B0B0F] text-white select-none border-t-[3px] border-black">
+    <section id="work" className="relative w-full bg-[#0B0B0F] text-white select-none border-t-[3px] border-black scroll-mt-20">
+      {/* Deep-link alias for /#projects */}
+      <div id="projects" className="absolute -top-24 pointer-events-none" aria-hidden="true" />
+
       {/* Part A: Comic Hazard Striping & Heavy Distorted WORK Title Banner */}
       <div
         ref={transitionRef}
