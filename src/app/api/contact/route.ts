@@ -1,29 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-
-// Sliding-window rate limiter per client IP: max 5 requests per 10 minutes
-const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
-const MAX_REQUESTS_PER_WINDOW = 5;
-const ipRequestMap = new Map<string, number[]>();
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const timestamps = ipRequestMap.get(ip) || [];
-
-  // Prune timestamps outside current sliding window
-  const activeTimestamps = timestamps.filter(
-    (time) => now - time < RATE_LIMIT_WINDOW_MS
-  );
-
-  if (activeTimestamps.length >= MAX_REQUESTS_PER_WINDOW) {
-    ipRequestMap.set(ip, activeTimestamps);
-    return false; // Rate limit exceeded
-  }
-
-  activeTimestamps.push(now);
-  ipRequestMap.set(ip, activeTimestamps);
-  return true;
-}
+import { Resend } from "resend";
 
 const contactRequestSchema = z.object({
   name: z
@@ -53,23 +30,7 @@ function sanitizeInput(text: string): string {
 
 export async function POST(req: NextRequest) {
   try {
-    // 1. Resolve client IP for rate limiting
-    const forwardedFor = req.headers.get("x-forwarded-for");
-    const ip = forwardedFor
-      ? forwardedFor.split(",")[0].trim()
-      : req.headers.get("x-real-ip") || "127.0.0.1";
-
-    if (!checkRateLimit(ip)) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Rate limit exceeded. Please wait a few minutes before transmitting again.",
-        },
-        { status: 429 }
-      );
-    }
-
-    // 2. Parse and validate payload
+    // 1. Parse and validate payload
     let body;
     try {
       body = await req.json();
@@ -92,7 +53,7 @@ export async function POST(req: NextRequest) {
 
     const { name, email, message, botCheck } = validationResult.data;
 
-    // 3. Honeypot check: If botCheck has any value, silently accept without processing
+    // 2. Honeypot check: If botCheck has any value, silently accept without processing (spam defense)
     if (botCheck && botCheck.trim().length > 0) {
       return NextResponse.json({
         success: true,
@@ -100,15 +61,48 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // 4. Sanitize sanitized fields
+    // 3. Sanitize fields
     const sanitizedName = sanitizeInput(name);
     const sanitizedEmail = sanitizeInput(email);
     const sanitizedMessage = sanitizeInput(message);
 
-    // Secure operational log (does NOT log full sensitive content)
-    if (process.env.NODE_ENV !== "production") {
-      console.log(
-        `[Contact Dispatch] From: ${sanitizedName} <${sanitizedEmail}> (${sanitizedMessage.length} chars)`
+    // 4. Dispatch email via Resend
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      console.error("[Contact Dispatch] RESEND_API_KEY is not configured in environment variables.");
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Transmission service is temporarily unconfigured. Please contact mguhan6383@gmail.com directly.",
+        },
+        { status: 503 }
+      );
+    }
+
+    const resend = new Resend(apiKey);
+    const { error } = await resend.emails.send({
+      from: "Portfolio Contact <onboarding@resend.dev>",
+      to: "mguhan6383@gmail.com",
+      replyTo: sanitizedEmail,
+      subject: `[Portfolio Transmission] Message from ${sanitizedName}`,
+      text: `Name: ${sanitizedName}\nEmail: ${sanitizedEmail}\n\nMessage:\n${sanitizedMessage}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #111; max-width: 600px; margin: 0 auto; padding: 20px; border: 3px solid #000; background: #FFFDF7;">
+          <h2 style="margin-top: 0; background: #FFE600; padding: 8px 12px; border: 2px solid #000; display: inline-block;">NEW PORTFOLIO TRANSMISSION</h2>
+          <p><strong>From:</strong> ${sanitizedName} (&lt;<a href="mailto:${sanitizedEmail}">${sanitizedEmail}</a>&gt;)</p>
+          <hr style="border: none; border-top: 2px solid #000; margin: 16px 0;" />
+          <h3 style="margin-bottom: 8px;">Message:</h3>
+          <div style="background: #F6F2E9; padding: 14px; border: 2px solid #000; border-radius: 4px; white-space: pre-wrap; font-size: 14px;">${sanitizedMessage}</div>
+          <p style="font-size: 12px; color: #666; margin-top: 20px; font-family: monospace;">// Dispatched via Guhan Portfolio Contact Route</p>
+        </div>
+      `,
+    });
+
+    if (error) {
+      console.error("[Contact Dispatch] Resend API error:", error);
+      return NextResponse.json(
+        { success: false, error: "Failed to dispatch email. Please reach out to mguhan6383@gmail.com directly." },
+        { status: 502 }
       );
     }
 
@@ -117,7 +111,8 @@ export async function POST(req: NextRequest) {
       message: "Transmission dispatched successfully! Guhan will review your message shortly.",
       timestamp: new Date().toISOString(),
     });
-  } catch {
+  } catch (error) {
+    console.error("[Contact Dispatch] Internal error:", error);
     return NextResponse.json(
       { success: false, error: "Internal dispatch error. Please use direct email dispatch." },
       { status: 500 }

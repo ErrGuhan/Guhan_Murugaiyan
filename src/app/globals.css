@@ -137,14 +137,6 @@
   font-family: var(--font-syne), sans-serif;
 }
 
-.font-cinzel {
-  font-family: var(--font-cinzel), serif;
-}
-
-.font-script {
-  font-family: var(--font-script), cursive;
-}
-
 .font-mono {
   font-family: var(--font-mono), monospace;
 }
@@ -576,3 +568,21 @@ html.lenis, html.lenis body {
     animation: none !important;
   }
 }
+
+/* Explicit High-Contrast Focus-Visible Rings for Accessibility */
+:focus-visible {
+  outline: 3px solid #FFE600 !important;
+  outline-offset: 2px !important;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid #FFE600 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px #000000 !important;
+}
+

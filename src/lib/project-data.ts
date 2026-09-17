@@ -10,6 +10,7 @@ export interface Project {
   filename: string;
   codeSnippet: string;
   image: string;
+  imageAlt: string;
   liveUrl: string;
   githubUrl: string;
   year: string;
@@ -56,6 +57,7 @@ export async function getVerifiedProducts() {
   return data?.map(mapProduct) ?? [];
 }`,
     image: "/images/campuscart-preview.jpg",
+    imageAlt: "CampusCart student marketplace web application showing verified listings and admin verification badges",
     liveUrl: "https://campus-cart01.vercel.app",
     githubUrl: "https://github.com/ErrGuhan/CampusCart01",
     year: "2026",
@@ -94,6 +96,7 @@ export default function HabitTrackerWidget() {
   // ...
 }`,
     image: "/images/personaltracker-preview.jpg",
+    imageAlt: "PersonalTracker habit and productivity web application displaying daily goal streaks and metrics",
     liveUrl: "https://personaltracker-psi.vercel.app",
     githubUrl: "https://github.com/ErrGuhan/PersonalTracker",
     year: "2026",
@@ -141,7 +144,9 @@ public class AccountService {
     }
   }
 }`,
+    // TODO: Supply /public/images/transferhub-preview.jpg with a real screenshot of the banking UI
     image: "/images/project-watches.jpg",
+    imageAlt: "TransferHub banking website interface preview with account balance and transfer flows",
     liveUrl: "https://transfer-hub-neon.vercel.app",
     githubUrl: "https://github.com/ErrGuhan/TransferHub",
     year: "2026",
@@ -191,6 +196,7 @@ export function ParametricDoor({
   );
 }`,
     image: "/images/janafibre-preview.jpg",
+    imageAlt: "Jana Fibre Glass interactive 3D parametric door configurator showing real-time Three.js architectural model",
     liveUrl: "https://janafibre.vercel.app",
     githubUrl: "https://github.com/ErrGuhan/JanaFibreGlass",
     year: "2026",
@@ -233,8 +239,20 @@ export default async function HomePage() {
   return <HomeHeroAndCategories categories={categoriesFromDb} />;
 }`,
     image: "/images/tharikadecors-preview.jpg",
+    imageAlt: "Tharika Decors luxury event and stage styling portfolio showcasing bespoke wedding decor categories",
     liveUrl: "https://tharikadecors.vercel.app",
     githubUrl: "https://github.com/ErrGuhan/TharikaDecors",
     year: "2026",
   },
 ];
+
+// Dev-only check to warn about placeholder project preview image
+if (process.env.NODE_ENV !== "production") {
+  const transferHub = REAL_PROJECTS.find((p) => p.id === "transfer-hub");
+  if (transferHub && transferHub.image.includes("project-watches")) {
+    console.warn(
+      "[PROJECT PREVIEW WARNING] TransferHub is currently using temporary fallback image '/images/project-watches.jpg'. Please supply a real screenshot at '/public/images/transferhub-preview.jpg'."
+    );
+  }
+}
+

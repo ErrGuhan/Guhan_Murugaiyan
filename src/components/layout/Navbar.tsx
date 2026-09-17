@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import MagneticButton from "@/components/ui/MagneticButton";
 import {
   ArrowUpRight,
@@ -17,6 +17,8 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDarkSection, setIsDarkSection] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const hamburgerButtonRef = useRef<HTMLButtonElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,21 +33,58 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Lock body scroll and listen for Escape key when mobile menu is open
+  // Lock body scroll, focus trap, and keyboard navigation when mobile menu is open
   useEffect(() => {
     const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
 
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
       lenis?.stop();
+
+      // Focus first interactive element inside menu overlay
+      requestAnimationFrame(() => {
+        const focusable = overlayRef.current?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusable && focusable.length > 0) {
+          const firstLink = Array.from(focusable).find((el) => el.tagName === "A") || focusable[0];
+          firstLink.focus();
+        }
+      });
     } else {
       document.body.style.overflow = "";
       lenis?.start();
     }
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isMenuOpen) return;
+
       if (e.key === "Escape") {
         setIsMenuOpen(false);
+        hamburgerButtonRef.current?.focus();
+        return;
+      }
+
+      if (e.key === "Tab") {
+        const focusable = overlayRef.current?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        if (!focusable || focusable.length === 0) return;
+
+        const firstElement = focusable[0];
+        const lastElement = focusable[focusable.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
       }
     };
 
@@ -209,9 +248,13 @@ export default function Navbar() {
 
           {/* Manga 2-Bar Comic Hamburger Button for Mobile */}
           <button
+            ref={hamburgerButtonRef}
             onClick={() => setIsMenuOpen(true)}
+            aria-expanded={isMenuOpen}
+            aria-haspopup="dialog"
+            aria-controls="mobile-nav-dialog"
             className="comic-btn w-10 h-10 flex flex-col justify-center items-center gap-1.5 p-2 rounded-xl bg-[#FFE600] text-black md:hidden"
-            aria-label="Open navigation menu"
+            aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
           >
             <span className="w-5 h-[2.5px] bg-black rounded-full" />
             <span className="w-5 h-[2.5px] bg-black rounded-full" />
@@ -221,6 +264,11 @@ export default function Navbar() {
 
       {/* Full-Screen Manga Panel Navigation Overlay */}
       <div
+        ref={overlayRef}
+        id="mobile-nav-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigation Menu"
         className={`fixed inset-0 bg-[#0B0B0F] text-white z-[99990] flex flex-col justify-between p-5 sm:p-8 md:p-12 overflow-y-auto no-scrollbar transition-all duration-300 bg-halftone-dark select-none ${
           isMenuOpen
             ? "opacity-100 pointer-events-auto translate-y-0"
@@ -244,7 +292,10 @@ export default function Navbar() {
           </div>
 
           <button
-            onClick={() => setIsMenuOpen(false)}
+            onClick={() => {
+              setIsMenuOpen(false);
+              hamburgerButtonRef.current?.focus();
+            }}
             className="comic-btn px-3 py-1.5 rounded-xl bg-[#FF2A55] text-white border-[2.5px] border-black shadow-[3px_3px_0px_#000000] font-mono font-black text-xs flex items-center gap-1.5 hover:bg-[#FFE600] hover:text-black transition-colors"
             aria-label="Close navigation menu"
           >
@@ -261,7 +312,10 @@ export default function Navbar() {
               <a
                 key={item.label}
                 href={item.href}
-                onClick={() => setIsMenuOpen(false)}
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  hamburgerButtonRef.current?.focus();
+                }}
                 className="comic-card w-full p-3 sm:p-3.5 rounded-2xl bg-[#14141E] text-white border-[3px] border-black shadow-[4px_4px_0px_#000000] flex items-center justify-between group hover:bg-[#FFE600] hover:text-black transition-all active:translate-x-0.5 active:translate-y-0.5"
                 style={{ transitionDelay: `${idx * 25}ms` }}
               >

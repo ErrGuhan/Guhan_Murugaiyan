@@ -142,7 +142,6 @@ export default function About() {
                 fill
                 className="object-cover object-center grayscale contrast-125 group-hover:scale-105 group-hover:grayscale-0 transition-all duration-500 ease-out"
                 sizes="(max-width: 768px) 100vw, 450px"
-                priority
               />
 
               {/* Manga Name Badge Top-Left with 3px border */}

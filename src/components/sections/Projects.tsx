@@ -409,8 +409,10 @@ export default function Projects() {
                     >
                       <Image
                         src={project.image}
-                        alt={project.title}
+                        alt={project.imageAlt}
                         fill
+                        placeholder="blur"
+                        blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMSAxMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzEzMTMxQSIvPjwvc3ZnPg=="
                         className="object-cover object-center opacity-85 contrast-125 transition-transform duration-500 ease-out group-hover/frame:scale-[1.03]"
                         sizes="(max-width: 1024px) 100vw, 760px"
                       />

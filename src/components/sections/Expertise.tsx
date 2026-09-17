@@ -16,6 +16,7 @@ interface ExpertiseArea {
   desc: string;
   tags: string[];
   image: string;
+  imageAlt: string;
   icon: typeof Cpu;
 }
 
@@ -33,6 +34,7 @@ export default function Expertise() {
       desc: "Architecting autonomous cooperative agent networks, LLM tool calling, memory persistence, and multi-stage task decomposition pipelines.",
       tags: ["Multi-Agent Swarm", "LLM Orchestration", "Python", "Autonomous Tools"],
       image: "/expertise/agentic-ai.png",
+      imageAlt: "Architectural blueprint representing autonomous agent networks, tool-calling graphs, and multi-agent memory swarms",
       icon: Cpu,
     },
     {
@@ -42,6 +44,7 @@ export default function Expertise() {
       desc: "Building resilient object-oriented backends, concurrent transaction execution engines, clean service architectures, and Spring Boot APIs.",
       tags: ["Core Java 21", "Spring Boot", "Concurrency", "OOP Architecture"],
       image: "/expertise/java-enterprise.png",
+      imageAlt: "Java enterprise backend architecture diagram highlighting Spring Boot service layers and concurrent execution",
       icon: Layers,
     },
     {
@@ -51,6 +54,7 @@ export default function Expertise() {
       desc: "Applied analytics workflows developed at NoviTech R&D, turning raw enterprise streams into automated anomaly alerts and executive metrics.",
       tags: ["Data Pipelines", "Statistical Modeling", "ETL Automation", "Pandas"],
       image: "/expertise/data-analytics.png",
+      imageAlt: "Enterprise data analytics dashboard preview showing pipeline telemetry and statistical anomaly graphs",
       icon: BarChart3,
     },
     {
@@ -60,6 +64,7 @@ export default function Expertise() {
       desc: "NSS community leadership paired with analytical accounting and financial integrity at Jana Fibre Glass, ensuring disciplined execution.",
       tags: ["NSS Representative", "Accounting Precision", "Executive Comms"],
       image: "/expertise/leadership-rigor.png",
+      imageAlt: "Analytical workflow diagram depicting community coordination, financial rigor, and executive communications",
       icon: ShieldCheck,
     },
   ];
@@ -326,7 +331,7 @@ export default function Expertise() {
                       <div className="relative w-full aspect-video rounded-xl overflow-hidden border-[3px] border-black shadow-[4px_4px_0px_#000000]">
                         <Image
                           src={item.image}
-                          alt={item.title}
+                          alt={item.imageAlt}
                           fill
                           className="object-cover"
                           sizes="(max-width: 768px) 100vw, 400px"
@@ -352,7 +357,7 @@ export default function Expertise() {
           <div className="relative w-full h-full">
             <Image
               src={activeHoverItem.image}
-              alt={activeHoverItem.title}
+              alt={activeHoverItem.imageAlt}
               fill
               className="object-cover"
               sizes="300px"
