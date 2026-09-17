@@ -59,21 +59,21 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Guhan Murugaiyan — AI Developer & Creative Architect",
+    default: "Guhan Murugaiyan — AI Developer & Java Backend Engineer",
     template: "%s | Guhan Murugaiyan",
   },
   description:
-    "Creative developer & agent architect portfolio specializing in high-performance web applications, motion design, and intelligent autonomous systems.",
+    "AI Developer & Java Backend Engineer building full-stack applications, agentic AI systems, and high-performance web platforms.",
   keywords: [
     "Guhan Murugaiyan",
-    "Creative Developer",
-    "Frontend Engineer",
-    "GSAP",
+    "AI Developer",
+    "Java Backend Developer",
+    "Spring Boot",
+    "Full Stack Developer",
     "Next.js",
-    "React 19",
-    "AI Architect",
-    "Autonomous Agents",
-    "Portfolio",
+    "LLM",
+    "Agentic AI",
+    "Multi-Agent Systems",
   ],
   authors: [{ name: "Guhan Murugaiyan", url: siteUrl }],
   creator: "Guhan Murugaiyan",
@@ -93,9 +93,9 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Guhan Murugaiyan — AI Developer & Creative Architect",
+    title: "Guhan Murugaiyan — AI Developer & Java Backend Engineer",
     description:
-      "Creative developer portfolio where design meets code, cinematic motion, and autonomous AI systems.",
+      "AI Developer & Java Backend Engineer building full-stack applications, agentic AI systems, and high-performance web platforms.",
     url: siteUrl,
     siteName: "Guhan Murugaiyan Portfolio",
     locale: "en_US",
@@ -103,9 +103,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Guhan Murugaiyan — AI Developer & Creative Architect",
+    title: "Guhan Murugaiyan — AI Developer & Java Backend Engineer",
     description:
-      "Creative developer portfolio where design meets code, cinematic motion, and autonomous AI systems.",
+      "AI Developer & Java Backend Engineer — agentic systems, Spring Boot APIs, and full-stack web apps.",
     creator: "@ErrGuhan",
   },
   icons: {
@@ -118,25 +118,26 @@ const personJsonLd = {
   "@type": "Person",
   name: "Guhan Murugaiyan",
   alternateName: "ErrGuhan",
-  jobTitle: "AI Developer & Creative Architect",
+  jobTitle: "AI Developer & Java Backend Engineer",
   url: siteUrl,
   image: `${siteUrl}/images/profile.jpg`,
   description:
-    "Creative developer & agent architect specializing in high-performance web applications, motion design, and intelligent autonomous systems.",
+    "AI Developer & Java Backend Engineer building full-stack applications, agentic AI systems, and high-performance web platforms.",
   sameAs: [
     "https://github.com/ErrGuhan",
     "https://www.linkedin.com/in/guhanmurugaiyan",
   ],
   knowsAbout: [
+    "AI Development",
+    "Java 21",
+    "Spring Boot",
+    "Full Stack Development",
     "Next.js",
     "React 19",
     "TypeScript",
-    "Tailwind CSS",
-    "GSAP",
-    "Java 21",
-    "Spring Boot",
     "Agentic AI",
     "Multi-Agent Systems",
+    "LLM Orchestration",
     "Data Analytics",
   ],
 };

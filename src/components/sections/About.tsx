@@ -143,8 +143,11 @@ export default function About() {
 
               <Image
                 src="/images/profile.jpg"
-                alt="Guhan Murugaiyan"
+                alt="Guhan Murugaiyan — AI Developer & Java Backend Engineer"
                 fill
+                loading="lazy"
+                placeholder="blur"
+                blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0IDUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMxMzEzMUEiLz48L3N2Zz4="
                 className="object-cover object-center grayscale contrast-125 group-hover:scale-105 group-hover:grayscale-0 transition-all duration-500 ease-out"
                 sizes="(max-width: 768px) 100vw, 450px"
               />

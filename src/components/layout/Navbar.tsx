@@ -44,19 +44,26 @@ export default function Navbar() {
       setAudioEnabled(isSoundEnabled());
     }, 0);
 
+    let ticking = false;
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      setIsScrolled(scrollY > 20);
-      const threshold = window.innerHeight * 0.85;
-      setIsDarkSection(scrollY > threshold);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          setIsScrolled(scrollY > 20);
+          const threshold = window.innerHeight * 0.85;
+          setIsDarkSection(scrollY > threshold);
 
-      const totalHeight =
-        document.documentElement.scrollHeight - window.innerHeight;
-      const progress =
-        totalHeight > 0
-          ? Math.min(100, Math.max(0, Math.round((scrollY / totalHeight) * 100)))
-          : 0;
-      setScrollProgress(progress);
+          const totalHeight =
+            document.documentElement.scrollHeight - window.innerHeight;
+          const progress =
+            totalHeight > 0
+              ? Math.min(100, Math.max(0, Math.round((scrollY / totalHeight) * 100)))
+              : 0;
+          setScrollProgress(progress);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });

@@ -22,18 +22,25 @@ export default function ChapterTracker() {
   const [activeId, setActiveId] = useState<string>("hero");
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + window.innerHeight * 0.4;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollPosition = window.scrollY + window.innerHeight * 0.4;
 
-      for (let i = CHAPTERS.length - 1; i >= 0; i--) {
-        const el = document.getElementById(CHAPTERS[i].id);
-        if (el) {
-          const top = el.offsetTop;
-          if (scrollPosition >= top) {
-            setActiveId(CHAPTERS[i].id);
-            break;
+          for (let i = CHAPTERS.length - 1; i >= 0; i--) {
+            const el = document.getElementById(CHAPTERS[i].id);
+            if (el) {
+              const top = el.offsetTop;
+              if (scrollPosition >= top) {
+                setActiveId(CHAPTERS[i].id);
+                break;
+              }
+            }
           }
-        }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 

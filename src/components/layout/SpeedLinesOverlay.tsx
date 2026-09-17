@@ -19,30 +19,37 @@ export default function SpeedLinesOverlay() {
     lastScrollY.current = window.scrollY;
     lastTime.current = performance.now();
 
+    let ticking = false;
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const currentTime = performance.now();
-      const timeDelta = Math.max(1, currentTime - lastTime.current);
-      const scrollDelta = Math.abs(currentScrollY - lastScrollY.current);
-      const velocity = (scrollDelta / timeDelta) * 16; // Normalized to ~60fps frame
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          const currentTime = performance.now();
+          const timeDelta = Math.max(1, currentTime - lastTime.current);
+          const scrollDelta = Math.abs(currentScrollY - lastScrollY.current);
+          const velocity = (scrollDelta / timeDelta) * 16; // Normalized to ~60fps frame
 
-      lastScrollY.current = currentScrollY;
-      lastTime.current = currentTime;
+          lastScrollY.current = currentScrollY;
+          lastTime.current = currentTime;
 
-      // Trigger speed streaks on high velocity (> 35px/frame equivalent)
-      if (velocity > 38) {
-        setIsActive(true);
+          // Trigger speed streaks on high velocity (> 38px/frame equivalent)
+          if (velocity > 38) {
+            setIsActive(true);
 
-        // Sound trigger debounced to at most once per 1.5s
-        if (currentTime - lastSoundTime.current > 1500) {
-          playWhoosh();
-          lastSoundTime.current = currentTime;
-        }
+            // Sound trigger debounced to at most once per 1.5s
+            if (currentTime - lastSoundTime.current > 1500) {
+              playWhoosh();
+              lastSoundTime.current = currentTime;
+            }
 
-        if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        timeoutRef.current = setTimeout(() => {
-          setIsActive(false);
-        }, 220);
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
+            timeoutRef.current = setTimeout(() => {
+              setIsActive(false);
+            }, 220);
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 

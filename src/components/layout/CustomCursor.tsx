@@ -138,10 +138,20 @@ export default function CustomCursor() {
 
     // 2. Particle Animation Loop
     let animId: number;
+    let hasCleared = false;
     const renderSparks = () => {
       animId = requestAnimationFrame(renderSparks);
       if (!ctx || !canvas) return;
 
+      if (particles.length === 0) {
+        if (!hasCleared) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          hasCleared = true;
+        }
+        return;
+      }
+
+      hasCleared = false;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       for (let i = particles.length - 1; i >= 0; i--) {
