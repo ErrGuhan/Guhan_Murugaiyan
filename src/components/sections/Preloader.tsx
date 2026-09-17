@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Sparkles, Zap } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -27,9 +27,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
   const shockwaveRef = useRef<HTMLDivElement>(null);
   const hudTopRef = useRef<HTMLDivElement>(null);
   const hudBottomRef = useRef<HTMLDivElement>(null);
-
-  const phase1Ref = useRef<HTMLDivElement>(null);
-  const phase2Ref = useRef<HTMLDivElement>(null);
+  const centerContentRef = useRef<HTMLDivElement>(null);
 
   const mainTimelineRef = useRef<gsap.core.Timeline | null>(null);
   const slashTimelineRef = useRef<gsap.core.Timeline | null>(null);
@@ -70,40 +68,39 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         {
           scaleX: 1.5,
           opacity: 1,
-          duration: 0.22,
+          duration: 0.18,
           ease: "power4.out",
         }
       );
     }
 
-    // 2. High-impact anime white flash
+    // 2. High-impact white flash
     if (whiteFlashRef.current) {
       slashTl.to(
         whiteFlashRef.current,
         {
-          opacity: 0.9,
+          opacity: 0.85,
           duration: 0.08,
           ease: "power2.in",
         },
-        "<0.08"
+        "<0.06"
       );
       slashTl.to(whiteFlashRef.current, {
         opacity: 0,
-        duration: 0.15,
+        duration: 0.12,
         ease: "power2.out",
       });
     }
 
     // 3. Fade out HUD & Zoom blast center text
-    const textElements = [phase1Ref.current, phase2Ref.current].filter(Boolean);
-    if (textElements.length > 0) {
+    if (centerContentRef.current) {
       slashTl.to(
-        textElements,
+        centerContentRef.current,
         {
-          scale: 1.35,
+          scale: 1.15,
           opacity: 0,
-          filter: "blur(12px)",
-          duration: 0.28,
+          filter: "blur(8px)",
+          duration: 0.22,
           ease: "power2.inOut",
         },
         "<"
@@ -116,25 +113,24 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         hudElements,
         {
           opacity: 0,
-          y: -20,
-          duration: 0.2,
+          duration: 0.18,
         },
         "<"
       );
     }
 
-    // 4. Split Shatter: Diagonal Shards violently slide apart in opposite directions
+    // 4. Split Shatter: Diagonal Shards slide apart in opposite directions
     if (upperShardRef.current) {
       slashTl.to(
         upperShardRef.current,
         {
           xPercent: -85,
           yPercent: -105,
-          rotation: -4,
-          duration: 0.72,
+          rotation: -3,
+          duration: 0.65,
           ease: "power4.inOut",
         },
-        "<0.05"
+        "<0.04"
       );
     }
 
@@ -144,8 +140,8 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         {
           xPercent: 85,
           yPercent: 105,
-          rotation: 4,
-          duration: 0.72,
+          rotation: 3,
+          duration: 0.65,
           ease: "power4.inOut",
         },
         "<"
@@ -158,9 +154,9 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         slashBladeRef.current,
         {
           opacity: 0,
-          duration: 0.15,
+          duration: 0.12,
         },
-        "<0.1"
+        "<0.08"
       );
     }
   }, [onComplete]);
@@ -179,7 +175,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
 
     const progressObj = { val: 0 };
 
-    // Master Entrance & Kinetic Presentation Timeline
+    // Master Entrance & Progression Timeline (Total ~1.3s before slash)
     const tl = gsap.timeline({
       onComplete: () => {
         triggerKatanaSlash();
@@ -187,43 +183,27 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     });
     mainTimelineRef.current = tl;
 
-    // Reset initial states
-    gsap.set(phase1Ref.current, { opacity: 1, xPercent: 0, skewX: 0 });
-    gsap.set(phase2Ref.current, { opacity: 0, xPercent: 120, skewX: 20 });
-
     // Initial shockwave burst
     if (shockwaveRef.current) {
       tl.fromTo(
         shockwaveRef.current,
         { scale: 0.2, opacity: 0.8 },
-        { scale: 2.8, opacity: 0, duration: 0.85, ease: "power2.out" },
+        { scale: 2.8, opacity: 0, duration: 0.7, ease: "power2.out" },
         0
       );
     }
 
-    // Smooth counter progression (0 -> 50% during Phase 1 across 1.7s)
-    tl.to(
-      progressObj,
-      {
-        val: 50,
-        duration: 1.7,
-        ease: "power1.inOut",
-        onUpdate: () => setProgress(Math.round(progressObj.val)),
-      },
-      0
-    );
-
-    // Phase 1 Kinetic Slam: "HELLO! EVERYONE..."
-    if (phase1Ref.current) {
-      const badge = phase1Ref.current.querySelector(".p1-badge");
-      const title = phase1Ref.current.querySelector(".p1-title");
-      const sub = phase1Ref.current.querySelector(".p1-sub");
+    // Entrance animation of central composition
+    if (centerContentRef.current) {
+      const badge = centerContentRef.current.querySelector(".p-badge");
+      const title = centerContentRef.current.querySelector(".p-title");
+      const sub = centerContentRef.current.querySelector(".p-sub");
 
       if (badge) {
         tl.fromTo(
           badge,
-          { y: -30, opacity: 0, scale: 0.8 },
-          { y: 0, opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2)" },
+          { y: -20, opacity: 0, scale: 0.9 },
+          { y: 0, opacity: 1, scale: 1, duration: 0.45, ease: "back.out(1.8)" },
           0.05
         );
       }
@@ -231,82 +211,9 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       if (title) {
         tl.fromTo(
           title,
-          { scale: 1.6, opacity: 0, y: 25 },
-          { scale: 1, opacity: 1, y: 0, duration: 0.65, ease: "elastic.out(1, 0.75)" },
-          0.12
-        );
-      }
-
-      if (sub) {
-        tl.fromTo(
-          sub,
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.45, ease: "power2.out" },
-          0.4
-        );
-      }
-    }
-
-    // At 1.75s: Phase 1 whips away to left with speedline blur
-    if (phase1Ref.current) {
-      tl.to(
-        phase1Ref.current,
-        {
-          xPercent: -130,
-          skewX: -25,
-          opacity: 0,
-          duration: 0.35,
-          ease: "power3.in",
-        },
-        1.75
-      );
-    }
-
-    // Counter surges from 50% to 100% (Overdrive) across 1.4s
-    tl.to(
-      progressObj,
-      {
-        val: 100,
-        duration: 1.4,
-        ease: "power2.out",
-        onUpdate: () => setProgress(Math.round(progressObj.val)),
-      },
-      1.8
-    );
-
-    // Phase 2 Presentation Slam: "WELCOME TO MY ARC"
-    if (phase2Ref.current) {
-      const badge = phase2Ref.current.querySelector(".p2-badge");
-      const title = phase2Ref.current.querySelector(".p2-title");
-      const sub = phase2Ref.current.querySelector(".p2-sub");
-
-      tl.to(
-        phase2Ref.current,
-        {
-          xPercent: 0,
-          skewX: 0,
-          opacity: 1,
-          duration: 0.5,
-          ease: "back.out(1.5)",
-        },
-        1.9
-      );
-
-      if (badge) {
-        tl.fromTo(
-          badge,
-          { y: -20, opacity: 0, scale: 0.8 },
-          { y: 0, opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2)" },
-          2.0
-        );
-      }
-
-      if (title) {
-        tl.fromTo(
-          title,
-          { scale: 1.4, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 0.6, ease: "elastic.out(1, 0.75)" },
-          2.05
+          { scale: 1.25, opacity: 0, y: 15 },
+          { scale: 1, opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
+          0.1
         );
       }
 
@@ -315,18 +222,30 @@ export default function Preloader({ onComplete }: PreloaderProps) {
           sub,
           { y: 15, opacity: 0 },
           { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" },
-          2.25
+          0.25
         );
       }
     }
 
-    // Hold Phase 2, then trigger Katana Slash at ~3.4s
-    tl.to({}, { duration: 0.8 }, 2.6);
+    // Smooth counter progression (0 -> 100% across 1.1s)
+    tl.to(
+      progressObj,
+      {
+        val: 100,
+        duration: 1.1,
+        ease: "power2.inOut",
+        onUpdate: () => setProgress(Math.round(progressObj.val)),
+      },
+      0
+    );
 
-    // Safety fallback timer (4.6s max)
+    // Brief pause at 100% before triggering slash
+    tl.to({}, { duration: 0.15 }, 1.1);
+
+    // Safety fallback timer (2.5s max)
     const safetyTimer = setTimeout(() => {
       triggerKatanaSlash();
-    }, 4600);
+    }, 2500);
 
     return () => {
       clearTimeout(safetyTimer);
@@ -359,16 +278,16 @@ export default function Preloader({ onComplete }: PreloaderProps) {
           top: "50%",
           left: "-25vw",
           width: "150vw",
-          height: "6px",
+          height: "5px",
           background:
-            "linear-gradient(90deg, transparent, #00F0FF, #FFFFFF, #FFE600, transparent)",
+            "linear-gradient(90deg, transparent, #FFE600, #FFFFFF, #FFE600, transparent)",
           boxShadow:
-            "0 0 35px #FFE600, 0 0 60px #00F0FF, 0 0 15px #FFFFFF",
+            "0 0 30px #FFE600, 0 0 60px rgba(255, 230, 0, 0.6), 0 0 15px #FFFFFF",
           transform: "translateY(-50%) rotate(-13.5deg) scaleX(0)",
         }}
       />
 
-      {/* 3. Upper Diagonal Shard (Slices UP & LEFT on climax) */}
+      {/* 3. Upper Diagonal Shard */}
       <div
         ref={upperShardRef}
         className="fixed inset-0 z-[99990] bg-[#0B0B0F] pointer-events-none will-change-transform bg-halftone-dark border-b-[3px] border-[#FFE600]"
@@ -377,26 +296,26 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         }}
       />
 
-      {/* 4. Lower Diagonal Shard (Slices DOWN & RIGHT on climax) */}
+      {/* 4. Lower Diagonal Shard */}
       <div
         ref={lowerShardRef}
-        className="fixed inset-0 z-[99990] bg-[#0B0B0F] pointer-events-none will-change-transform bg-halftone-dark border-t-[3px] border-[#00F0FF]"
+        className="fixed inset-0 z-[99990] bg-[#0B0B0F] pointer-events-none will-change-transform bg-halftone-dark border-t-[3px] border-[#FFE600]"
         style={{
           clipPath: "polygon(0% 62%, 100% 38%, 100% 100%, 0% 100%)",
         }}
       />
 
-      {/* 5. Radial Manga Speedlines Background */}
-      <div className="absolute inset-0 z-[99992] pointer-events-none overflow-hidden animate-speedline-pulse opacity-25">
+      {/* 5. Radial Speedlines Background */}
+      <div className="absolute inset-0 z-[99992] pointer-events-none overflow-hidden opacity-15">
         <div
           className="w-[200vw] h-[200vw] absolute -top-[50vw] -left-[50vw]"
           style={{
             background: `repeating-conic-gradient(
               from 0deg at 50% 50%,
-              rgba(255, 230, 0, 0.3) 0deg 2.5deg,
-              transparent 2.5deg 12deg,
-              rgba(0, 240, 255, 0.25) 12deg 14.5deg,
-              transparent 14.5deg 24deg
+              rgba(255, 230, 0, 0.25) 0deg 2.5deg,
+              transparent 2.5deg 15deg,
+              rgba(255, 255, 255, 0.15) 15deg 17.5deg,
+              transparent 17.5deg 30deg
             )`,
           }}
         />
@@ -405,7 +324,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       {/* 6. Kinetic Shockwave Impact Ring */}
       <div
         ref={shockwaveRef}
-        className="absolute z-[99993] w-64 h-64 rounded-full border-[4px] border-[#FFE600] pointer-events-none opacity-0"
+        className="absolute z-[99993] w-64 h-64 rounded-full border-[3px] border-[#FFE600] pointer-events-none opacity-0"
         style={{
           boxShadow: "0 0 30px #FFE600",
         }}
@@ -416,106 +335,61 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         ref={hudTopRef}
         className="absolute top-5 sm:top-7 left-5 sm:left-8 right-5 sm:right-8 flex items-center justify-between z-[99994] pointer-events-none"
       >
-        {/* Left: System Status Pill */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#17171C] border-[2.5px] border-black shadow-[3px_3px_0px_#000000] text-xs font-mono font-black text-[#FFE600]">
-          <Zap className="w-3.5 h-3.5 fill-[#FFE600]" />
-          <span className="tracking-wider">{"ARC '26 // OVERDRIVE"}</span>
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#17171C] border-[2px] border-black shadow-[2px_2px_0px_#000000] text-xs font-mono font-black text-[#FFE600]">
+          <span className="w-2 h-2 rounded-full bg-[#00E676] animate-pulse" />
+          <span className="tracking-wider">PORTFOLIO &apos;26 // INITIALIZING</span>
         </div>
 
-        {/* Center: Audio/Power Equalizer */}
-        <div className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#17171C] border-[2.5px] border-black shadow-[3px_3px_0px_#000000]">
-          <span className="w-1 bg-[#00F0FF] rounded-full animate-eq-1" />
-          <span className="w-1 bg-[#FFE600] rounded-full animate-eq-2" />
-          <span className="w-1 bg-[#FF2A55] rounded-full animate-eq-3" />
-          <span className="w-1 bg-[#00E676] rounded-full animate-eq-4" />
-          <span className="text-[10px] font-mono text-neutral-300 font-black ml-1.5 tracking-widest uppercase">
-            SYNC 120HZ
-          </span>
-        </div>
-
-        {/* Right: Power Progress Gauge */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#FFE600] text-black border-[2.5px] border-black shadow-[3px_3px_0px_#000000] text-xs font-mono font-black">
-          <Sparkles className="w-3.5 h-3.5 fill-black" />
-          <span>PWR: {progress}%</span>
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#17171C] border-[2px] border-black shadow-[2px_2px_0px_#000000] text-xs font-mono font-black text-neutral-400">
+          <span className="hidden sm:inline">[ CLICK ANYWHERE TO SKIP ↗ ]</span>
         </div>
       </div>
 
-      {/* 8. Main Stage: Clean Symmetrical Presentation Stages */}
-      <div className="relative z-[99994] flex items-center justify-center w-full max-w-5xl h-[280px] sm:h-[340px] px-4 sm:px-6 pointer-events-none text-center">
-        {/* PHASE 1: "HELLO! EVERYONE..." */}
-        <div
-          ref={phase1Ref}
-          className="absolute inset-0 flex flex-col items-center justify-center w-full will-change-transform"
-        >
-          <div className="p1-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-[#FFE600] text-black border-[3px] border-black shadow-[4px_4px_0px_#000000] text-xs font-mono font-black tracking-widest uppercase mb-4 -rotate-1">
-            <Sparkles className="w-4 h-4 fill-black" />
-            <span>{"TRANSMISSION // INCOMING MESSAGE"}</span>
-          </div>
-
-          <h1
-            className="p1-title font-display font-black uppercase text-[clamp(2.4rem,8.2vw,6.4rem)] text-white tracking-tight leading-[0.92] drop-shadow-[6px_6px_0px_#000000]"
-            style={{
-              WebkitTextStroke: "2.5px #000000",
-            }}
-          >
-            HELLO! <span className="text-[#FFE600]">EVERYONE...</span>
-          </h1>
-
-          <div className="p1-sub inline-flex items-center gap-2 font-mono text-xs sm:text-sm text-[#00F0FF] font-black tracking-widest mt-5 uppercase">
-            <span className="inline-block w-2.5 h-0.5 bg-[#00F0FF]" />
-            <span>{"GUHAN MURUGAIYAN // CREATIVE ARCHITECT"}</span>
-            <span className="inline-block w-2.5 h-0.5 bg-[#00F0FF]" />
-          </div>
+      {/* 8. Main Stage: Clean Symmetrical Presentation */}
+      <div
+        ref={centerContentRef}
+        className="relative z-[99994] flex flex-col items-center justify-center w-full max-w-4xl px-4 pointer-events-none text-center"
+      >
+        <div className="p-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-[#FFE600] text-black border-[3px] border-black shadow-[4px_4px_0px_#000000] text-xs font-mono font-black tracking-widest uppercase mb-4 -rotate-1">
+          <Sparkles className="w-4 h-4 fill-black" />
+          <span>PORTFOLIO &apos;26</span>
         </div>
 
-        {/* PHASE 2: "WELCOME TO MY ARC" */}
-        <div
-          ref={phase2Ref}
-          className="absolute inset-0 flex flex-col items-center justify-center w-full will-change-transform"
+        <h1
+          className="p-title font-display font-black uppercase text-[clamp(2.5rem,8.5vw,6.5rem)] text-white tracking-tight leading-[0.92] drop-shadow-[6px_6px_0px_#000000]"
+          style={{
+            WebkitTextStroke: "2.5px #000000",
+          }}
         >
-          <div className="p2-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-[#00F0FF] text-black border-[3px] border-black shadow-[4px_4px_0px_#000000] text-xs font-mono font-black tracking-widest uppercase mb-4 rotate-1">
-            <Zap className="w-4 h-4 fill-black" />
-            <span>{"ARC '26 // PROLOGUE"}</span>
-          </div>
+          GUHAN <span className="text-[#FFE600]">MURUGAIYAN</span>
+        </h1>
 
-          <h2
-            className="p2-title font-display font-black uppercase text-[clamp(2.6rem,9vw,7rem)] text-[#FFE600] tracking-tight leading-[0.92] drop-shadow-[6px_6px_0px_#000000]"
-            style={{
-              WebkitTextStroke: "2.5px #000000",
-            }}
-          >
-            WELCOME TO <span className="text-white">MY ARC</span>
-          </h2>
-
-          <div className="p2-sub inline-flex items-center gap-2 font-mono text-xs sm:text-sm text-[#FFE600] font-black tracking-widest mt-5 uppercase">
-            <span className="inline-block w-2.5 h-0.5 bg-[#FFE600]" />
-            <span>{"CHAPTER 01 // THE JOURNEY BEGINS"}</span>
-            <span className="inline-block w-2.5 h-0.5 bg-[#FFE600]" />
-          </div>
+        <div className="p-sub inline-flex items-center gap-2 font-mono text-xs sm:text-sm text-neutral-300 font-bold tracking-widest mt-4 uppercase">
+          <span className="inline-block w-2.5 h-0.5 bg-[#FFE600]" />
+          <span>AI DEVELOPER &amp; SYSTEMS ENGINEER</span>
+          <span className="inline-block w-2.5 h-0.5 bg-[#FFE600]" />
         </div>
       </div>
 
-      {/* 9. HUD Bottom Progress Bar & Skip Prompt */}
+      {/* 9. HUD Bottom Progress Bar */}
       <div
         ref={hudBottomRef}
         className="absolute bottom-6 sm:bottom-8 left-6 sm:left-12 right-6 sm:right-12 flex flex-col items-center gap-2.5 z-[99994] pointer-events-none"
       >
-        {/* Dynamic Neo-Brutalist Energy Meter */}
-        <div className="w-full max-w-md h-3.5 bg-[#17171C] border-[2.5px] border-black shadow-[3px_3px_0px_#000000] rounded-full overflow-hidden p-0.5">
+        {/* Clean High-Contrast Energy Meter */}
+        <div className="w-full max-w-md h-3 bg-[#17171C] border-[2px] border-black shadow-[2px_2px_0px_#000000] rounded-full overflow-hidden p-0.5">
           <div
-            className="h-full bg-gradient-to-r from-[#FFE600] via-[#00F0FF] to-[#FFE600] rounded-full transition-all duration-100 ease-out"
+            className="h-full bg-[#FFE600] rounded-full transition-all duration-75 ease-out"
             style={{ width: `${progress}%` }}
           />
         </div>
 
         <div className="flex items-center justify-between w-full max-w-md text-[10px] font-mono font-black text-neutral-400 uppercase tracking-wider px-1">
           <span className="text-[#FFE600]">
-            {progress < 100
-              ? `INITIALIZING SYSTEM MATRIX [ ${progress}% ]`
-              : "MAX POWER // OVERDRIVE READY ⚡"}
+            LOADING EXPERIENCE [ {progress}% ]
           </span>
-          <span className="text-neutral-400 hover:text-white transition-colors">
-            [ CLICK ANYWHERE TO SKIP ↗ ]
+          <span className="text-neutral-500">
+            BASE: INDIA
           </span>
         </div>
       </div>
