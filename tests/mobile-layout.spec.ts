@@ -117,7 +117,7 @@ for (const vp of MOBILE_VIEWPORTS) {
       await page.waitForTimeout(300);
     });
 
-    test("should cleanly display and flip project cards without horizontal blowing out", async ({ page }) => {
+    test("should cleanly display and scroll through all 5 ARCs in mobile carousel without overlap", async ({ page }) => {
       await page.goto("/", { waitUntil: "networkidle" });
       await page.waitForTimeout(800);
 
@@ -126,12 +126,44 @@ for (const vp of MOBILE_VIEWPORTS) {
       await projectSection.scrollIntoViewIfNeeded();
       await page.waitForTimeout(500);
 
-      // Find first flip button (code snippet / specs button)
-      const flipButtons = page.locator('button:has-text("CODE"), button:has-text("SPECS")');
-      if ((await flipButtons.count()) > 0) {
-        const firstBtn = flipButtons.first();
-        await firstBtn.click();
-        await page.waitForTimeout(600);
+      // Verify all 5 ARC cards exist in mobile carousel
+      const mobileCards = page.locator('[aria-label="Mobile Case Studies Carousel"] .project-card');
+      await expect(mobileCards).toHaveCount(5);
+
+      // Verify first ARC card is visible
+      const firstCard = mobileCards.first();
+      await expect(firstCard).toBeVisible();
+
+      // Verify credentials section is positioned strictly BELOW the work section (no overlap)
+      const credentialsSection = page.locator("#credentials");
+      const workBox = await projectSection.boundingBox();
+      const credBox = await credentialsSection.boundingBox();
+      if (workBox && credBox) {
+        expect(credBox.y).toBeGreaterThanOrEqual(workBox.y + workBox.height - 2);
+      }
+
+      // Test ARC scroll-through: click Next project button
+      const nextBtn = page.getByRole("button", { name: "Next project" });
+      await expect(nextBtn).toBeVisible();
+
+      // Click to advance to ARC 02
+      await nextBtn.click();
+      await page.waitForTimeout(400);
+
+      // Verify counter badge updated
+      const workBadge = page.locator("#featured-work-badge");
+      await expect(workBadge).toContainText("02 / 05");
+
+      // Click to advance to ARC 03
+      await nextBtn.click();
+      await page.waitForTimeout(400);
+      await expect(workBadge).toContainText("03 / 05");
+
+      // Test card flip on mobile
+      const flipBtn = firstCard.locator('button:has-text("CODE")');
+      if (await flipBtn.isVisible()) {
+        await flipBtn.click();
+        await page.waitForTimeout(500);
 
         // Check overflow while flipped
         const flippedOverflow = await page.evaluate(() => {
@@ -143,10 +175,10 @@ for (const vp of MOBILE_VIEWPORTS) {
         expect(flippedOverflow.scrollWidth).toBeLessThanOrEqual(flippedOverflow.clientWidth + 1);
 
         // Flip back
-        const returnBtn = page.locator('button:has-text("RETURN TO CASE")').first();
-        if (await returnBtn.isVisible()) {
-          await returnBtn.click();
-          await page.waitForTimeout(400);
+        const previewBtn = firstCard.locator('button:has-text("PREVIEW")');
+        if (await previewBtn.isVisible()) {
+          await previewBtn.click();
+          await page.waitForTimeout(300);
         }
       }
     });
