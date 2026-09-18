@@ -103,20 +103,20 @@ export default function BattleModeManager() {
   return (
     <aside
       aria-label="Battle Mode HUD indicator"
-      className="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-auto"
+      className="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-auto max-w-[calc(100vw-2rem)] w-max"
     >
-      <div className="flex items-center gap-3 px-4 py-2 bg-[#FF2A55] text-white border-[3px] border-black shadow-[5px_5px_0px_#000000] rounded-xl animate-pulse">
-        <ShieldAlert className="w-5 h-5 fill-white text-black flex-shrink-0 animate-spin" />
-        <div className="flex items-center gap-2">
-          <span className="font-mono text-xs sm:text-sm font-black tracking-widest uppercase">
-            ⚠️ BATTLE MODE OVERDRIVE // REVERTING IN {secondsRemaining}S
+      <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 bg-[#FF2A55] text-white border-[3px] border-black shadow-[4px_4px_0px_#000000] sm:shadow-[5px_5px_0px_#000000] rounded-xl animate-pulse">
+        <ShieldAlert className="w-4 sm:w-5 h-4 sm:h-5 fill-white text-black flex-shrink-0 animate-spin" />
+        <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+          <span className="font-mono text-[10px] sm:text-xs md:text-sm font-black tracking-wider sm:tracking-widest uppercase truncate">
+            ⚠️ BATTLE MODE // REVERTING IN {secondsRemaining}S
           </span>
-          <Zap className="w-4 h-4 text-[#FFE600] fill-[#FFE600]" />
+          <Zap className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-[#FFE600] fill-[#FFE600] flex-shrink-0" />
         </div>
         <button
           onClick={disengageBattleMode}
           aria-label="Disengage Battle Mode"
-          className="ml-2 w-6 h-6 rounded-md bg-black text-white hover:bg-white hover:text-black transition-colors flex items-center justify-center font-mono font-black text-xs"
+          className="ml-1 sm:ml-2 w-6 h-6 rounded-md bg-black text-white hover:bg-white hover:text-black transition-colors flex items-center justify-center font-mono font-black text-xs flex-shrink-0"
         >
           <X className="w-3.5 h-3.5 stroke-[3]" />
         </button>

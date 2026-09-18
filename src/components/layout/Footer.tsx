@@ -13,15 +13,15 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-[#0B0B0F] text-white border-t-[3px] border-black px-6 md:px-12 py-10 select-none bg-halftone-dark relative">
-      <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+    <footer className="bg-[#0B0B0F] text-white border-t-[3px] border-black px-4 sm:px-6 md:px-12 py-8 sm:py-10 select-none bg-halftone-dark relative">
+      <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-5 sm:gap-6">
         {/* Left Side: Manga Volume Fin Stamp & Copyright */}
         <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-5 text-center sm:text-left">
           <div className="flex items-center gap-2">
             <span className="px-2 py-0.5 bg-[#FFE600] text-black font-display font-black text-sm border-[2px] border-black shadow-[2px_2px_0px_#000000] -rotate-2">
               FIN
             </span>
-            <span className="font-display font-black text-xl text-white tracking-wider">
+            <span className="font-display font-black text-lg sm:text-xl text-white tracking-wider">
               TO BE CONTINUED...
             </span>
           </div>
@@ -34,7 +34,7 @@ export default function Footer() {
         <div>
           <button
             onClick={scrollToTop}
-            className="comic-btn px-5 py-2.5 rounded-xl bg-[#FFE600] text-black font-mono font-black text-xs tracking-widest uppercase flex items-center gap-2 hover:bg-[#00F0FF]"
+            className="comic-btn px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-[#FFE600] text-black font-mono font-black text-xs tracking-widest uppercase flex items-center gap-2 hover:bg-[#00F0FF]"
           >
             <span>BACK TO TOP</span>
             <ArrowUp className="w-4 h-4 stroke-[3]" />

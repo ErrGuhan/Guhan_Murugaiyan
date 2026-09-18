@@ -103,13 +103,13 @@ export default function About() {
     <section
       id="about"
       ref={containerRef}
-      className="relative min-h-screen py-24 md:py-36 px-6 md:px-12 bg-[#0B0B0F] text-white overflow-hidden border-t-[3px] border-black bg-halftone-dark scroll-mt-20"
+      className="relative min-h-screen py-20 sm:py-24 md:py-36 px-4 sm:px-6 md:px-12 bg-[#0B0B0F] text-white overflow-hidden border-t-[3px] border-black bg-halftone-dark scroll-mt-20"
     >
       <div className="max-w-5xl mx-auto w-full">
         {/* Section Heading */}
-        <div className="mb-14 md:mb-18 flex flex-col items-start">
+        <div className="mb-10 sm:mb-14 md:mb-18 flex flex-col items-start">
           <div className="flex items-center justify-between w-full mb-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#FFE600] text-black border-[3px] border-black shadow-[3px_3px_0px_#000000] rounded-lg text-xs font-mono font-black tracking-widest uppercase">
+            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 bg-[#FFE600] text-black border-[2.5px] sm:border-[3px] border-black shadow-[2.5px_2.5px_0px_#000000] sm:shadow-[3px_3px_0px_#000000] rounded-lg text-[11px] sm:text-xs font-mono font-black tracking-widest uppercase">
               <Sparkles className="w-3.5 h-3.5 fill-black" />
               <span>— 02 · PROFILE & BACKGROUND</span>
             </div>
@@ -117,7 +117,7 @@ export default function About() {
 
           <h2
             data-text="ABOUT ME"
-            className="comic-glitch-text text-4xl sm:text-6xl md:text-7xl leading-tight tracking-tight uppercase text-white drop-shadow-[5px_5px_0px_#000000]"
+            className="comic-glitch-text text-3xl sm:text-5xl md:text-7xl leading-tight tracking-tight uppercase text-white drop-shadow-[4px_4px_0px_#000000] sm:drop-shadow-[5px_5px_0px_#000000]"
           >
             ABOUT <span className="text-[#FFE600]">ME</span>
           </h2>
@@ -125,11 +125,11 @@ export default function About() {
           {/* Solid 3px Manga Divider Line */}
           <div
             ref={dividerRef}
-            className="w-full h-[3px] bg-[#FFE600] border-y border-black mt-6"
+            className="w-full h-[3px] bg-[#FFE600] border-y border-black mt-4 sm:mt-6"
           />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-14 items-start">
           {/* Left Column: Profile Card with 3px border and 4px shadow */}
           <div className="lg:col-span-5 flex flex-col items-center lg:items-start">
             <div
@@ -157,45 +157,45 @@ export default function About() {
               />
 
               {/* Profile Name Badge Top-Left with 3px border */}
-              <div className="absolute top-4 left-4 z-20 bg-[#FFE600] text-black px-3 py-1.5 rounded-lg border-[2.5px] border-black shadow-[3px_3px_0px_#000000] -rotate-2">
-                <span className="text-[11px] font-mono tracking-wider uppercase font-black block">
+              <div className="absolute top-3 sm:top-4 left-3 sm:left-4 z-20 bg-[#FFE600] text-black px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg border-[2px] sm:border-[2.5px] border-black shadow-[2.5px_2.5px_0px_#000000] -rotate-2">
+                <span className="text-[10px] sm:text-[11px] font-mono tracking-wider uppercase font-black block">
                   GUHAN MURUGAIYAN
                 </span>
-                <span className="text-[9px] font-mono tracking-widest text-neutral-800 uppercase block font-bold">
+                <span className="text-[8px] sm:text-[9px] font-mono tracking-widest text-neutral-800 uppercase block font-bold">
                   AI & SYSTEMS ENGINEER
                 </span>
               </div>
 
               {/* Bottom Edge: Manga Action Quick Connect with 3px borders */}
-              <div className="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between bg-black/90 px-4 py-2.5 rounded-xl border-[2.5px] border-black shadow-[3px_3px_0px_#000000]">
-                <span className="text-[11px] font-mono text-[#FFE600] font-black tracking-wider uppercase">
+              <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4 z-20 flex items-center justify-between bg-black/90 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl border-[2px] sm:border-[2.5px] border-black shadow-[2.5px_2.5px_0px_#000000]">
+                <span className="text-[10px] sm:text-[11px] font-mono text-[#FFE600] font-black tracking-wider uppercase">
                   QUICK CONNECT ⚡
                 </span>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 sm:gap-2">
                   <a
                     href="https://github.com/ErrGuhan"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="comic-btn p-2 rounded-lg bg-white text-black hover:bg-[#FFE600] transition-colors"
+                    className="comic-btn p-1.5 sm:p-2 rounded-lg bg-white text-black hover:bg-[#FFE600] transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center"
                     title="GitHub Profile"
                   >
-                    <GithubIcon className="w-4 h-4" />
+                    <GithubIcon className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
                   </a>
                   <a
                     href="/resume.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="comic-btn p-2 rounded-lg bg-white text-black hover:bg-[#00F0FF] transition-colors"
+                    className="comic-btn p-1.5 sm:p-2 rounded-lg bg-white text-black hover:bg-[#00F0FF] transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center"
                     title="Download Resume"
                   >
-                    <FileText className="w-4 h-4" />
+                    <FileText className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
                   </a>
                   <a
                     href="#contact"
-                    className="comic-btn p-2 rounded-lg bg-white text-black hover:bg-[#FF2A55] hover:text-white transition-colors"
+                    className="comic-btn p-1.5 sm:p-2 rounded-lg bg-white text-black hover:bg-[#FF2A55] hover:text-white transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center"
                     title="Send Message"
                   >
-                    <Mail className="w-4 h-4" />
+                    <Mail className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
                   </a>
                 </div>
               </div>
@@ -203,15 +203,15 @@ export default function About() {
           </div>
 
           {/* Right Column: Narrative Comic Box & RPG Attribute Grid */}
-          <div className="about-text-wrapper lg:col-span-7 flex flex-col justify-between space-y-8">
+          <div className="about-text-wrapper lg:col-span-7 flex flex-col justify-between space-y-6 sm:space-y-8">
             {/* Comic Speech/Narrative Dialogue Box */}
-            <div className="comic-card p-6 sm:p-8 rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000] relative">
-              <span className="about-text-reveal text-xs font-mono text-[#FFE600] tracking-widest uppercase mb-3 block font-black">
+            <div className="comic-card p-4 sm:p-6 md:p-8 rounded-2xl bg-[#13131A] border-[2.5px] sm:border-[3px] border-black shadow-[3px_3px_0px_#000000] sm:shadow-[4px_4px_0px_#000000] relative">
+              <span className="about-text-reveal text-xs font-mono text-[#FFE600] tracking-widest uppercase mb-2.5 sm:mb-3 block font-black">
                 {"// BACKGROUND & PHILOSOPHY"}
               </span>
 
               {/* Large headline with comic font styling */}
-              <h3 className="about-text-reveal font-syne text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-[1.2] uppercase text-white">
+              <h3 className="about-text-reveal font-syne text-xl sm:text-2xl md:text-4xl font-black tracking-tight leading-[1.2] uppercase text-white">
                 I BUILD{" "}
                 <span className="text-[#FFE600] drop-shadow-[2px_2px_0px_#000000]">
                   INTELLIGENT SYSTEMS
@@ -224,7 +224,7 @@ export default function About() {
               </h3>
 
               {/* 2-Column Body Narrative */}
-              <div className="about-text-reveal mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-neutral-300 text-sm leading-relaxed">
+              <div className="about-text-reveal mt-4 sm:mt-6 grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4 text-neutral-300 text-xs sm:text-sm leading-relaxed">
                 <p>
                   I am an <strong className="text-white font-black">AI Developer and Computer Science Engineer</strong> deeply
                   passionate about constructing autonomous multi-agent networks,
@@ -242,19 +242,19 @@ export default function About() {
             </div>
 
             {/* Character RPG Stats Grid (3 cols x 2 rows) with 3px black borders & 4px shadows */}
-            <div className="about-stats-grid grid grid-cols-2 sm:grid-cols-3 gap-3.5 pt-2">
+            <div className="about-stats-grid grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3.5 pt-1 sm:pt-2">
               {facts.map((fact) => (
                 <div
                   key={fact.label}
-                  className="about-stat-item comic-card p-4 rounded-xl bg-[#17171C] border-[3px] border-black shadow-[4px_4px_0px_#000000] hover:bg-[#FFE600] hover:text-black group transition-all"
+                  className="about-stat-item comic-card p-3 sm:p-4 rounded-xl bg-[#17171C] border-[2.5px] sm:border-[3px] border-black shadow-[3px_3px_0px_#000000] sm:shadow-[4px_4px_0px_#000000] hover:bg-[#FFE600] hover:text-black group transition-all"
                 >
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-[10px] font-mono text-[#FFE600] group-hover:text-black uppercase tracking-widest font-black block">
+                  <div className="flex items-center justify-between mb-1 sm:mb-1.5">
+                    <span className="text-[9px] sm:text-[10px] font-mono text-[#FFE600] group-hover:text-black uppercase tracking-widest font-black block">
                       {fact.label}
                     </span>
-                    <span className="text-sm">{fact.icon}</span>
+                    <span className="text-xs sm:text-sm">{fact.icon}</span>
                   </div>
-                  <span className="font-syne font-bold text-sm sm:text-base text-white group-hover:text-black block leading-snug">
+                  <span className="font-syne font-bold text-xs sm:text-sm md:text-base text-white group-hover:text-black block leading-snug">
                     {fact.value}
                   </span>
                 </div>

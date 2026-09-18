@@ -71,12 +71,12 @@ export default function Expertise() {
   ];
 
   const floatingIcons = [
-    { name: "Java 21", color: "#FFE600", left: "8%", top: "15%", duration: 3.2, delay: 0 },
-    { name: "Python", color: "#00F0FF", left: "62%", top: "10%", duration: 3.8, delay: 0.4 },
-    { name: "Spring Boot", color: "#00E676", left: "28%", top: "42%", duration: 3.5, delay: 0.8 },
-    { name: "Next.js", color: "#FFFFFF", left: "70%", top: "50%", duration: 4.1, delay: 0.2 },
-    { name: "Supabase", color: "#3ECF8E", left: "12%", top: "72%", duration: 3.6, delay: 1.1 },
-    { name: "GSAP Motion", color: "#FFE600", left: "55%", top: "76%", duration: 3.9, delay: 0.6 },
+    { name: "Java 21", color: "#FFE600", left: "6%", top: "15%", duration: 3.2, delay: 0 },
+    { name: "Python", color: "#00F0FF", left: "52%", top: "10%", duration: 3.8, delay: 0.4 },
+    { name: "Spring Boot", color: "#00E676", left: "20%", top: "42%", duration: 3.5, delay: 0.8 },
+    { name: "Next.js", color: "#FFFFFF", left: "58%", top: "50%", duration: 4.1, delay: 0.2 },
+    { name: "Supabase", color: "#3ECF8E", left: "8%", top: "72%", duration: 3.6, delay: 1.1 },
+    { name: "GSAP Motion", color: "#FFE600", left: "48%", top: "74%", duration: 3.9, delay: 0.6 },
   ];
 
   // GSAP quickTo cursor tracking for preview panel
@@ -178,13 +178,13 @@ export default function Expertise() {
     <section
       id="expertise"
       ref={containerRef}
-      className="relative min-h-screen py-24 md:py-36 px-6 md:px-12 bg-[#0B0B0F] text-white border-t-[3px] border-black overflow-hidden bg-halftone-dark scroll-mt-20"
+      className="relative min-h-screen py-20 sm:py-24 md:py-36 px-4 sm:px-6 md:px-12 bg-[#0B0B0F] text-white border-t-[3px] border-black overflow-hidden bg-halftone-dark scroll-mt-20"
     >
       <div className="max-w-5xl mx-auto w-full">
         {/* Section Header */}
-        <div className="mb-14 md:mb-18">
+        <div className="mb-10 sm:mb-14 md:mb-18">
           <div className="flex items-center justify-between w-full mb-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#00F0FF] text-black border-[3px] border-black shadow-[3px_3px_0px_#000000] rounded-lg text-xs font-mono font-black tracking-widest uppercase">
+            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 bg-[#00F0FF] text-black border-[2.5px] sm:border-[3px] border-black shadow-[2.5px_2.5px_0px_#000000] sm:shadow-[3px_3px_0px_#000000] rounded-lg text-[11px] sm:text-xs font-mono font-black tracking-widest uppercase">
               <Zap className="w-3.5 h-3.5 fill-black" />
               <span>— 03 · TECHNICAL EXPERTISE</span>
             </div>
@@ -192,20 +192,20 @@ export default function Expertise() {
 
           <h2
             data-text="MY EXPERTISE"
-            className="comic-glitch-text text-4xl sm:text-6xl md:text-7xl leading-tight tracking-tight uppercase text-white drop-shadow-[5px_5px_0px_#000000]"
+            className="comic-glitch-text text-3xl sm:text-5xl md:text-7xl leading-tight tracking-tight uppercase text-white drop-shadow-[4px_4px_0px_#000000] sm:drop-shadow-[5px_5px_0px_#000000]"
           >
             <span className="text-[#FFE600]">MY</span> EXPERTISE
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-14 items-start">
           {/* Left Column: Overview & Tech Stack Matrix */}
-          <div className="lg:col-span-5 flex flex-col justify-between space-y-8">
-            <div className="comic-card p-6 rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000]">
-              <h3 className="font-syne text-2xl sm:text-3xl font-black tracking-tight leading-snug text-white">
+          <div className="lg:col-span-5 flex flex-col justify-between space-y-6 sm:space-y-8">
+            <div className="comic-card p-4 sm:p-6 rounded-2xl bg-[#13131A] border-[2.5px] sm:border-[3px] border-black shadow-[3px_3px_0px_#000000] sm:shadow-[4px_4px_0px_#000000]">
+              <h3 className="font-syne text-xl sm:text-2xl md:text-3xl font-black tracking-tight leading-snug text-white">
                 Intelligent systems where autonomy, code, and concurrency scale in harmony.
               </h3>
-              <p className="mt-4 text-neutral-300 text-sm leading-relaxed">
+              <p className="mt-3 sm:mt-4 text-neutral-300 text-xs sm:text-sm leading-relaxed">
                 From autonomous multi-agent networks to resilient Java backends and
                 data pipelines, I deliver production systems engineered with architectural
                 rigor and speed.
@@ -213,9 +213,9 @@ export default function Expertise() {
             </div>
 
             {/* Floating Tech Stack Cluster Container */}
-            <div className="comic-card relative w-full h-72 rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000] overflow-hidden p-4">
+            <div className="comic-card relative w-full h-64 sm:h-72 rounded-2xl bg-[#13131A] border-[2.5px] sm:border-[3px] border-black shadow-[3px_3px_0px_#000000] sm:shadow-[4px_4px_0px_#000000] overflow-hidden p-3 sm:p-4">
               <div className="flex items-center justify-between border-b-[2px] border-black pb-2 mb-2">
-                <span className="text-[11px] font-mono font-black tracking-widest uppercase text-[#FFE600]">
+                <span className="text-[10px] sm:text-[11px] font-mono font-black tracking-widest uppercase text-[#FFE600]">
                   CORE TECH STACK
                 </span>
                 <span className="w-2.5 h-2.5 rounded-full bg-[#00E676] border border-black animate-pulse" />
@@ -225,7 +225,7 @@ export default function Expertise() {
               {floatingIcons.map((icon, idx) => (
                 <div
                   key={icon.name}
-                  className={`floating-icon-${idx} absolute px-3.5 py-1.5 rounded-lg text-xs font-mono font-black border-[2.5px] border-black shadow-[3px_3px_0px_#000000] select-none transition-transform hover:scale-110 cursor-default`}
+                  className={`floating-icon-${idx} absolute px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-mono font-black border-[2px] sm:border-[2.5px] border-black shadow-[2.5px_2.5px_0px_#000000] sm:shadow-[3px_3px_0px_#000000] select-none transition-transform hover:scale-110 cursor-default`}
                   style={{
                     left: icon.left,
                     top: icon.top,
@@ -234,7 +234,7 @@ export default function Expertise() {
                   }}
                 >
                   <span
-                    className="inline-block w-2 h-2 rounded-full mr-1.5 align-middle border border-black"
+                    className="inline-block w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full mr-1 sm:mr-1.5 align-middle border border-black"
                     style={{ backgroundColor: icon.color }}
                   />
                   {icon.name}
@@ -243,7 +243,7 @@ export default function Expertise() {
             </div>
 
             {/* Top 4-5 Skills Pill Row */}
-            <div className="flex flex-wrap gap-2 pt-1">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-1">
               {[
                 "Java Development",
                 "AI Agent Architect",
@@ -252,7 +252,7 @@ export default function Expertise() {
               ].map((skill) => (
                 <span
                   key={skill}
-                  className="comic-card text-xs font-mono font-black px-3.5 py-1.5 rounded-lg bg-[#FFE600] text-black border-[2.5px] border-black shadow-[3px_3px_0px_#000000]"
+                  className="comic-card text-[11px] sm:text-xs font-mono font-black px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-lg bg-[#FFE600] text-black border-[2px] sm:border-[2.5px] border-black shadow-[2.5px_2.5px_0px_#000000] sm:shadow-[3px_3px_0px_#000000]"
                 >
                   ⚡ {skill}
                 </span>
@@ -261,7 +261,7 @@ export default function Expertise() {
           </div>
 
           {/* Right Column: Numbered List Rows (01-04) */}
-          <div className="lg:col-span-7 flex flex-col space-y-4">
+          <div className="lg:col-span-7 flex flex-col space-y-3 sm:space-y-4">
             {expertiseList.map((item, idx) => {
               const IconComp = item.icon;
               const isMobileActive = activeMobileIdx === idx;
@@ -275,48 +275,48 @@ export default function Expertise() {
                     setActiveMobileIdx(isMobileActive ? null : idx)
                   }
                   className={cn(
-                    "expertise-row comic-card group relative p-6 sm:p-7 rounded-2xl border-[3px] border-black shadow-[4px_4px_0px_#000000] transition-all cursor-pointer bg-[#13131A]",
+                    "expertise-row comic-card group relative p-4 sm:p-6 md:p-7 rounded-2xl border-[2.5px] sm:border-[3px] border-black shadow-[3px_3px_0px_#000000] sm:shadow-[4px_4px_0px_#000000] transition-all cursor-pointer bg-[#13131A]",
                     isMobileActive || hoveredSlug === item.slug
-                      ? "bg-[#1C1C26] shadow-[6px_6px_0px_#000000] -translate-x-1 -translate-y-1"
+                      ? "bg-[#1C1C26] shadow-[5px_5px_0px_#000000] sm:shadow-[6px_6px_0px_#000000] -translate-x-0.5 sm:-translate-x-1 -translate-y-0.5 sm:-translate-y-1"
                       : "hover:bg-[#1A1A24]"
                   )}
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex items-start gap-4 sm:gap-6">
+                  <div className="flex items-start justify-between gap-3 sm:gap-4">
+                    <div className="flex items-start gap-2.5 sm:gap-4 flex-1 min-w-0">
                       {/* Number Badge with 3px border */}
-                      <span className="font-mono font-black text-base px-2.5 py-1 rounded-lg bg-[#FFE600] text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] mt-0.5">
+                      <span className="font-mono font-black text-xs sm:text-base px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg bg-[#FFE600] text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] mt-0.5 flex-shrink-0">
                         {item.num}
                       </span>
 
-                      <div>
-                        <div className="flex items-center gap-2.5 mb-1.5">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2 sm:gap-2.5 mb-1 sm:mb-1.5 flex-wrap">
                           {/* Row Icon in Box with 2.5px border */}
-                          <div className="w-8 h-8 rounded-lg bg-[#FFE600] text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] flex items-center justify-center transition-transform group-hover:scale-110 group-hover:rotate-6">
-                            <IconComp className="w-4 h-4 stroke-[2.5]" />
+                          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[#FFE600] text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] flex items-center justify-center transition-transform group-hover:scale-110 group-hover:rotate-6 flex-shrink-0">
+                            <IconComp className="w-3.5 sm:w-4 h-3.5 sm:h-4 stroke-[2.5]" />
                           </div>
 
-                          <h4 className="font-syne text-lg sm:text-xl font-black tracking-tight text-white group-hover:text-[#FFE600] transition-colors">
+                          <h4 className="font-syne text-base sm:text-lg md:text-xl font-black tracking-tight text-white group-hover:text-[#FFE600] transition-colors leading-tight">
                             {item.title}
                           </h4>
                         </div>
 
-                        <p className="text-neutral-300 text-xs sm:text-sm mt-2 leading-relaxed">
+                        <p className="text-neutral-300 text-xs sm:text-sm mt-1.5 sm:mt-2 leading-relaxed">
                           {item.desc}
                         </p>
                       </div>
                     </div>
 
-                    <div className="comic-btn w-8 h-8 rounded-lg bg-white text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] flex items-center justify-center group-hover:bg-[#FFE600] transition-colors flex-shrink-0">
-                      <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
+                    <div className="comic-btn w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] flex items-center justify-center group-hover:bg-[#FFE600] transition-colors flex-shrink-0 ml-1">
+                      <ArrowUpRight className="w-3.5 sm:w-4 h-3.5 sm:h-4 stroke-[2.5]" />
                     </div>
                   </div>
 
                   {/* Skill Tag Pills */}
-                  <div className="mt-4 flex flex-wrap gap-2 pt-3 border-t-[2px] border-black/40">
+                  <div className="mt-3 sm:mt-4 flex flex-wrap gap-1.5 sm:gap-2 pt-2.5 sm:pt-3 border-t-[2px] border-black/40">
                     {item.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="text-[11px] font-mono font-bold px-3 py-1 rounded-md bg-[#1A1A24] text-neutral-200 border-[1.5px] border-black shadow-[1.5px_1.5px_0px_#000000]"
+                        className="text-[10px] sm:text-[11px] font-mono font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded-md bg-[#1A1A24] text-neutral-200 border-[1.5px] border-black shadow-[1.5px_1.5px_0px_#000000]"
                       >
                         {tag}
                       </span>

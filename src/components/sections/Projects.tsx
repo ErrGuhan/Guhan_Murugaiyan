@@ -266,15 +266,15 @@ export default function Projects() {
         </div>
 
         {/* Center Distorted WORK Title */}
-        <div className="relative z-10 max-w-5xl mx-auto px-6 py-10 sm:py-14 flex flex-col items-center text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-white text-black border-[3px] border-black shadow-[3px_3px_0px_#000000] rounded-lg text-xs font-mono font-black tracking-widest uppercase mb-3 -rotate-1">
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-14 flex flex-col items-center text-center">
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 bg-white text-black border-[2.5px] sm:border-[3px] border-black shadow-[2.5px_2.5px_0px_#000000] sm:shadow-[3px_3px_0px_#000000] rounded-lg text-[11px] sm:text-xs font-mono font-black tracking-widest uppercase mb-3 -rotate-1">
             <Sparkles className="w-3.5 h-3.5 text-[#FFE600] fill-[#FFE600]" />
             <span>{"FEATURED PROJECTS // CASE STUDIES"}</span>
           </div>
 
           <h2
             data-text="WORK"
-            className="comic-glitch-text text-[clamp(4.5rem,18vw,14rem)] leading-[0.82] tracking-tighter uppercase text-[#FFE600] drop-shadow-[7px_7px_0px_#000000]"
+            className="comic-glitch-text text-[clamp(3.8rem,16vw,14rem)] leading-[0.82] tracking-tighter uppercase text-[#FFE600] drop-shadow-[5px_5px_0px_#000000] sm:drop-shadow-[7px_7px_0px_#000000]"
           >
             WORK
           </h2>
@@ -300,7 +300,7 @@ export default function Projects() {
           ref={stickyInnerRef}
           className={
             isStackedMode
-              ? "relative w-full py-12 px-4 sm:px-6 bg-[#0B0B0F] bg-halftone-dark"
+              ? "relative w-full py-8 sm:py-12 px-3 sm:px-6 bg-[#0B0B0F] bg-halftone-dark"
               : "sticky top-0 w-full h-[100dvh] overflow-hidden bg-[#0B0B0F] bg-halftone-dark flex flex-col justify-between py-4 sm:py-6"
           }
         >
@@ -317,17 +317,17 @@ export default function Projects() {
             {/* Header & Gallery Navigation Controls */}
             <div className="max-w-7xl mx-auto w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 pb-3 sm:pb-4 border-b-[3px] border-black flex-shrink-0">
               <div>
-                <div className="flex flex-wrap items-center gap-2 mb-1">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg border-[2.5px] border-black bg-[#FFE600] text-black shadow-[2.5px_2.5px_0px_#000000] text-[11px] font-mono tracking-widest uppercase font-black">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-1">
+                  <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-lg border-[2px] sm:border-[2.5px] border-black bg-[#FFE600] text-black shadow-[2px_2px_0px_#000000] sm:shadow-[2.5px_2.5px_0px_#000000] text-[10px] sm:text-[11px] font-mono tracking-widest uppercase font-black">
                     <Sparkles className="w-3.5 h-3.5 fill-black" />
                     {`// 01 — FEATURED WORK (0${activeIndex + 1} / 0${totalProjects})`}
                   </div>
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border-[2px] border-black bg-[#13131A] text-[#00F0FF] shadow-[2px_2px_0px_#000000] text-[10px] font-mono font-black tracking-wider uppercase">
+                  <div className="inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-lg border-[1.5px] sm:border-[2px] border-black bg-[#13131A] text-[#00F0FF] shadow-[2px_2px_0px_#000000] text-[9px] sm:text-[10px] font-mono font-black tracking-wider uppercase">
                     <Activity className="w-3 h-3 text-[#00E676] animate-pulse" />
                     <span>5 PRODUCTION CASE STUDIES · LIVE DEMOS</span>
                   </div>
                 </div>
-                <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tight text-white -webkit-text-stroke-[1.5px_#000] drop-shadow-[3px_3px_0px_#000000]">
+                <h3 className="font-display text-xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tight text-white -webkit-text-stroke-[1.5px_#000] drop-shadow-[3px_3px_0px_#000000]">
                   SELECTED CASE STUDIES
                 </h3>
               </div>
@@ -429,14 +429,14 @@ export default function Projects() {
                         )}
                       >
                         {/* FRONT FACE: Visual Preview & Live Launch */}
-                        <div className="relative rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000] hover:shadow-[7px_7px_0px_#000000] p-4 sm:p-5 lg:p-6 flex flex-col justify-between group select-text h-full [backface-visibility:hidden]">
+                        <div className="relative rounded-2xl bg-[#13131A] border-[2.5px] sm:border-[3px] border-black shadow-[3px_3px_0px_#000000] sm:shadow-[4px_4px_0px_#000000] hover:shadow-[6px_6px_0px_#000000] sm:hover:shadow-[7px_7px_0px_#000000] p-3.5 sm:p-5 lg:p-6 flex flex-col justify-between group select-text h-full [backface-visibility:hidden]">
                           {/* Top Case Bar */}
-                          <div className="flex items-center justify-between pb-3 border-b-[2px] border-black flex-shrink-0 gap-2">
-                            <div className="flex items-center gap-2">
-                              <span className="px-2 py-0.5 rounded-md bg-[#FFE600] text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] font-mono font-black text-xs">
+                          <div className="flex items-center justify-between pb-2.5 sm:pb-3 border-b-[2px] border-black flex-shrink-0 gap-1.5 sm:gap-2 flex-wrap">
+                            <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                              <span className="px-2 py-0.5 rounded-md bg-[#FFE600] text-black border-[2px] border-black shadow-[1.5px_1.5px_0px_#000000] sm:shadow-[2px_2px_0px_#000000] font-mono font-black text-[11px] sm:text-xs flex-shrink-0">
                                 ARC {project.num}
                               </span>
-                              <span className="text-xs font-mono tracking-wider text-neutral-300 uppercase font-black">
+                              <span className="text-[10px] sm:text-xs font-mono tracking-wider text-neutral-300 uppercase font-black truncate max-w-[130px] sm:max-w-none">
                                 / {project.category}
                               </span>
                               <span className="hidden sm:inline-block text-[11px] font-mono text-[#FFE600] font-bold">
@@ -444,18 +444,18 @@ export default function Projects() {
                               </span>
                             </div>
 
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
                               <button
                                 type="button"
                                 onClick={(e) => toggleFlip(project.id, e)}
                                 data-cursor="pointer"
-                                className="comic-btn px-2.5 py-1 rounded-md bg-[#00F0FF] text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] text-[10px] font-mono font-black tracking-wider uppercase flex items-center gap-1 hover:bg-[#FFE600] cursor-pointer"
+                                className="comic-btn px-2 sm:px-2.5 py-1 rounded-md bg-[#00F0FF] text-black border-[2px] border-black shadow-[1.5px_1.5px_0px_#000000] sm:shadow-[2px_2px_0px_#000000] text-[9px] sm:text-[10px] font-mono font-black tracking-wider uppercase flex items-center gap-1 hover:bg-[#FFE600] cursor-pointer min-h-[30px]"
                                 title="Flip to inspect code architecture"
                               >
                                 <RotateCw className="w-3 h-3 stroke-[2.5]" />
                                 <span>CODE</span>
                               </button>
-                              <span className="px-2 py-0.5 rounded-md bg-[#00E676] text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] text-[10px] font-mono font-black tracking-wider uppercase">
+                              <span className="px-1.5 sm:px-2 py-0.5 rounded-md bg-[#00E676] text-black border-[2px] border-black shadow-[1.5px_1.5px_0px_#000000] sm:shadow-[2px_2px_0px_#000000] text-[9px] sm:text-[10px] font-mono font-black tracking-wider uppercase">
                                 RELEASED ⚡
                               </span>
                             </div>
@@ -463,8 +463,7 @@ export default function Projects() {
 
                           {/* Project Preview Image */}
                           <div
-                            className="relative w-full my-2.5 sm:my-3 rounded-xl overflow-hidden border-[3px] border-black shadow-[3px_3px_0px_#000000] bg-[#161616] group/frame cursor-pointer flex-shrink-0"
-                            style={{ aspectRatio: "21/8", maxHeight: "180px" }}
+                            className="relative w-full my-2.5 sm:my-3 rounded-xl overflow-hidden border-[2.5px] sm:border-[3px] border-black shadow-[2.5px_2.5px_0px_#000000] sm:shadow-[3px_3px_0px_#000000] bg-[#161616] group/frame cursor-pointer flex-shrink-0 aspect-[16/9] sm:aspect-[21/8] max-h-[220px]"
                             data-cursor="view"
                           >
                             <Image
@@ -476,26 +475,26 @@ export default function Projects() {
                               className="object-cover object-center opacity-85 contrast-125 transition-transform duration-500 ease-out group-hover/frame:scale-[1.03]"
                               sizes="(max-width: 1024px) 100vw, 760px"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3 sm:p-4">
-                              <span className="text-[10px] font-mono text-[#FFE600] tracking-widest uppercase mb-0.5 font-black">
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-2.5 sm:p-4">
+                              <span className="text-[9px] sm:text-[10px] font-mono text-[#FFE600] tracking-widest uppercase mb-0.5 font-black">
                                 ARCHITECT: GUHAN MURUGAIYAN
                               </span>
-                              <h4 className="font-syne text-lg sm:text-xl lg:text-2xl font-black uppercase text-white drop-shadow-[2px_2px_0px_#000000]">
+                              <h4 className="font-syne text-base sm:text-xl lg:text-2xl font-black uppercase text-white drop-shadow-[2px_2px_0px_#000000] leading-tight">
                                 {project.title}
                               </h4>
                             </div>
                           </div>
 
                           {/* Content Grid */}
-                          <div className="my-1 sm:my-2 flex-1 min-h-0 space-y-2">
+                          <div className="my-1 sm:my-2 flex-1 min-h-0 space-y-1.5 sm:space-y-2">
                             <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed line-clamp-3">
                               {project.description}
                             </p>
-                            <div className="flex flex-wrap gap-1.5 pt-1">
+                            <div className="flex flex-wrap gap-1 sm:gap-1.5 pt-0.5 sm:pt-1">
                               {project.tags.map((tag) => (
                                 <span
                                   key={tag}
-                                  className="text-[10px] sm:text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-md bg-[#1C1C26] border-[1.5px] border-black shadow-[1.5px_1.5px_0px_#000000] text-white"
+                                  className="text-[9px] sm:text-[11px] font-mono font-bold px-2 sm:px-2.5 py-0.5 rounded-md bg-[#1C1C26] border-[1.5px] border-black shadow-[1.5px_1.5px_0px_#000000] text-white"
                                 >
                                   {tag}
                                 </span>
@@ -504,16 +503,16 @@ export default function Projects() {
                           </div>
 
                           {/* Action Links Footer */}
-                          <div className="pt-2.5 sm:pt-3 border-t-[2px] border-black flex flex-wrap items-center justify-between gap-2.5 mt-auto flex-shrink-0">
-                            <span className="text-[11px] font-mono font-bold text-neutral-400">
+                          <div className="pt-2.5 sm:pt-3 border-t-[2px] border-black flex flex-wrap items-center justify-between gap-2 mt-auto flex-shrink-0">
+                            <span className="text-[10px] sm:text-[11px] font-mono font-bold text-neutral-400">
                               VERIFIED REPO SOURCE
                             </span>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1.5 sm:gap-2">
                               <a
                                 href={project.githubUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="comic-btn px-3 py-1.5 rounded-lg bg-white text-black text-[11px] font-mono font-black tracking-wider uppercase flex items-center gap-1.5 hover:bg-[#00F0FF]"
+                                className="comic-btn px-2.5 sm:px-3 py-1.5 rounded-lg bg-white text-black text-[10px] sm:text-[11px] font-mono font-black tracking-wider uppercase flex items-center gap-1 sm:gap-1.5 hover:bg-[#00F0FF] min-h-[38px]"
                               >
                                 <GithubIcon className="w-3.5 h-3.5" /> REPO
                               </a>
@@ -521,7 +520,7 @@ export default function Projects() {
                                 href={project.liveUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="comic-btn px-3.5 py-1.5 rounded-lg bg-[#FFE600] text-black text-[11px] font-mono font-black tracking-wider uppercase hover:bg-[#00E676] flex items-center gap-1.5"
+                                className="comic-btn px-3 sm:px-3.5 py-1.5 rounded-lg bg-[#FFE600] text-black text-[10px] sm:text-[11px] font-mono font-black tracking-wider uppercase hover:bg-[#00E676] flex items-center gap-1 sm:gap-1.5 min-h-[38px]"
                               >
                                 LIVE DEMO <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
                               </a>
@@ -530,16 +529,16 @@ export default function Projects() {
                         </div>
 
                         {/* BACK FACE: Architecture Terminal & Code Blueprint */}
-                        <div className="absolute inset-0 rounded-2xl bg-[#08080E] border-[3px] border-black shadow-[4px_4px_0px_#000000] hover:shadow-[7px_7px_0px_#000000] p-4 sm:p-5 lg:p-6 flex flex-col justify-between select-text [transform:rotateY(180deg)] [backface-visibility:hidden]">
+                        <div className="absolute inset-0 rounded-2xl bg-[#08080E] border-[2.5px] sm:border-[3px] border-black shadow-[3px_3px_0px_#000000] sm:shadow-[4px_4px_0px_#000000] hover:shadow-[6px_6px_0px_#000000] sm:hover:shadow-[7px_7px_0px_#000000] p-3.5 sm:p-5 lg:p-6 flex flex-col justify-between select-text [transform:rotateY(180deg)] [backface-visibility:hidden]">
                           {/* Terminal Header */}
-                          <div className="flex items-center justify-between pb-2.5 border-b-[2px] border-black flex-shrink-0 gap-2 bg-[#13131A] -mx-4 -mt-4 sm:-mx-5 sm:-mt-5 lg:-mx-6 lg:-mt-6 p-3 rounded-t-2xl">
+                          <div className="flex items-center justify-between pb-2 sm:pb-2.5 border-b-[2px] border-black flex-shrink-0 gap-2 bg-[#13131A] -mx-3.5 -mt-3.5 sm:-mx-5 sm:-mt-5 lg:-mx-6 lg:-mt-6 p-2.5 sm:p-3 rounded-t-2xl">
                             <div className="flex items-center gap-2">
-                              <div className="flex items-center gap-1.5">
+                              <div className="flex items-center gap-1 sm:gap-1.5">
                                 <div className="w-2.5 h-2.5 rounded-full bg-[#FF2A55] border border-black" />
                                 <div className="w-2.5 h-2.5 rounded-full bg-[#FFE600] border border-black" />
                                 <div className="w-2.5 h-2.5 rounded-full bg-[#00E676] border border-black" />
                               </div>
-                              <span className="font-mono text-xs font-black text-[#FFE600] tracking-wider uppercase">
+                              <span className="font-mono text-[11px] sm:text-xs font-black text-[#FFE600] tracking-wider uppercase">
                                 {`ARC ${project.num} // ARCHITECTURE`}
                               </span>
                             </div>
@@ -553,7 +552,7 @@ export default function Projects() {
                                 type="button"
                                 onClick={(e) => toggleFlip(project.id, e)}
                                 data-cursor="pointer"
-                                className="comic-btn px-2.5 py-1 rounded-md bg-[#FFE600] text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] text-[10px] font-mono font-black tracking-wider uppercase flex items-center gap-1 hover:bg-[#00F0FF] cursor-pointer"
+                                className="comic-btn px-2 sm:px-2.5 py-1 rounded-md bg-[#FFE600] text-black border-[2px] border-black shadow-[1.5px_1.5px_0px_#000000] sm:shadow-[2px_2px_0px_#000000] text-[9px] sm:text-[10px] font-mono font-black tracking-wider uppercase flex items-center gap-1 hover:bg-[#00F0FF] cursor-pointer min-h-[30px]"
                                 title="Flip back to preview"
                               >
                                 <RotateCw className="w-3 h-3 stroke-[2.5]" />
@@ -563,34 +562,34 @@ export default function Projects() {
                           </div>
 
                           {/* Code Terminal View */}
-                          <div className="my-3 flex-1 min-h-0 flex flex-col justify-between">
-                            <pre className="p-3 sm:p-4 text-[10px] sm:text-[11px] leading-relaxed text-neutral-200 overflow-x-auto overflow-y-auto max-h-[220px] sm:max-h-[260px] bg-black/90 rounded-xl border-[2px] border-black font-mono selection:bg-[#FFE600] selection:text-black">
+                          <div className="my-2 sm:my-3 flex-1 min-h-0 flex flex-col justify-between">
+                            <pre className="p-2.5 sm:p-4 text-[9px] sm:text-[11px] leading-relaxed text-neutral-200 overflow-x-auto overflow-y-auto max-h-[190px] sm:max-h-[260px] bg-black/90 rounded-xl border-[2px] border-black font-mono selection:bg-[#FFE600] selection:text-black">
                               <code>{project.codeSnippet}</code>
                             </pre>
 
                             {/* Architecture Spec Grid */}
-                            <div className="grid grid-cols-3 gap-2 mt-3 font-mono text-[10px]">
-                              <div className="p-2 rounded-lg bg-[#13131A] border-[1.5px] border-black">
-                                <span className="text-neutral-500 block uppercase font-bold">ARC YEAR</span>
+                            <div className="grid grid-cols-3 gap-1.5 sm:gap-2 mt-2 sm:mt-3 font-mono text-[9px] sm:text-[10px]">
+                              <div className="p-1.5 sm:p-2 rounded-lg bg-[#13131A] border-[1.5px] border-black">
+                                <span className="text-neutral-500 block uppercase font-bold text-[8px] sm:text-[9px]">ARC YEAR</span>
                                 <span className="text-[#FFE600] font-black">{project.year}</span>
                               </div>
-                              <div className="p-2 rounded-lg bg-[#13131A] border-[1.5px] border-black">
-                                <span className="text-neutral-500 block uppercase font-bold">CORE RUNTIME</span>
+                              <div className="p-1.5 sm:p-2 rounded-lg bg-[#13131A] border-[1.5px] border-black">
+                                <span className="text-neutral-500 block uppercase font-bold text-[8px] sm:text-[9px]">RUNTIME</span>
                                 <span className="text-[#00F0FF] font-black truncate block">{project.tags[0] ?? "TypeScript"}</span>
                               </div>
-                              <div className="p-2 rounded-lg bg-[#13131A] border-[1.5px] border-black">
-                                <span className="text-neutral-500 block uppercase font-bold">STATUS</span>
+                              <div className="p-1.5 sm:p-2 rounded-lg bg-[#13131A] border-[1.5px] border-black">
+                                <span className="text-neutral-500 block uppercase font-bold text-[8px] sm:text-[9px]">STATUS</span>
                                 <span className={cn(
-                                  "font-black text-[9px] tracking-wide",
+                                  "font-black text-[8px] sm:text-[9px] tracking-wide",
                                   project.statusBadge === "SHIPPED" ? "text-[#00E676]" : "text-[#FFE600]"
                                 )}>
-                                  {project.statusBadge === "SHIPPED" ? "⚡ SHIPPED" : "🔧 IN PROGRESS"}
+                                  {project.statusBadge === "SHIPPED" ? "⚡ SHIPPED" : "🔧 PROGRESS"}
                                 </span>
                               </div>
                             </div>
 
                             {/* Difficulty star rating */}
-                            <div className="flex items-center gap-2 mt-2 font-mono text-[10px]">
+                            <div className="flex items-center gap-1.5 sm:gap-2 mt-1.5 sm:mt-2 font-mono text-[9px] sm:text-[10px]">
                               <span className="text-neutral-500 uppercase font-bold tracking-wider">DIFFICULTY:</span>
                               <span className="tracking-wide" aria-label={`Difficulty: ${project.difficulty} out of 5 stars`}>
                                 {Array.from({ length: 5 }).map((_, i) => (
@@ -606,16 +605,16 @@ export default function Projects() {
                           </div>
 
                           {/* Terminal Footer Actions */}
-                          <div className="pt-2.5 sm:pt-3 border-t-[2px] border-black flex flex-wrap items-center justify-between gap-2 mt-auto flex-shrink-0">
-                            <span className="text-[10px] font-mono font-bold text-neutral-400">
+                          <div className="pt-2 sm:pt-3 border-t-[2px] border-black flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 mt-auto flex-shrink-0">
+                            <span className="text-[9px] sm:text-[10px] font-mono font-bold text-neutral-400">
                               {"// VERIFIED COMPONENT SCHEMA"}
                             </span>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1.5 sm:gap-2">
                               <a
                                 href={project.githubUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="comic-btn px-3 py-1.5 rounded-lg bg-white text-black text-[11px] font-mono font-black tracking-wider uppercase flex items-center gap-1.5 hover:bg-[#00F0FF]"
+                                className="comic-btn px-2.5 sm:px-3 py-1.5 rounded-lg bg-white text-black text-[10px] sm:text-[11px] font-mono font-black tracking-wider uppercase flex items-center gap-1 sm:gap-1.5 hover:bg-[#00F0FF] min-h-[38px]"
                               >
                                 <GithubIcon className="w-3.5 h-3.5" /> REPO SOURCE
                               </a>
@@ -623,7 +622,7 @@ export default function Projects() {
                                 href={project.liveUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="comic-btn px-3.5 py-1.5 rounded-lg bg-[#FFE600] text-black text-[11px] font-mono font-black tracking-wider uppercase hover:bg-[#00E676] flex items-center gap-1.5"
+                                className="comic-btn px-3 sm:px-3.5 py-1.5 rounded-lg bg-[#FFE600] text-black text-[10px] sm:text-[11px] font-mono font-black tracking-wider uppercase hover:bg-[#00E676] flex items-center gap-1 sm:gap-1.5 min-h-[38px]"
                               >
                                 LAUNCH <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
                               </a>

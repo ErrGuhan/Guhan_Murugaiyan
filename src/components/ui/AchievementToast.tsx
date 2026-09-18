@@ -40,7 +40,7 @@ export default function AchievementToast() {
   return (
     <aside
       aria-label="Achievement notification"
-      className="fixed bottom-6 right-6 z-50 max-w-sm w-[calc(100vw-3rem)] animate-in slide-in-from-bottom-5 fade-in duration-300"
+      className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 left-4 sm:left-auto z-50 max-w-sm w-auto sm:w-[calc(100vw-3rem)] sm:max-w-sm animate-in slide-in-from-bottom-5 fade-in duration-300"
     >
       <div className="relative rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[6px_6px_0px_#000000] overflow-hidden">
         {/* Banner Header */}

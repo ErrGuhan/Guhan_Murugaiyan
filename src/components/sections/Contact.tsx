@@ -204,32 +204,32 @@ export default function Contact() {
     <section
       id="contact"
       ref={containerRef}
-      className="relative min-h-screen py-24 md:py-36 px-6 md:px-12 bg-[#0B0B0F] text-white border-t-[3px] border-black overflow-hidden scroll-mt-16 bg-halftone-dark"
+      className="relative min-h-screen py-20 sm:py-24 md:py-36 px-4 sm:px-6 md:px-12 bg-[#0B0B0F] text-white border-t-[3px] border-black overflow-hidden scroll-mt-16 bg-halftone-dark"
     >
       <div className="max-w-5xl mx-auto w-full">
         {/* Section Header */}
-        <div className="mb-14 md:mb-18">
+        <div className="mb-12 sm:mb-14 md:mb-18">
           <div className="flex items-center justify-between w-full mb-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-lg border-[3px] border-black bg-[#FFE600] text-black shadow-[3px_3px_0px_#000000] text-xs font-mono tracking-widest uppercase font-black">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg border-[3px] border-black bg-[#FFE600] text-black shadow-[3px_3px_0px_#000000] text-xs font-mono tracking-widest uppercase font-black">
               <Sparkles className="w-3.5 h-3.5 fill-black" />
               <span>{"— 05 · CONTACT & INQUIRIES"}</span>
             </div>
           </div>
 
-          <h2 className="font-display text-[clamp(2.5rem,7.5vw,4.8rem)] font-black tracking-tight uppercase leading-[1.05] max-w-3xl text-white -webkit-text-stroke-[2px_#000] drop-shadow-[5px_5px_0px_#000000]">
+          <h2 className="font-display text-[clamp(2.1rem,7.5vw,4.8rem)] font-black tracking-tight uppercase leading-[1.05] max-w-3xl text-white -webkit-text-stroke-[2px_#000] drop-shadow-[5px_5px_0px_#000000]">
             LET&apos;S CREATE <br />
             <span className="text-[#FFE600]">SOMETHING MEANINGFUL.</span>
           </h2>
 
-          <p className="mt-6 text-neutral-300 text-sm sm:text-base max-w-xl font-normal leading-relaxed">
+          <p className="mt-5 sm:mt-6 text-neutral-300 text-sm sm:text-base max-w-xl font-normal leading-relaxed">
             Have a project in mind, an opportunity in AI or Backend Engineering,
             or want to connect directly? Send a note below or reach out via email.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
           {/* Left Column: Direct Contact Info Cards with 3px borders and 4px shadows */}
-          <div className="lg:col-span-5 space-y-4">
+          <div className="lg:col-span-5 space-y-3.5 sm:space-y-4">
             {/* Copy Email Card */}
             <div
               onClick={copyEmail}
@@ -242,17 +242,17 @@ export default function Contact() {
               role="button"
               tabIndex={0}
               aria-label="Copy email address mguhan6383@gmail.com"
-              className="contact-card-reveal comic-card w-full p-5 sm:p-6 rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000] hover:shadow-[7px_7px_0px_#000000] cursor-pointer group flex items-center justify-between outline-none focus-visible:ring-2 focus-visible:ring-[#FFE600]"
+              className="contact-card-reveal comic-card w-full p-4 sm:p-6 rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000] hover:shadow-[7px_7px_0px_#000000] cursor-pointer group flex items-center justify-between gap-3 outline-none focus-visible:ring-2 focus-visible:ring-[#FFE600]"
             >
-              <div className="flex items-center gap-4 min-w-0">
-                <div className="w-12 h-12 rounded-xl bg-[#FFE600] text-black border-[2.5px] border-black shadow-[2.5px_2.5px_0px_#000000] flex items-center justify-center group-hover:scale-105 transition-transform flex-shrink-0">
+              <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-[#FFE600] text-black border-[2.5px] border-black shadow-[2.5px_2.5px_0px_#000000] flex items-center justify-center group-hover:scale-105 transition-transform flex-shrink-0">
                   <Mail className="w-5 h-5 stroke-[2.5]" />
                 </div>
                 <div className="min-w-0">
                   <span className="text-[11px] font-mono text-[#FFE600] uppercase tracking-widest block font-black">
                     EMAIL
                   </span>
-                  <span className="font-mono text-sm sm:text-base text-white font-bold truncate block">
+                  <span className="font-mono text-xs sm:text-base text-white font-bold truncate block">
                     mguhan6383@gmail.com
                   </span>
                 </div>
@@ -264,7 +264,7 @@ export default function Contact() {
                   e.stopPropagation();
                   copyEmail();
                 }}
-                className="comic-btn w-10 h-10 rounded-xl bg-white text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] hover:bg-[#FFE600] flex items-center justify-center flex-shrink-0 ml-3"
+                className="comic-btn w-10 h-10 rounded-xl bg-white text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] hover:bg-[#FFE600] flex items-center justify-center flex-shrink-0"
                 title={copied ? "Copied!" : "Copy email address"}
                 aria-label="Copy email address"
               >
@@ -281,10 +281,10 @@ export default function Contact() {
               href="https://www.linkedin.com/in/guhanmurugaiyan"
               target="_blank"
               rel="noopener noreferrer"
-              className="contact-card-reveal comic-card w-full p-5 sm:p-6 rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000] hover:shadow-[7px_7px_0px_#000000] flex items-center justify-between group"
+              className="contact-card-reveal comic-card w-full p-4 sm:p-6 rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000] hover:shadow-[7px_7px_0px_#000000] flex items-center justify-between gap-3 group"
             >
-              <div className="flex items-center gap-4 min-w-0">
-                <div className="w-12 h-12 rounded-xl bg-[#00F0FF] text-black border-[2.5px] border-black shadow-[2.5px_2.5px_0px_#000000] flex items-center justify-center group-hover:scale-105 transition-transform flex-shrink-0">
+              <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-[#00F0FF] text-black border-[2.5px] border-black shadow-[2.5px_2.5px_0px_#000000] flex items-center justify-center group-hover:scale-105 transition-transform flex-shrink-0">
                   <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
                     <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.25c-.9 0-1.63.73-1.63 1.63s.73 1.63 1.63 1.63 1.63-.73 1.63-1.63c0-.9-.73-1.63-1.63-1.63Z" />
                   </svg>
@@ -293,42 +293,43 @@ export default function Contact() {
                   <span className="text-[11px] font-mono text-[#00F0FF] uppercase tracking-widest block font-black">
                     LINKEDIN
                   </span>
-                  <span className="font-syne font-bold text-sm sm:text-base text-white truncate block">
+                  <span className="font-syne font-bold text-xs sm:text-base text-white truncate block">
                     LinkedIn / guhanmurugaiyan
                   </span>
                 </div>
               </div>
 
-              <div className="comic-btn w-10 h-10 rounded-xl bg-white text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] hover:bg-[#00F0FF] flex items-center justify-center flex-shrink-0 ml-3">
+              <div className="comic-btn w-10 h-10 rounded-xl bg-white text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] hover:bg-[#00F0FF] flex items-center justify-center flex-shrink-0">
                 <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
               </div>
             </a>
 
             {/* Location Card */}
-            <div className="contact-card-reveal comic-card w-full p-5 sm:p-6 rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000] flex items-center justify-between">
-              <div className="flex items-center gap-4 min-w-0">
-                <div className="w-12 h-12 rounded-xl bg-[#FF2A55] text-white border-[2.5px] border-black shadow-[2.5px_2.5px_0px_#000000] flex items-center justify-center flex-shrink-0">
+            <div className="contact-card-reveal comic-card w-full p-4 sm:p-6 rounded-2xl bg-[#13131A] border-[3px] border-black shadow-[4px_4px_0px_#000000] flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-[#FF2A55] text-white border-[2.5px] border-black shadow-[2.5px_2.5px_0px_#000000] flex items-center justify-center flex-shrink-0">
                   <MapPin className="w-5 h-5 stroke-[2.5]" />
                 </div>
                 <div className="min-w-0">
                   <span className="text-[11px] font-mono text-[#FF2A55] uppercase tracking-widest block font-black">
                     LOCATION
                   </span>
-                  <span className="font-syne font-bold text-sm sm:text-base text-white truncate block">
+                  <span className="font-syne font-bold text-xs sm:text-base text-white truncate block">
                     Vanur, Tamil Nadu, India
                   </span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#00E676] text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] text-[10px] font-mono font-black tracking-wider uppercase flex-shrink-0 ml-3">
-                <span className="w-2 h-2 rounded-full bg-black animate-pulse" />
-                <span>IST (UTC+5:30)</span>
+              <div className="flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-[#00E676] text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] text-[9px] sm:text-[10px] font-mono font-black tracking-wider uppercase flex-shrink-0">
+                <span className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-black animate-pulse" />
+                <span className="hidden min-[360px]:inline">IST (UTC+5:30)</span>
+                <span className="min-[360px]:hidden">IST</span>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Contact Form with 3px black borders & 4px offset shadows */}
-          <div className="contact-form-reveal lg:col-span-7 rounded-3xl bg-[#13131A] border-[3px] border-black p-6 sm:p-10 shadow-[6px_6px_0px_#000000]">
+          {/* Right Column: Contact Form with 3px black borders & responsive padding */}
+          <div className="contact-form-reveal lg:col-span-7 rounded-2xl sm:rounded-3xl bg-[#13131A] border-[3px] border-black p-4 sm:p-8 md:p-10 shadow-[4px_4px_0px_#000000] sm:shadow-[6px_6px_0px_#000000]">
             <form onSubmit={(e) => { void handleSubmit(onSubmit)(e); }} className="space-y-6">
               {/* Anti-spam honeypot field - hidden from humans */}
               <div className="hidden" aria-hidden="true">
