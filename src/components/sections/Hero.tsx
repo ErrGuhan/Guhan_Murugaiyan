@@ -1,17 +1,48 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Download, Sparkles, ArrowDownRight, Send } from "lucide-react";
 import { playSuccessChime, playHoverTick } from "@/lib/sound-effects";
+import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const parallaxBgRef = useRef<HTMLDivElement>(null);
+  const [isScrollEngaged, setIsScrollEngaged] = useState(false);
+  const [hoveredWord, setHoveredWord] = useState<string | null>(null);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Mobile scroll & touch engagement detector
+  useEffect(() => {
+    const handleScrollOrTouch = () => {
+      if (typeof window === "undefined" || window.innerWidth >= 768) return;
+      const container = containerRef.current;
+      if (!container) return;
+
+      const rect = container.getBoundingClientRect();
+      if (rect.bottom > 50 && rect.top < window.innerHeight) {
+        setIsScrollEngaged(true);
+        if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+        scrollTimeoutRef.current = setTimeout(() => {
+          setIsScrollEngaged(false);
+        }, 350);
+      }
+    };
+
+    window.addEventListener("scroll", handleScrollOrTouch, { passive: true });
+    window.addEventListener("touchmove", handleScrollOrTouch, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScrollOrTouch);
+      window.removeEventListener("touchmove", handleScrollOrTouch);
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    };
+  }, []);
 
   // Mouse Parallax for Halftone Sunburst/Background
   useEffect(() => {
@@ -166,31 +197,87 @@ export default function Hero() {
       {/* Main Center Composition: Clean Unobscured Typography & Workflow CTAs */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center my-4 sm:my-8 md:my-10 w-full max-w-5xl mx-auto px-1 sm:px-6">
         {/* Accent Tag Banner */}
-        <div className="hero-stagger mb-2.5 sm:mb-4 inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 bg-white border-[2.5px] sm:border-[3px] border-black shadow-[3px_3px_0px_#000000] rounded-lg -rotate-1">
+        <div className="hero-stagger mb-2.5 sm:mb-4 inline-flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 py-1.5 bg-white border-[2.5px] sm:border-[3px] border-black shadow-[3px_3px_0px_#000000] rounded-full -rotate-1">
           <Sparkles className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-[#FFE600] fill-[#FFE600] flex-shrink-0" />
-          <span className="font-mono font-black text-[11px] sm:text-sm tracking-widest text-black uppercase">
-            AI DEVELOPER & SYSTEMS ENGINEER
+          <span className="font-mono font-black text-[11px] sm:text-xs tracking-widest text-black uppercase">
+            NEXT-GEN AUTONOMOUS SYSTEMS ARCHITECT
           </span>
         </div>
 
         <h1
-          className="font-display font-black uppercase flex flex-col items-center text-black w-full cursor-default my-1 sm:my-2"
+          className="hero-creative-developer font-display font-black uppercase text-black w-full cursor-default my-1 sm:my-2"
           data-cursor="pointer"
         >
           {/* Word 1: CREATIVE */}
           <span
+            onMouseEnter={() => {
+              playHoverTick();
+              setHoveredWord("creative");
+            }}
+            onMouseLeave={() => setHoveredWord(null)}
+            className={cn(
+              "squeeze-word comic-split-word text-[clamp(2.75rem,13.5vw,11.5rem)] leading-[0.86] tracking-tight group",
+              (isScrollEngaged || hoveredWord === "creative") && "is-glitching"
+            )}
             data-text="CREATIVE"
-            className="squeeze-word comic-glitch-text text-[clamp(2.75rem,13.5vw,11.5rem)] leading-[0.88] tracking-tight text-[#FFE600] hover:scale-105 transition-transform duration-200"
           >
-            CREATIVE
+            {/* Base 3D shadow & outer yellow rims */}
+            <span
+              aria-hidden="true"
+              className="comic-word-underlay comic-word-underlay-creative"
+            >
+              CREATIVE
+            </span>
+            {/* Main Striped Fill: Cyan -> Black -> Yellow -> Black -> Coral */}
+            <span className="comic-word-fill comic-fill-creative">
+              CREATIVE
+            </span>
+            {/* Animated Glitch Slices */}
+            <span aria-hidden="true" className="comic-word-slice slice-top comic-fill-creative">
+              CREATIVE
+            </span>
+            <span aria-hidden="true" className="comic-word-slice slice-mid comic-fill-creative">
+              CREATIVE
+            </span>
+            <span aria-hidden="true" className="comic-word-slice slice-bot comic-fill-creative">
+              CREATIVE
+            </span>
           </span>
 
           {/* Word 2: DEVELOPER */}
           <span
+            onMouseEnter={() => {
+              playHoverTick();
+              setHoveredWord("developer");
+            }}
+            onMouseLeave={() => setHoveredWord(null)}
+            className={cn(
+              "squeeze-word comic-split-word text-[clamp(2.35rem,11.5vw,10rem)] leading-[0.86] tracking-tight mt-1 sm:mt-2 group",
+              (isScrollEngaged || hoveredWord === "developer") && "is-glitching"
+            )}
             data-text="DEVELOPER"
-            className="squeeze-word comic-glitch-text text-[clamp(2.35rem,11.5vw,10rem)] leading-[0.88] tracking-tight mt-1 sm:mt-2 text-white hover:scale-105 transition-transform duration-200"
           >
-            DEVELOPER
+            {/* Base 3D shadow & outer white/cyan rims */}
+            <span
+              aria-hidden="true"
+              className="comic-word-underlay comic-word-underlay-developer"
+            >
+              DEVELOPER
+            </span>
+            {/* Main Striped Fill: Cyan -> Black -> White -> Black -> Coral */}
+            <span className="comic-word-fill comic-fill-developer">
+              DEVELOPER
+            </span>
+            {/* Animated Glitch Slices */}
+            <span aria-hidden="true" className="comic-word-slice slice-top comic-fill-developer">
+              DEVELOPER
+            </span>
+            <span aria-hidden="true" className="comic-word-slice slice-mid comic-fill-developer">
+              DEVELOPER
+            </span>
+            <span aria-hidden="true" className="comic-word-slice slice-bot comic-fill-developer">
+              DEVELOPER
+            </span>
           </span>
         </h1>
 

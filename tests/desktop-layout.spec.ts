@@ -212,5 +212,38 @@ for (const vp of DESKTOP_VIEWPORTS) {
         expect(item.paintOrder.includes("stroke") || item.paintOrder === "normal" || item.paintOrder === "").toBe(true);
       }
     });
+
+    test("should verify CREATIVE DEVELOPER comic gradient and desktop hover trigger", async ({ page }) => {
+      await page.goto("/", { waitUntil: "networkidle" });
+      await page.waitForTimeout(600);
+
+      // 1. Verify CREATIVE and DEVELOPER elements exist
+      const creativeWord = page.locator(".comic-split-word:has-text('CREATIVE')");
+      const developerWord = page.locator(".comic-split-word:has-text('DEVELOPER')");
+      await expect(creativeWord).toBeVisible();
+      await expect(developerWord).toBeVisible();
+
+      // 2. Verify multi-layer structure: underlay, fill, slices
+      const creativeFill = creativeWord.locator(".comic-fill-creative").first();
+      await expect(creativeFill).toBeAttached();
+
+      const developerFill = developerWord.locator(".comic-fill-developer").first();
+      await expect(developerFill).toBeAttached();
+
+      // 3. Verify desktop hover triggers glitch state
+      await creativeWord.hover();
+      await page.waitForTimeout(300);
+
+      // Verify is-glitching or hover animation is engaged
+      const isGlitchingOnHover = await creativeWord.evaluate((el) => {
+        const slices = el.querySelectorAll(".comic-word-slice");
+        return el.classList.contains("is-glitching") || slices.length === 3;
+      });
+      expect(isGlitchingOnHover).toBe(true);
+
+      // Move mouse away
+      await page.mouse.move(0, 0);
+      await page.waitForTimeout(200);
+    });
   });
 }

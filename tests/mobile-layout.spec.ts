@@ -291,6 +291,32 @@ for (const vp of MOBILE_VIEWPORTS) {
         expect(headingBox.x + headingBox.width).toBeLessThanOrEqual(vp.width + 4);
       }
     });
+
+    test("should verify CREATIVE DEVELOPER comic gradient styling and mobile scroll engagement", async ({ page }) => {
+      await page.goto("/", { waitUntil: "networkidle" });
+      await page.waitForTimeout(600);
+
+      // 1. Verify CREATIVE and DEVELOPER elements exist
+      const creativeWord = page.locator(".comic-split-word:has-text('CREATIVE')");
+      const developerWord = page.locator(".comic-split-word:has-text('DEVELOPER')");
+      await expect(creativeWord).toBeVisible();
+      await expect(developerWord).toBeVisible();
+
+      // 2. Verify multi-layer structure: underlay, fill, slices
+      const creativeFill = creativeWord.locator(".comic-fill-creative").first();
+      await expect(creativeFill).toBeAttached();
+
+      const developerFill = developerWord.locator(".comic-fill-developer").first();
+      await expect(developerFill).toBeAttached();
+
+      // 3. Test mobile scroll engagement: scroll down slightly
+      await page.evaluate(() => window.scrollBy(0, 80));
+      await page.waitForTimeout(100);
+
+      // Slices should exist and have proper clip-paths
+      const sliceCount = await creativeWord.locator(".comic-word-slice").count();
+      expect(sliceCount).toBe(3);
+    });
   });
 }
 

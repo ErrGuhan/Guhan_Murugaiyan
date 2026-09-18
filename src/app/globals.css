@@ -352,3 +352,240 @@ html.battle-mode body::before {
 .halftone-photo-overlay.halftone-off {
   opacity: 0;
 }
+
+/* ==========================================================================
+   EXCLUSIVE CREATIVE DEVELOPER COMIC GRADIENT & GLITCH ANIMATION
+   ========================================================================== */
+
+.hero-creative-developer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+}
+
+.comic-split-word {
+  position: relative;
+  display: inline-block;
+  font-family: var(--font-anton), var(--font-syne), sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  line-height: 0.86;
+  cursor: pointer;
+  transform-origin: center center;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* Layer 1: Solid 3D Comic Block Shadow & Outer Bevel Highlights */
+.comic-word-underlay {
+  position: relative;
+  display: block;
+  color: #000000;
+  -webkit-text-stroke: 3.5px #000000;
+  paint-order: stroke fill;
+  user-select: none;
+}
+
+@media (max-width: 640px) {
+  .comic-word-underlay {
+    -webkit-text-stroke: 2px #000000;
+  }
+}
+
+/* CREATIVE Underlay: Yellow top/bottom rim + 3D black block shadow */
+.comic-word-underlay-creative {
+  filter: drop-shadow(0 -3px 0 #FFE600) drop-shadow(0 3px 0 #FFE600) drop-shadow(0 8px 0 #000000) drop-shadow(4px 8px 0 #000000) drop-shadow(-2px 8px 0 #000000);
+}
+
+@media (max-width: 640px) {
+  .comic-word-underlay-creative {
+    filter: drop-shadow(0 -1.5px 0 #FFE600) drop-shadow(0 1.5px 0 #FFE600) drop-shadow(0 5px 0 #000000) drop-shadow(2px 5px 0 #000000);
+  }
+}
+
+/* DEVELOPER Underlay: Cyan right accent + White bottom rim + 3D black block shadow */
+.comic-word-underlay-developer {
+  filter: drop-shadow(0 3px 0 #FFFFFF) drop-shadow(3px 0px 0 #00F0FF) drop-shadow(0 8px 0 #000000) drop-shadow(4px 8px 0 #000000) drop-shadow(-2px 8px 0 #000000);
+}
+
+@media (max-width: 640px) {
+  .comic-word-underlay-developer {
+    filter: drop-shadow(0 1.5px 0 #FFFFFF) drop-shadow(2px 0px 0 #00F0FF) drop-shadow(0 5px 0 #000000) drop-shadow(2px 5px 0 #000000);
+  }
+}
+
+/* Layer 2: Main Foreground Striped Fill with Black Comic Separation Lines */
+.comic-word-fill {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 1.5px #000000;
+  paint-order: stroke fill;
+}
+
+@media (max-width: 640px) {
+  .comic-word-fill {
+    -webkit-text-stroke: 1px #000000;
+  }
+}
+
+/* CREATIVE Fill: Cyan (top 38%) -> Black Line -> Yellow (mid 18%) -> Black Line -> Coral Red (bot 42%) */
+.comic-fill-creative {
+  background-image: linear-gradient(
+    to bottom,
+    #00F0FF 0%,
+    #00F0FF 38%,
+    #000000 38%,
+    #000000 41.5%,
+    #FFE600 41.5%,
+    #FFE600 58.5%,
+    #000000 58.5%,
+    #000000 62%,
+    #FF2A55 62%,
+    #FF2A55 100%
+  );
+}
+
+/* DEVELOPER Fill: Cyan (top 38%) -> Black Line -> Crisp White (mid 18%) -> Black Line -> Coral Red (bot 42%) */
+.comic-fill-developer {
+  background-image: linear-gradient(
+    to bottom,
+    #00F0FF 0%,
+    #00F0FF 38%,
+    #000000 38%,
+    #000000 41.5%,
+    #FFFFFF 41.5%,
+    #FFFFFF 58.5%,
+    #000000 58.5%,
+    #000000 62%,
+    #FF2A55 62%,
+    #FF2A55 100%
+  );
+}
+
+/* Layer 3: Glitch Slice Overlays */
+.comic-word-slice {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 1.5px #000000;
+  paint-order: stroke fill;
+  opacity: 0;
+  transform: translate3d(0, 0, 0);
+  will-change: transform, opacity;
+}
+
+@media (max-width: 640px) {
+  .comic-word-slice {
+    -webkit-text-stroke: 1px #000000;
+  }
+}
+
+.comic-word-slice.slice-top {
+  clip-path: polygon(0 0, 100% 0, 100% 41.5%, 0 41.5%);
+}
+
+.comic-word-slice.slice-mid {
+  clip-path: polygon(0 40%, 100% 40%, 100% 60%, 0 60%);
+}
+
+.comic-word-slice.slice-bot {
+  clip-path: polygon(0 58.5%, 100% 58.5%, 100% 100%, 0 100%);
+}
+
+/* Activation rules:
+   Desktop: Triggers on hover (.comic-split-word:hover or .is-glitching)
+   Mobile: Triggers when scroll is engaged (.is-glitching)
+*/
+@media (hover: hover) {
+  .comic-split-word:hover .comic-word-slice,
+  .comic-split-word.is-glitching .comic-word-slice {
+    opacity: 1;
+  }
+
+  .comic-split-word:hover .slice-top,
+  .comic-split-word.is-glitching .slice-top {
+    animation: comicGlitchSliceTop 0.28s steps(2, jump-none) infinite;
+  }
+
+  .comic-split-word:hover .slice-mid,
+  .comic-split-word.is-glitching .slice-mid {
+    animation: comicGlitchSliceMid 0.22s steps(3, jump-none) infinite;
+  }
+
+  .comic-split-word:hover .slice-bot,
+  .comic-split-word.is-glitching .slice-bot {
+    animation: comicGlitchSliceBot 0.32s steps(2, jump-none) infinite;
+  }
+
+  .comic-split-word:hover,
+  .comic-split-word.is-glitching {
+    animation: comicGlitchJitter 0.2s steps(2, jump-none) infinite;
+  }
+}
+
+/* Mobile: Triggers explicitly via .is-glitching during scroll engagement */
+@media (hover: none), (max-width: 767px) {
+  .comic-split-word.is-glitching .comic-word-slice {
+    opacity: 1;
+  }
+
+  .comic-split-word.is-glitching .slice-top {
+    animation: comicGlitchSliceTop 0.28s steps(2, jump-none) infinite;
+  }
+
+  .comic-split-word.is-glitching .slice-mid {
+    animation: comicGlitchSliceMid 0.22s steps(3, jump-none) infinite;
+  }
+
+  .comic-split-word.is-glitching .slice-bot {
+    animation: comicGlitchSliceBot 0.32s steps(2, jump-none) infinite;
+  }
+
+  .comic-split-word.is-glitching {
+    animation: comicGlitchJitter 0.2s steps(2, jump-none) infinite;
+  }
+}
+
+@keyframes comicGlitchSliceTop {
+  0% { transform: translate3d(0, 0, 0); }
+  25% { transform: translate3d(-5px, 0, 0); }
+  50% { transform: translate3d(4px, 0, 0); }
+  75% { transform: translate3d(-3px, 0, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes comicGlitchSliceMid {
+  0% { transform: translate3d(0, 0, 0); }
+  20% { transform: translate3d(7px, 0, 0); }
+  40% { transform: translate3d(-6px, 0, 0); }
+  60% { transform: translate3d(8px, 0, 0); }
+  80% { transform: translate3d(-5px, 0, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes comicGlitchSliceBot {
+  0% { transform: translate3d(0, 0, 0); }
+  30% { transform: translate3d(-4px, 0, 0); }
+  60% { transform: translate3d(5px, 0, 0); }
+  90% { transform: translate3d(-2px, 0, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes comicGlitchJitter {
+  0% { transform: translate3d(0, 0, 0); }
+  25% { transform: translate3d(-1.5px, 1px, 0); }
+  50% { transform: translate3d(1.5px, -1px, 0); }
+  75% { transform: translate3d(-1px, 0.5px, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
