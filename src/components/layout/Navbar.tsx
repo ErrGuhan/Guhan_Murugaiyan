@@ -205,7 +205,12 @@ export default function Navbar() {
               <span className="text-[10px] sm:text-[11px] font-mono font-bold tracking-widest uppercase text-inherit">
                 PORTFOLIO <span className="text-[#FFE600] drop-shadow-[1px_1px_0px_#000] font-black">⚡</span>
               </span>
-              <span className="text-[8px] sm:text-[9px] font-mono tracking-widest text-neutral-500 uppercase mt-0.5">
+              <span
+                className={cn(
+                  "text-[8px] sm:text-[9px] font-mono tracking-widest uppercase mt-0.5",
+                  isDarkSection ? "text-neutral-400" : "text-neutral-600"
+                )}
+              >
                 PORTFOLIO &apos;26
               </span>
             </div>
@@ -213,7 +218,14 @@ export default function Navbar() {
         </div>
 
         {/* Center: Comic Capsule Nav Links */}
-        <nav className="hidden md:flex items-center gap-1.5 lg:gap-2 bg-black/5 dark:bg-white/5 p-1.5 rounded-xl border-[3px] border-black shadow-[4px_4px_0px_#000000] backdrop-blur-md">
+        <nav
+          className={cn(
+            "hidden md:flex items-center gap-1.5 lg:gap-2 p-1.5 rounded-xl border-[3px] border-black backdrop-blur-md transition-all duration-300",
+            isDarkSection
+              ? "bg-[#13131A]/95 shadow-[4px_4px_0px_#FFE600]"
+              : "bg-[#FFFDF7]/95 shadow-[4px_4px_0px_#000000]"
+          )}
+        >
           {navLinks.map((link) => (
             <a
               key={link.label}
@@ -222,7 +234,7 @@ export default function Navbar() {
               className={cn(
                 "comic-btn px-3.5 py-1.5 rounded-lg text-xs font-mono font-black tracking-wider uppercase transition-all flex items-center",
                 isDarkSection
-                  ? "bg-[#1A1A24] text-white hover:bg-[#FFE600] hover:text-black"
+                  ? "bg-[#1C1C26] text-white hover:bg-[#FFE600] hover:text-black"
                   : "bg-[#FFFDF7] text-black hover:bg-[#FFE600] hover:text-black"
               )}
             >

@@ -131,7 +131,7 @@ export default function About() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-14 items-start">
           {/* Left Column: Profile Card with 3px border and 4px shadow */}
-          <div className="lg:col-span-5 flex flex-col items-center lg:items-start">
+          <div className="lg:col-span-5 flex flex-col items-center lg:items-start lg:sticky lg:top-28">
             <div
               className="about-photo-card comic-card relative w-full max-w-sm sm:max-w-md aspect-[4/5] rounded-2xl overflow-hidden border-[3px] border-black shadow-[4px_4px_0px_#000000] group bg-[#17171C]"
               data-cursor="view"

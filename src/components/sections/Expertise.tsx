@@ -200,12 +200,12 @@ export default function Expertise() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-14 items-start">
           {/* Left Column: Overview & Tech Stack Matrix */}
-          <div className="lg:col-span-5 flex flex-col justify-between space-y-6 sm:space-y-8">
+          <div className="lg:col-span-5 flex flex-col justify-between space-y-6 sm:space-y-8 lg:sticky lg:top-28">
             <div className="comic-card p-4 sm:p-6 rounded-2xl bg-[#13131A] border-[2.5px] sm:border-[3px] border-black shadow-[3px_3px_0px_#000000] sm:shadow-[4px_4px_0px_#000000]">
               <h3 className="font-syne text-xl sm:text-2xl md:text-3xl font-black tracking-tight leading-snug text-white">
                 Intelligent systems where autonomy, code, and concurrency scale in harmony.
               </h3>
-              <p className="mt-3 sm:mt-4 text-neutral-300 text-xs sm:text-sm leading-relaxed">
+              <p className="mt-3 sm:mt-4 text-neutral-200 text-xs sm:text-sm leading-relaxed">
                 From autonomous multi-agent networks to resilient Java backends and
                 data pipelines, I deliver production systems engineered with architectural
                 rigor and speed.

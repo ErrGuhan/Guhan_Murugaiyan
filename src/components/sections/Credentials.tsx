@@ -5,6 +5,7 @@ import { Award, Briefcase, GraduationCap, Sparkles } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -74,11 +75,14 @@ export default function Credentials() {
         </div>
 
         {/* Certifications Badge Grid with 3px black borders & 4px shadows */}
-        <div className="cred-reveal grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-12 sm:mb-16">
-          {certs.map((c) => (
+        <div className="cred-reveal grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 sm:gap-4 mb-12 sm:mb-16">
+          {certs.map((c, idx) => (
             <div
               key={c.title}
-              className="comic-card p-4 sm:p-5 rounded-2xl bg-[#13131A] border-[2.5px] sm:border-[3px] border-black shadow-[3px_3px_0px_#000000] sm:shadow-[4px_4px_0px_#000000] hover:shadow-[5px_5px_0px_#000000] sm:hover:shadow-[7px_7px_0px_#000000] flex items-start gap-3 sm:gap-4 group cursor-default"
+              className={cn(
+                "comic-card p-4 sm:p-5 rounded-2xl bg-[#13131A] border-[2.5px] sm:border-[3px] border-black shadow-[3px_3px_0px_#000000] sm:shadow-[4px_4px_0px_#000000] hover:shadow-[5px_5px_0px_#000000] sm:hover:shadow-[7px_7px_0px_#000000] flex items-start gap-3 sm:gap-4 group cursor-default",
+                idx < 2 ? "lg:col-span-3" : "lg:col-span-2"
+              )}
             >
               <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#FFE600] text-black border-[2px] border-black shadow-[2px_2px_0px_#000000] flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-transform">
                 <Award className="w-4 sm:w-5 h-4 sm:h-5 stroke-[2.5]" />
