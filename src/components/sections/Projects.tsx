@@ -123,7 +123,7 @@ function ProjectCard({
 
           {/* Content Grid */}
           <div className="my-1 sm:my-2 flex-1 min-h-0 space-y-1.5 sm:space-y-2">
-            <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed line-clamp-3">
+            <p className="text-xs sm:text-sm text-neutral-200 leading-relaxed line-clamp-3">
               {project.description}
             </p>
             <div className="flex flex-wrap gap-1 sm:gap-1.5 pt-0.5 sm:pt-1">
@@ -140,7 +140,7 @@ function ProjectCard({
 
           {/* Action Links Footer */}
           <div className="pt-2.5 sm:pt-3 border-t-[2px] border-black flex flex-wrap items-center justify-between gap-2 mt-auto flex-shrink-0">
-            <span className="text-[10px] sm:text-[11px] font-mono font-bold text-neutral-400">
+            <span className="text-[10px] sm:text-[11px] font-mono font-bold text-neutral-300">
               VERIFIED REPO SOURCE
             </span>
             <div className="flex items-center gap-1.5 sm:gap-2">
@@ -206,15 +206,15 @@ function ProjectCard({
             {/* Architecture Spec Grid */}
             <div className="grid grid-cols-3 gap-1.5 sm:gap-2 mt-2 sm:mt-3 font-mono text-[9px] sm:text-[10px]">
               <div className="p-1.5 sm:p-2 rounded-lg bg-[#13131A] border-[1.5px] border-black">
-                <span className="text-neutral-500 block uppercase font-bold text-[8px] sm:text-[9px]">ARC YEAR</span>
+                <span className="text-neutral-400 block uppercase font-bold text-[8px] sm:text-[9px]">ARC YEAR</span>
                 <span className="text-[#FFE600] font-black">{project.year}</span>
               </div>
               <div className="p-1.5 sm:p-2 rounded-lg bg-[#13131A] border-[1.5px] border-black">
-                <span className="text-neutral-500 block uppercase font-bold text-[8px] sm:text-[9px]">RUNTIME</span>
+                <span className="text-neutral-400 block uppercase font-bold text-[8px] sm:text-[9px]">RUNTIME</span>
                 <span className="text-[#00F0FF] font-black truncate block">{project.tags[0] ?? "TypeScript"}</span>
               </div>
               <div className="p-1.5 sm:p-2 rounded-lg bg-[#13131A] border-[1.5px] border-black">
-                <span className="text-neutral-500 block uppercase font-bold text-[8px] sm:text-[9px]">STATUS</span>
+                <span className="text-neutral-400 block uppercase font-bold text-[8px] sm:text-[9px]">STATUS</span>
                 <span
                   className={cn(
                     "font-black text-[8px] sm:text-[9px] tracking-wide",
@@ -228,12 +228,12 @@ function ProjectCard({
 
             {/* Difficulty star rating */}
             <div className="flex items-center gap-1.5 sm:gap-2 mt-1.5 sm:mt-2 font-mono text-[9px] sm:text-[10px]">
-              <span className="text-neutral-500 uppercase font-bold tracking-wider">DIFFICULTY:</span>
+              <span className="text-neutral-400 uppercase font-bold tracking-wider">DIFFICULTY:</span>
               <span className="tracking-wide" aria-label={`Difficulty: ${project.difficulty} out of 5 stars`}>
                 {Array.from({ length: 5 }).map((_, i) => (
                   <span
                     key={i}
-                    className={i < project.difficulty ? "text-[#FFE600]" : "text-neutral-700"}
+                    className={i < project.difficulty ? "text-[#FFE600]" : "text-neutral-600"}
                   >
                     ★
                   </span>
@@ -244,7 +244,7 @@ function ProjectCard({
 
           {/* Terminal Footer Actions */}
           <div className="pt-2 sm:pt-3 border-t-[2px] border-black flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 mt-auto flex-shrink-0">
-            <span className="text-[9px] sm:text-[10px] font-mono font-bold text-neutral-400">
+            <span className="text-[9px] sm:text-[10px] font-mono font-bold text-neutral-300">
               {"// VERIFIED COMPONENT SCHEMA"}
             </span>
             <div className="flex items-center gap-1.5 sm:gap-2">
@@ -555,7 +555,10 @@ export default function Projects() {
                     <span>5 PRODUCTION CASE STUDIES · LIVE DEMOS</span>
                   </div>
                 </div>
-                <h3 className="font-display text-xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tight text-white -webkit-text-stroke-[1.5px_#000] drop-shadow-[3px_3px_0px_#000000]">
+                <h3
+                  className="font-display text-xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tight text-white drop-shadow-[3px_3px_0px_#000000]"
+                  style={{ WebkitTextStroke: "1px #000", paintOrder: "stroke fill" }}
+                >
                   SELECTED CASE STUDIES
                 </h3>
               </div>
@@ -673,7 +676,7 @@ export default function Projects() {
                 <span className="hidden md:inline">DRAG OR SCROLL ARC MATRIX</span>
                 <span className="text-[#00F0FF] animate-pulse">▶▶</span>
               </span>
-              <span className="text-[10px] text-neutral-500 font-mono">
+              <span className="text-[10px] text-neutral-400 font-mono font-semibold">
                 {"// TIP: TAP [CODE] TO FLIP BLUEPRINT"}
               </span>
             </div>

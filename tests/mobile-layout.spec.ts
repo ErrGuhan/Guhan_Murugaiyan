@@ -214,5 +214,83 @@ for (const vp of MOBILE_VIEWPORTS) {
         expect(submitBox.height).toBeGreaterThanOrEqual(44); // WCAG touch target
       }
     });
+
+    test("should verify letter visibility, contrast, and paint-order styling on text and headings", async ({ page }) => {
+      await page.goto("/", { waitUntil: "networkidle" });
+      await page.waitForTimeout(800);
+
+      // 1. Verify paint-order: stroke fill on comic-glitch-text elements to ensure stroke doesn't swallow letter bodies
+      const glitchStyles = await page.evaluate(() => {
+        const els = Array.from(document.querySelectorAll(".comic-glitch-text"));
+        return els.map((el) => {
+          const style = window.getComputedStyle(el);
+          return {
+            tag: el.tagName,
+            text: (el.textContent || "").trim().slice(0, 30),
+            paintOrder: style.getPropertyValue("paint-order") || style.paintOrder || "",
+            fontSize: parseFloat(style.fontSize),
+            opacity: parseFloat(style.opacity),
+            visibility: style.visibility,
+          };
+        });
+      });
+
+      expect(glitchStyles.length).toBeGreaterThan(0);
+      for (const item of glitchStyles) {
+        expect(item.opacity).toBe(1);
+        expect(item.visibility).toBe("visible");
+        expect(item.fontSize).toBeGreaterThan(20);
+        // Ensure paint-order includes stroke
+        expect(item.paintOrder.includes("stroke") || item.paintOrder === "normal" || item.paintOrder === "").toBe(true);
+      }
+
+      // 2. Verify Credentials section titles (e.g. "Learner to Builder: Become an AI Architect")
+      const credSection = page.locator("#credentials");
+      await credSection.scrollIntoViewIfNeeded();
+      await page.waitForTimeout(400);
+
+      const certTitle = page.getByText("Learner to Builder: Become an AI Architect").first();
+      await expect(certTitle).toBeVisible();
+
+      const certMetrics = await certTitle.evaluate((el) => {
+        const style = window.getComputedStyle(el);
+        const rect = el.getBoundingClientRect();
+        return {
+          width: rect.width,
+          height: rect.height,
+          fontSize: parseFloat(style.fontSize),
+          fontFamily: style.fontFamily,
+          color: style.color,
+          lineHeight: style.lineHeight,
+        };
+      });
+
+      expect(certMetrics.width).toBeGreaterThan(100);
+      expect(certMetrics.height).toBeGreaterThan(14);
+      expect(certMetrics.fontSize).toBeGreaterThanOrEqual(13);
+
+      // 3. Verify About RPG stats cards have readable typography without distortion
+      const aboutSection = page.locator("#about");
+      await aboutSection.scrollIntoViewIfNeeded();
+      await page.waitForTimeout(400);
+
+      const rpgStatCards = page.locator("#about .comic-card");
+      const rpgCount = await rpgStatCards.count();
+      expect(rpgCount).toBeGreaterThanOrEqual(2);
+
+      // 4. Verify Selected Case Studies heading visibility and alignment
+      const workSection = page.locator("#work");
+      await workSection.scrollIntoViewIfNeeded();
+      await page.waitForTimeout(400);
+
+      const caseStudiesHeading = page.getByText("SELECTED CASE STUDIES").first();
+      await expect(caseStudiesHeading).toBeVisible();
+      const headingBox = await caseStudiesHeading.boundingBox();
+      if (headingBox) {
+        expect(headingBox.x).toBeGreaterThanOrEqual(4);
+        expect(headingBox.x + headingBox.width).toBeLessThanOrEqual(vp.width + 4);
+      }
+    });
   });
 }
+

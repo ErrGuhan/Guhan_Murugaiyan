@@ -224,14 +224,14 @@ export default function About() {
               </h3>
 
               {/* 2-Column Body Narrative */}
-              <div className="about-text-reveal mt-4 sm:mt-6 grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4 text-neutral-300 text-xs sm:text-sm leading-relaxed">
+              <div className="about-text-reveal mt-4 sm:mt-6 grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4 text-neutral-200 text-xs sm:text-sm leading-relaxed">
                 <p>
                   I am an <strong className="text-white font-black">AI Developer and Computer Science Engineer</strong> deeply
                   passionate about constructing autonomous multi-agent networks,
                   concurrent backends, and high-throughput data workflows that scale
                   reliably without manual intervention.
                 </p>
-                <p className="text-neutral-400">
+                <p className="text-neutral-200">
                   I care about the architectural details that elevate software: autonomous
                   collaboration, fault-tolerant execution, and turning raw data into
                   meaningful business intelligence. Beyond code, I proudly represent the{" "}
@@ -254,7 +254,7 @@ export default function About() {
                     </span>
                     <span className="text-xs sm:text-sm">{fact.icon}</span>
                   </div>
-                  <span className="font-syne font-bold text-xs sm:text-sm md:text-base text-white group-hover:text-black block leading-snug">
+                  <span className="font-sans font-bold text-xs sm:text-sm md:text-base text-white group-hover:text-black block leading-snug tracking-tight">
                     {fact.value}
                   </span>
                 </div>

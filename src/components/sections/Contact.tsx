@@ -216,12 +216,15 @@ export default function Contact() {
             </div>
           </div>
 
-          <h2 className="font-display text-[clamp(2.1rem,7.5vw,4.8rem)] font-black tracking-tight uppercase leading-[1.05] max-w-3xl text-white -webkit-text-stroke-[2px_#000] drop-shadow-[5px_5px_0px_#000000]">
+          <h2
+            className="font-display text-[clamp(2.1rem,7.5vw,4.8rem)] font-black tracking-tight uppercase leading-[1.05] max-w-3xl text-white drop-shadow-[5px_5px_0px_#000000]"
+            style={{ WebkitTextStroke: "1px #000", paintOrder: "stroke fill" }}
+          >
             LET&apos;S CREATE <br />
             <span className="text-[#FFE600]">SOMETHING MEANINGFUL.</span>
           </h2>
 
-          <p className="mt-5 sm:mt-6 text-neutral-300 text-sm sm:text-base max-w-xl font-normal leading-relaxed">
+          <p className="mt-5 sm:mt-6 text-neutral-200 text-sm sm:text-base max-w-xl font-normal leading-relaxed">
             Have a project in mind, an opportunity in AI or Backend Engineering,
             or want to connect directly? Send a note below or reach out via email.
           </p>
@@ -293,7 +296,7 @@ export default function Contact() {
                   <span className="text-[11px] font-mono text-[#00F0FF] uppercase tracking-widest block font-black">
                     LINKEDIN
                   </span>
-                  <span className="font-syne font-bold text-xs sm:text-base text-white truncate block">
+                  <span className="font-sans font-bold text-xs sm:text-base text-white tracking-tight truncate block">
                     LinkedIn / guhanmurugaiyan
                   </span>
                 </div>
@@ -314,7 +317,7 @@ export default function Contact() {
                   <span className="text-[11px] font-mono text-[#FF2A55] uppercase tracking-widest block font-black">
                     LOCATION
                   </span>
-                  <span className="font-syne font-bold text-xs sm:text-base text-white truncate block">
+                  <span className="font-sans font-bold text-xs sm:text-base text-white tracking-tight truncate block">
                     Vanur, Tamil Nadu, India
                   </span>
                 </div>
@@ -348,7 +351,7 @@ export default function Contact() {
                 <input
                   {...register("name")}
                   placeholder="Enter your name or organization"
-                  className="w-full px-4 py-3.5 rounded-xl bg-[#08080C] border-[3px] border-black shadow-[3px_3px_0px_#000000] text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#FFE600] focus:shadow-[5px_5px_0px_#FFE600] transition-all font-mono text-sm"
+                  className="w-full px-4 py-3.5 rounded-xl bg-[#08080C] border-[3px] border-black shadow-[3px_3px_0px_#000000] text-white placeholder:text-neutral-400 focus:outline-none focus:border-[#FFE600] focus:shadow-[5px_5px_0px_#FFE600] transition-all font-mono text-sm"
                 />
                 {errors.name && (
                   <p className="mt-1.5 text-xs text-[#FF2A55] font-mono font-bold">
@@ -365,7 +368,7 @@ export default function Contact() {
                   {...register("email")}
                   type="email"
                   placeholder="your.email@domain.com"
-                  className="w-full px-4 py-3.5 rounded-xl bg-[#08080C] border-[3px] border-black shadow-[3px_3px_0px_#000000] text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#00F0FF] focus:shadow-[5px_5px_0px_#00F0FF] transition-all font-mono text-sm"
+                  className="w-full px-4 py-3.5 rounded-xl bg-[#08080C] border-[3px] border-black shadow-[3px_3px_0px_#000000] text-white placeholder:text-neutral-400 focus:outline-none focus:border-[#00F0FF] focus:shadow-[5px_5px_0px_#00F0FF] transition-all font-mono text-sm"
                 />
                 {errors.email && (
                   <p className="mt-1.5 text-xs text-[#FF2A55] font-mono font-bold">
@@ -392,7 +395,7 @@ export default function Contact() {
                     placeholder={msgFocused ? "Describe your project, role, or inquiry..." : typewriterPlaceholder || "Describe your project, role, or inquiry..."}
                     onFocus={() => setMsgFocused(true)}
                     onBlur={() => setMsgFocused(false)}
-                    className="w-full px-4 py-3.5 rounded-xl bg-[#08080C] border-[3px] border-black shadow-[3px_3px_0px_#000000] text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#FFE600] focus:shadow-[5px_5px_0px_#FFE600] transition-all font-mono text-sm resize-none"
+                    className="w-full px-4 py-3.5 rounded-xl bg-[#08080C] border-[3px] border-black shadow-[3px_3px_0px_#000000] text-white placeholder:text-neutral-400 focus:outline-none focus:border-[#FFE600] focus:shadow-[5px_5px_0px_#FFE600] transition-all font-mono text-sm resize-none"
                   />
                 </div>
                 {errors.message && (

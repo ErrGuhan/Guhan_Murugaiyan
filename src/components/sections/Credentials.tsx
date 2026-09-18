@@ -65,7 +65,10 @@ export default function Credentials() {
             <span>{"// 04 · EXPERIENCE & CERTIFICATIONS"}</span>
           </div>
 
-          <h2 className="cred-reveal font-display text-3xl sm:text-5xl md:text-7xl font-black tracking-tight uppercase text-white -webkit-text-stroke-[1.5px_#000] sm:-webkit-text-stroke-[2.5px_#000] drop-shadow-[4px_4px_0px_#000000] sm:drop-shadow-[5px_5px_0px_#000000]">
+          <h2
+            className="cred-reveal font-display text-3xl sm:text-5xl md:text-7xl font-black tracking-tight uppercase text-white drop-shadow-[4px_4px_0px_#000000] sm:drop-shadow-[5px_5px_0px_#000000]"
+            style={{ paintOrder: "stroke fill", WebkitTextStroke: "1px #000" }}
+          >
             EXPERIENCE <span className="text-[#FFE600]">& CREDENTIALS</span>
           </h2>
         </div>
@@ -81,10 +84,10 @@ export default function Credentials() {
                 <Award className="w-4 sm:w-5 h-4 sm:h-5 stroke-[2.5]" />
               </div>
               <div className="min-w-0 flex-1">
-                <h4 className="font-syne font-black text-xs sm:text-sm text-white group-hover:text-[#FFE600] transition-colors leading-snug">
+                <h4 className="font-sans font-bold text-sm sm:text-base text-white group-hover:text-[#FFE600] transition-colors leading-snug tracking-tight">
                   {c.title}
                 </h4>
-                <p className="text-[11px] sm:text-xs font-mono text-neutral-400 mt-1 font-bold">
+                <p className="text-[11px] sm:text-xs font-mono text-neutral-300 mt-1 font-semibold">
                   {c.issuer}
                 </p>
               </div>
@@ -108,13 +111,13 @@ export default function Credentials() {
                 <span className="inline-block px-2 sm:px-2.5 py-0.5 rounded-md bg-[#FFE600] text-black border-[1.5px] sm:border-[2px] border-black shadow-[1.5px_1.5px_0px_#000000] sm:shadow-[2px_2px_0px_#000000] text-[11px] sm:text-xs font-mono font-black uppercase">
                   July 2026 – 2026
                 </span>
-                <h4 className="font-syne font-black text-base sm:text-lg text-white mt-2">
+                <h4 className="font-sans font-extrabold text-base sm:text-lg text-white mt-2 tracking-tight">
                   Data Analyst
                 </h4>
                 <p className="text-xs font-mono font-bold text-[#00F0FF]">
                   NoviTech R&D Pvt Ltd · Chennai
                 </p>
-                <p className="text-xs sm:text-sm text-neutral-300 mt-2 sm:mt-3 leading-relaxed">
+                <p className="text-xs sm:text-sm text-neutral-200 mt-2 sm:mt-3 leading-relaxed">
                   Immersed in practical analytics workflows, turning raw enterprise streams into meaningful statistical metrics and automated anomaly detection pipelines.
                 </p>
               </div>
@@ -123,13 +126,13 @@ export default function Credentials() {
                 <span className="inline-block px-2 sm:px-2.5 py-0.5 rounded-md bg-[#00F0FF] text-black border-[1.5px] sm:border-[2px] border-black shadow-[1.5px_1.5px_0px_#000000] sm:shadow-[2px_2px_0px_#000000] text-[11px] sm:text-xs font-mono font-black uppercase">
                   May 2024 – Present
                 </span>
-                <h4 className="font-syne font-black text-base sm:text-lg text-white mt-2">
+                <h4 className="font-sans font-extrabold text-base sm:text-lg text-white mt-2 tracking-tight">
                   Accountant
                 </h4>
                 <p className="text-xs font-mono font-bold text-[#FFE600]">
                   Jana Fibre Glass
                 </p>
-                <p className="text-xs sm:text-sm text-neutral-300 mt-2 sm:mt-3 leading-relaxed">
+                <p className="text-xs sm:text-sm text-neutral-200 mt-2 sm:mt-3 leading-relaxed">
                   Managing financial data integrity, operational ledger reconciliation, and reporting precision across manufacturing supply chains.
                 </p>
               </div>
@@ -150,13 +153,13 @@ export default function Credentials() {
                 <span className="inline-block px-2 sm:px-2.5 py-0.5 rounded-md bg-[#FFE600] text-black border-[1.5px] sm:border-[2px] border-black shadow-[1.5px_1.5px_0px_#000000] sm:shadow-[2px_2px_0px_#000000] text-[11px] sm:text-xs font-mono font-black uppercase">
                   Nov 2024 – Nov 2028
                 </span>
-                <h4 className="font-syne font-black text-base sm:text-lg text-white mt-2">
+                <h4 className="font-sans font-extrabold text-base sm:text-lg text-white mt-2 tracking-tight">
                   B.Tech in Computer Science & Engineering
                 </h4>
                 <p className="text-xs font-mono font-bold text-[#00F0FF]">
                   Sri Venkateshwaraa College of Engg & Tech (SVCET)
                 </p>
-                <p className="text-xs sm:text-sm text-neutral-300 mt-2 sm:mt-3 leading-relaxed">
+                <p className="text-xs sm:text-sm text-neutral-200 mt-2 sm:mt-3 leading-relaxed">
                   Core focus on Autonomous Agents, Concurrent Java Enterprise Architectures, and Distributed Data Infrastructure.
                 </p>
               </div>
@@ -165,13 +168,13 @@ export default function Credentials() {
                 <span className="inline-block px-2 sm:px-2.5 py-0.5 rounded-md bg-[#FF2A55] text-white border-[1.5px] sm:border-[2px] border-black shadow-[1.5px_1.5px_0px_#000000] sm:shadow-[2px_2px_0px_#000000] text-[11px] sm:text-xs font-mono font-black uppercase">
                   June 2022 – May 2024
                 </span>
-                <h4 className="font-syne font-black text-base sm:text-lg text-white mt-2">
+                <h4 className="font-sans font-extrabold text-base sm:text-lg text-white mt-2 tracking-tight">
                   Higher Secondary (Bio-Maths)
                 </h4>
                 <p className="text-xs font-mono font-bold text-[#FFE600]">
                   Kuyilappalayam Higher Secondary School
                 </p>
-                <p className="text-xs sm:text-sm text-neutral-300 mt-2 sm:mt-3 leading-relaxed">
+                <p className="text-xs sm:text-sm text-neutral-200 mt-2 sm:mt-3 leading-relaxed">
                   Advanced foundational coursework in biological sciences and mathematics, guiding analytical modeling and bioinformatics exploration.
                 </p>
               </div>

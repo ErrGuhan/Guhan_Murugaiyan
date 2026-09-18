@@ -300,7 +300,7 @@ export default function Expertise() {
                           </h4>
                         </div>
 
-                        <p className="text-neutral-300 text-xs sm:text-sm mt-1.5 sm:mt-2 leading-relaxed">
+                        <p className="text-neutral-200 text-xs sm:text-sm mt-1.5 sm:mt-2 leading-relaxed font-normal">
                           {item.desc}
                         </p>
                       </div>
@@ -316,7 +316,7 @@ export default function Expertise() {
                     {item.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="text-[10px] sm:text-[11px] font-mono font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded-md bg-[#1A1A24] text-neutral-200 border-[1.5px] border-black shadow-[1.5px_1.5px_0px_#000000]"
+                        className="text-[10px] sm:text-[11px] font-mono font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded-md bg-[#1A1A24] text-white border-[1.5px] border-black shadow-[1.5px_1.5px_0px_#000000]"
                       >
                         {tag}
                       </span>
