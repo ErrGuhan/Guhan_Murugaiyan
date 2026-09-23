@@ -7,6 +7,11 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FileText, Mail, Sparkles } from "lucide-react";
 import GitHubActivityWidget from "@/components/ui/GitHubActivityWidget";
+import {
+  triggerResumeDownload,
+  RESUME_DOWNLOAD_URL,
+  RESUME_FILENAME,
+} from "@/lib/download-resume";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -182,9 +187,12 @@ export default function About() {
                     <GithubIcon className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
                   </a>
                   <a
-                    href="/resume.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href={RESUME_DOWNLOAD_URL}
+                    download={RESUME_FILENAME}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      triggerResumeDownload({ source: "about" });
+                    }}
                     className="comic-btn p-1.5 sm:p-2 rounded-lg bg-white text-black hover:bg-[#00F0FF] transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center"
                     title="Download Resume"
                   >

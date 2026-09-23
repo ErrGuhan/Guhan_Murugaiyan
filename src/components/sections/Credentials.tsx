@@ -113,7 +113,7 @@ export default function Credentials() {
             <div className="space-y-3 sm:space-y-4">
               <div className="comic-card p-4 sm:p-6 rounded-2xl bg-[#13131A] border-[2.5px] sm:border-[3px] border-black shadow-[3px_3px_0px_#000000] sm:shadow-[4px_4px_0px_#000000]">
                 <span className="inline-block px-2 sm:px-2.5 py-0.5 rounded-md bg-[#FFE600] text-black border-[1.5px] sm:border-[2px] border-black shadow-[1.5px_1.5px_0px_#000000] sm:shadow-[2px_2px_0px_#000000] text-[11px] sm:text-xs font-mono font-black uppercase">
-                  July 2026 – 2026
+                  July 2026 – Present
                 </span>
                 <h4 className="font-sans font-extrabold text-base sm:text-lg text-white mt-2 tracking-tight">
                   Data Analyst

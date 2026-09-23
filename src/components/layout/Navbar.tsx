@@ -20,8 +20,12 @@ import {
   isSoundEnabled,
   toggleSound,
   playHoverTick,
-  playSuccessChime,
 } from "@/lib/sound-effects";
+import {
+  triggerResumeDownload,
+  RESUME_DOWNLOAD_URL,
+  RESUME_FILENAME,
+} from "@/lib/download-resume";
 import { cn } from "@/lib/utils";
 import { useThrottledScroll } from "@/hooks/useThrottledScroll";
 
@@ -244,23 +248,12 @@ export default function Navbar() {
 
           {/* Resume CTA with Achievement Trigger */}
           <a
-            href="/resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
+            href={RESUME_DOWNLOAD_URL}
+            download={RESUME_FILENAME}
             title="Download Guhan's Resume (PDF)"
-            onClick={() => {
-              playSuccessChime();
-              if (typeof window !== "undefined") {
-                window.dispatchEvent(
-                  new CustomEvent("achievement-unlocked", {
-                    detail: {
-                      title: "INTEL ACQUIRED",
-                      desc: "Guhan's Dossier (Resume) downloaded to your local drive.",
-                      xp: "+500 XP",
-                    },
-                  })
-                );
-              }
+            onClick={(e) => {
+              e.preventDefault();
+              triggerResumeDownload({ source: "navbar-desktop" });
             }}
             onMouseEnter={playHoverTick}
             className="comic-btn ml-0.5 px-3.5 py-1.5 rounded-lg bg-[#FFE600] text-black font-mono font-black text-xs tracking-wider uppercase flex items-center gap-1 hover:bg-[#00F0FF]"
@@ -463,19 +456,34 @@ export default function Navbar() {
           })}
 
           {/* Download Resume Hero Action */}
-          <a
-            href="/resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setIsMenuOpen(false)}
-            className="comic-btn w-full mt-1.5 py-3 sm:py-3.5 px-3 sm:px-4 rounded-2xl bg-[#00F0FF] text-black font-mono font-black text-xs sm:text-sm tracking-wider uppercase border-[2.5px] sm:border-[3px] border-black shadow-[3px_3px_0px_#000000] sm:shadow-[4px_4px_0px_#000000] flex items-center justify-center gap-2 hover:bg-[#FFE600] transition-colors min-h-[44px]"
-          >
-            <Download className="w-4 h-4 stroke-[3]" />
-            <span>DOWNLOAD RESUME (PDF)</span>
-            <span className="text-[9px] sm:text-[10px] px-1.5 sm:px-2 py-0.5 rounded bg-black text-[#00F0FF] font-mono font-bold">
-              2026 VER
-            </span>
-          </a>
+          <div className="w-full mt-1.5 flex flex-col gap-2">
+            <a
+              href={RESUME_DOWNLOAD_URL}
+              download={RESUME_FILENAME}
+              onClick={(e) => {
+                e.preventDefault();
+                setIsMenuOpen(false);
+                triggerResumeDownload({ source: "navbar-mobile" });
+              }}
+              className="comic-btn w-full py-3 sm:py-3.5 px-3 sm:px-4 rounded-2xl bg-[#00F0FF] text-black font-mono font-black text-xs sm:text-sm tracking-wider uppercase border-[2.5px] sm:border-[3px] border-black shadow-[3px_3px_0px_#000000] sm:shadow-[4px_4px_0px_#000000] flex items-center justify-center gap-2 hover:bg-[#FFE600] transition-colors min-h-[44px]"
+            >
+              <Download className="w-4 h-4 stroke-[3]" />
+              <span>DOWNLOAD RESUME (PDF)</span>
+              <span className="text-[9px] sm:text-[10px] px-1.5 sm:px-2 py-0.5 rounded bg-black text-[#00F0FF] font-mono font-bold">
+                2026 VER
+              </span>
+            </a>
+
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setIsMenuOpen(false)}
+              className="w-full py-1 text-center font-mono text-[11px] text-neutral-400 hover:text-[#00F0FF] underline underline-offset-4 tracking-wider uppercase font-bold"
+            >
+              Preview Resume Online (Direct View) ↗
+            </a>
+          </div>
         </div>
 
         {/* Overlay Footer Info Cards */}

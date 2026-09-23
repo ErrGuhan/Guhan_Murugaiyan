@@ -7,7 +7,7 @@ const cspHeader = `
   img-src 'self' blob: data: https:;
   font-src 'self' data: https://fonts.gstatic.com;
   connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com;
-  object-src 'none';
+  object-src 'self';
   base-uri 'self';
   form-action 'self';
   frame-ancestors 'none';
@@ -56,6 +56,23 @@ const nextConfig: NextConfig = {
           {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=(), interest-cohort=()",
+          },
+        ],
+      },
+      {
+        source: "/resume.pdf",
+        headers: [
+          {
+            key: "Content-Type",
+            value: "application/pdf",
+          },
+          {
+            key: "Content-Disposition",
+            value: 'inline; filename="Guhan_Murugaiyan_Resume.pdf"',
+          },
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, stale-while-revalidate=604800",
           },
         ],
       },

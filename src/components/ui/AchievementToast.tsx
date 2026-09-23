@@ -13,13 +13,19 @@ interface AchievementDetail {
 export default function AchievementToast() {
   const [achievement, setAchievement] = useState<AchievementDetail | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastPlayedRef = useRef<number>(0);
 
   useEffect(() => {
     const handleAchievement = (e: Event) => {
       const customEvent = e as CustomEvent<AchievementDetail>;
       if (!customEvent.detail) return;
 
-      playSuccessChime();
+      const now = Date.now();
+      if (now - lastPlayedRef.current > 600) {
+        playSuccessChime();
+        lastPlayedRef.current = now;
+      }
+
       setAchievement(customEvent.detail);
 
       if (timeoutRef.current) clearTimeout(timeoutRef.current);

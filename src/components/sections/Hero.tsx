@@ -5,7 +5,12 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Download, Sparkles, ArrowDownRight, Send } from "lucide-react";
-import { playSuccessChime, playHoverTick } from "@/lib/sound-effects";
+import { playHoverTick } from "@/lib/sound-effects";
+import {
+  triggerResumeDownload,
+  RESUME_DOWNLOAD_URL,
+  RESUME_FILENAME,
+} from "@/lib/download-resume";
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -146,19 +151,9 @@ export default function Hero() {
     { scope: containerRef }
   );
 
-  const handleResumeClick = () => {
-    playSuccessChime();
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(
-        new CustomEvent("achievement-unlocked", {
-          detail: {
-            title: "INTEL ACQUIRED",
-            desc: "Guhan's Dossier (Resume) downloaded to your local drive.",
-            xp: "+500 XP",
-          },
-        })
-      );
-    }
+  const handleResumeClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    triggerResumeDownload({ source: "hero" });
   };
 
   return (
@@ -298,9 +293,8 @@ export default function Hero() {
           </a>
 
           <a
-            href="/resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
+            href={RESUME_DOWNLOAD_URL}
+            download={RESUME_FILENAME}
             onClick={handleResumeClick}
             onMouseEnter={playHoverTick}
             className="comic-btn inline-flex items-center justify-center gap-2 px-3.5 sm:px-5 py-3 sm:py-3.5 rounded-xl bg-white text-black font-mono font-black text-xs sm:text-sm tracking-wider uppercase border-[2.5px] sm:border-[3px] border-black shadow-[3px_3px_0px_#000000] sm:shadow-[4px_4px_0px_#000000] hover:bg-[#FFE600] min-h-[44px]"
